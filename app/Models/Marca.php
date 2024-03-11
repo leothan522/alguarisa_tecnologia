@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Marca extends Model
 {
@@ -15,4 +16,10 @@ class Marca extends Model
     {
         return $query->where('nombre', 'LIKE', "%$keyword%");
     }
+
+    public function modelos(): HasMany
+    {
+        return $this->hasMany(Modelo::class, 'marcas_id', 'id');
+    }
+
 }

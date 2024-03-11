@@ -8,7 +8,7 @@ use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class ColoresComponent extends Component
+class ModelosComponent extends Component
 {
     use LivewireAlert;
 
@@ -27,7 +27,7 @@ class ColoresComponent extends Component
             ->get()
         ;
         $rowsColores = Color::count();
-        return view('livewire.dashboard.colores-component')
+        return view('livewire.dashboard.modelos-component')
             ->with('listarColores', $colores)
             ->with('rowsColores', $rowsColores);
     }
