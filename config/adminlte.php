@@ -311,6 +311,25 @@ return [
         // Sidebar items:
 
         [
+            'text'      => 'Gestionar Oficios',
+            'icon'      => 'fas fa-fw fa-book',
+            'can'       => ['bienes'],
+            'submenu' => [
+                /*[
+                    'text' => 'Oficios',
+                    'icon' => 'fas fa-fw fa-file-invoice',
+                    'route'  => 'bienes.index',
+                    'can'  => 'bienes',
+                ],*/
+                [
+                    'text' => 'Bienes',
+                    'icon' => 'fas fa-fw fa-boxes',
+                    'route'  => 'bienes.index',
+                    'can'  => 'bienes',
+                ]
+            ],
+        ],
+        [
             'text'      => 'Configuración',
             'icon'      => 'fas fa-fw fa-cogs',
             'can'       => ['usuarios', 'parametros'],

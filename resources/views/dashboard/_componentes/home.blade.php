@@ -38,7 +38,7 @@
 @section('js')
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
-        
+
         function buscar() {
             let input = $("#navbarSearch");
             let keyword = input.val();

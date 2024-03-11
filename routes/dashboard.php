@@ -1,16 +1,13 @@
 <?php
 
+use App\Http\Controllers\Dashboard\BienesController;
 use App\Http\Controllers\FCM\FcmController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Dashboard\ParametrosController;
 use App\Http\Controllers\Dashboard\UsuariosController;
 use App\Http\Controllers\Chat\ChatController;
 use App\Http\Controllers\Dashboard\EmpresasController;
-use App\Http\Controllers\Dashboard\ArticulosController;
-use App\Http\Controllers\Dashboard\StockController;
-use App\Http\Controllers\Dashboard\OfertasController;
 use App\Http\Controllers\Dashboard\TerritorioController;
-use App\Http\Controllers\Dashboard\CompartirController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +38,7 @@ Route::middleware([
 
     //alguarisa
     Route::get('territorio', [TerritorioController::class, 'index'])->name('territorio.index');
+    Route::get('bienes', [BienesController::class, 'index'])->name('bienes.index');
 
 });
 
