@@ -14,7 +14,7 @@
         </li>
         <li class="nav-item">
             <button type="button" class="btn btn-primary btn-sm btn-block m-1"
-                    data-toggle="modal" data-target="#modal-categorias" onclick=""
+                    data-toggle="modal" data-target="#modal-marcas" onclick=""
             {{--@if(!comprobarPermisos('categorias.index')) disabled @endif --}} >
                 Marcas
             </button>

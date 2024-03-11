@@ -23,6 +23,7 @@
 
     <div class="row">
         @livewire('dashboard.tipos-component')
+        @livewire('dashboard.marcas-component')
     </div>
 
 @endsection
