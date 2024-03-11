@@ -2,14 +2,14 @@
      xmlns:wire="http://www.w3.org/1999/xhtml">
 
     <div class="card-header">
-        @if($marcas_id)
+        @if($colores_id)
             <h3 class="card-title">Editar</h3>
         @else
             <h3 class="card-title">Crear</h3>
         @endif
         <div class="card-tools">
-            <button class="btn btn-tool" wire:click="limpiarMarcas">
-                @if($errors->all() || $marcas_id)
+            <button class="btn btn-tool" wire:click="limpiarColores">
+                @if($errors->all() || $colores_id)
                     <i class="fas fa-ban"></i> Cancelar
                 @else
                     <i class="fas fa-file"></i>
@@ -40,9 +40,9 @@
             </div>
 
             <div class="form-group mt-3">
-                <button type="submit" class="btn btn-block @if($marcas_id) btn-primary @else btn-success @endif"
-                @if(!comprobarPermisos('marcas.create') || ($marcas_id && !comprobarPermisos('marcas.edit'))) disabled @endif >
-                    <i class="fas fa-save"></i> Guardar @if($marcas_id) Cambios @endif
+                <button type="submit" class="btn btn-block @if($colores_id) btn-primary @else btn-success @endif"
+                @if(!comprobarPermisos('colores.create') || ($colores_id && !comprobarPermisos('colores.edit'))) disabled @endif >
+                    <i class="fas fa-save"></i> Guardar @if($colores_id) Cambios @endif
                 </button>
             </div>
 

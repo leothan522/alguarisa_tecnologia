@@ -24,6 +24,7 @@
     <div class="row">
         @livewire('dashboard.tipos-component')
         @livewire('dashboard.marcas-component')
+        @livewire('dashboard.colores-component')
     </div>
 
 @endsection
