@@ -3,6 +3,9 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Color;
+use App\Models\Marca;
+use App\Models\Modelo;
+use App\Models\Tipo;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\On;
@@ -13,7 +16,7 @@ class ModelosComponent extends Component
     use LivewireAlert;
 
     public $rows = 0;
-    public $colores_id, $nombre, $keyword;
+    public $modelos_id, $tipos_id, $marcas_id, $nombre, $keyword;
 
     public function mount()
     {
@@ -22,14 +25,15 @@ class ModelosComponent extends Component
 
     public function render()
     {
-        $colores = Color::buscar($this->keyword)
+        $modelos = Modelo::buscar($this->keyword)
             ->limit($this->rows)
+            ->orderBy('id', 'DESC')
             ->get()
         ;
-        $rowsColores = Color::count();
+        $rowsModelos = Modelo::count();
         return view('livewire.dashboard.modelos-component')
-            ->with('listarColores', $colores)
-            ->with('rowsColores', $rowsColores);
+            ->with('listarModelos', $modelos)
+            ->with('rowsModelos', $rowsModelos);
     }
 
     public function setLimit()
@@ -38,55 +42,71 @@ class ModelosComponent extends Component
         $this->rows = $this->rows + $rows;
     }
 
-    #[On('limpiarColores')]
-    public function limpiarColores()
+    #[On('limpiarModelos')]
+    public function limpiarModelos()
     {
         $this->reset([
-            'colores_id', 'nombre', 'keyword'
+            'modelos_id', 'tipos_id', 'marcas_id', 'nombre', 'keyword'
         ]);
         $this->resetErrorBag();
+
+        $tipos = Tipo::orderBy('nombre', 'ASC')->get();
+        $data = dataSelect2($tipos, 'nombre');
+        $this->dispatch('selectTipos', data: $data);
+
+        $marcas = Marca::orderBy('nombre', 'ASC')->get();
+        $data = dataSelect2($marcas, 'nombre');
+        $this->dispatch('selectMarcas', data: $data);
     }
 
     public function save()
     {
         $rules = [
-            'nombre'       =>  ['required', 'min:2', 'max:20', 'alpha_dash:ascii', Rule::unique('colores', 'nombre')->ignore($this->colores_id)],
+            'nombre'       =>  ['required', 'min:2', 'max:20', Rule::unique('modelos', 'nombre')->ignore($this->modelos_id)],
+            'tipos_id'     => 'required',
+            'marcas_id'     => 'required',
         ];
-        /*$messages = [
-            'nombre.required' => 'El nombre es obligatorio.',
-            'nombre.min' => 'El nombre debe contener al menos 3 caracteres.',
-            'nombre.max' => 'El nombre no debe ser mayor que 15 caracteres.',
-            'nombre.alpha_num' => ' El campo nombre sólo debe contener letras y números.'
-        ];*/
+        $messages = [
+            'tipos_id.required' => 'El Tipo es obligatorio.',
+            'marcas_id.required' => 'La Marca es obligatoria.',
+            'nombre.required' => 'La Modelo es obligatorio.',
+            'nombre.min' => 'El modelo debe contener al menos 2 caracteres.',
+            'nombre.max' => 'El modelo no debe ser mayor que 20 caracteres.'
+        ];
 
-        $this->validate($rules);
-        if (is_null($this->colores_id)){
+        $this->validate($rules, $messages);
+        if (is_null($this->modelos_id)){
             //nuevo
-            $color = new Color();
-            $message = "Color Creado.";
+            $modelos = new Modelo();
+            $message = "Modelo Creado.";
         }else{
             //editar
-            $color = Color::find($this->colores_id);
-            $message = "Color Actualizado.";
+            $modelos = Modelo::find($this->modelos_id);
+            $message = "Modelo Actualizado.";
         }
-        $color->nombre = $this->nombre;
-
-        $color->save();
+        $modelos->nombre = $this->nombre;
+        $modelos->tipos_id = $this->tipos_id;
+        $modelos->marcas_id = $this->marcas_id;
+        $modelos->save();
         //$this->dispatch('listarSelect', tabla: 'tipos')->to(ArticulosComponent::class);
-        $this->limpiarColores();
+        $this->limpiarModelos();
         $this->alert('success', $message);
     }
 
     public function edit($id)
     {
-        $color = Color::find($id);
-        $this->colores_id = $color->id;
-        $this->nombre = $color->nombre;
+        $modelos = Modelo::find($id);
+        $this->modelos_id = $modelos->id;
+        $this->nombre = $modelos->nombre;
+        $this->tipos_id = $modelos->tipos_id;
+        $this->marcas_id = $modelos->marcas_id;
+        $this->dispatch('setSelectTipos', id: $this->tipos_id);
+        $this->dispatch('setSelectMarcas', id: $this->marcas_id);
     }
 
     public function destroy($id)
     {
-        $this->colores_id = $id;
+        $this->modelos_id = $id;
         $this->confirm('¿Estas seguro?', [
             'toast' => false,
             'position' => 'center',
@@ -94,14 +114,14 @@ class ModelosComponent extends Component
             'confirmButtonText' =>  '¡Sí, bórralo!',
             'text' =>  '¡No podrás revertir esto!',
             'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmedColores',
+            'onConfirmed' => 'confirmedModelos',
         ]);
     }
 
-    #[On('confirmedColores')]
-    public function confirmedColores()
+    #[On('confirmedModelos')]
+    public function confirmedModelos()
     {
-        $color = Color::find($this->colores_id);
+        $modelos = Modelo::find($this->modelos_id);
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
@@ -117,19 +137,55 @@ class ModelosComponent extends Component
                 'confirmButtonText' => 'OK',
             ]);
         } else {
-            $color->delete();
+            $modelos->delete();
             $this->alert(
                 'success',
-                'Color Eliminado.'
+                'Modelos Eliminado.'
             );
             //$this->dispatch('listarSelect', tabla: 'tipos')->to(ArticulosComponent::class);
         }
 
-        $this->limpiarColores();
+        $this->limpiarModelos();
     }
 
     public function buscar()
     {
         //
     }
+
+    #[On('selectTipos')]
+    public function selectTipos($data)
+    {
+        //JS
+    }
+
+    #[On('getSelectTipos')]
+    public function getSelectTipos($id)
+    {
+        $this->tipos_id = $id;
+    }
+
+    #[On('setSelectTipos')]
+    public function setSelectTipos($id)
+    {
+        //JS
+    }
+
+    #[On('selectMarcas')]
+    public function selectMarcas($data)
+    {
+        //JS
+    }
+
+    #[On('getSelectMarcas')]
+    public function getSelectMarcas($id)
+    {
+        $this->marcas_id = $id;
+    }
+
+    public function setSelectMarcas($id)
+    {
+        //JS
+    }
+
 }

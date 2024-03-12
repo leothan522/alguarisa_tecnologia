@@ -1,4 +1,4 @@
-<div wire:ignore.self class="modal fade" id="modal-colores" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div wire:ignore.self class="modal fade" id="modal-modelos" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -6,7 +6,7 @@
 
                     <div class="col-md-6">
                         <h4 class="modal-title">
-                            Colores
+                            Modelos
                         </h4>
                     </div>
                     <div class="col-md-5 justify-content-end">
@@ -21,7 +21,7 @@
                             </div>
                         </form>
                     </div>
-                    <button type="button" wire:click="limpiarColores" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" wire:click="limpiarModelos" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -43,7 +43,7 @@
             {!! verSpinner() !!}
 
             <div class="modal-footer justify-content-end">
-                <button type="button" wire:click="limpiarColores" class="btn btn-default btn-sm" data-dismiss="modal">{{ __('Close') }}</button>
+                <button type="button" wire:click="limpiarModelos" class="btn btn-default btn-sm" data-dismiss="modal">{{ __('Close') }}</button>
             </div>
 
         </div>

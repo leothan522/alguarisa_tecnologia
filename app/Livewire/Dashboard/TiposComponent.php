@@ -50,7 +50,7 @@ class TiposComponent extends Component
     public function save()
     {
         $rules = [
-            'nombre'       =>  ['required', 'min:2', 'max:20', 'alpha_dash:ascii', Rule::unique('tipos', 'nombre')->ignore($this->tipos_id)],
+            'nombre'       =>  ['required', 'min:2', 'max:20'/*, 'alpha_dash:ascii'*/, Rule::unique('tipos', 'nombre')->ignore($this->tipos_id)],
         ];
         /*$messages = [
             'nombre.required' => 'El nombre es obligatorio.',

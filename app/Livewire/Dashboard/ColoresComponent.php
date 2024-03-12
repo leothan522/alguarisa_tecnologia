@@ -50,7 +50,7 @@ class ColoresComponent extends Component
     public function save()
     {
         $rules = [
-            'nombre'       =>  ['required', 'min:2', 'max:20', 'alpha_dash:ascii', Rule::unique('colores', 'nombre')->ignore($this->colores_id)],
+            'nombre'       =>  ['required', 'min:2', 'max:20'/*, 'alpha_dash:ascii'*/, Rule::unique('colores', 'nombre')->ignore($this->colores_id)],
         ];
         /*$messages = [
             'nombre.required' => 'El nombre es obligatorio.',

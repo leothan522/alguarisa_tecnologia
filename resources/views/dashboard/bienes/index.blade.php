@@ -1,5 +1,7 @@
 @extends('adminlte::page')
 
+@section('plugins.Select2', true)
+
 @section('title', 'Bienes')
 
 @section('content_header')
@@ -25,6 +27,7 @@
         @livewire('dashboard.tipos-component')
         @livewire('dashboard.marcas-component')
         @livewire('dashboard.colores-component')
+        @livewire('dashboard.modelos-component')
     </div>
 
 @endsection
@@ -44,6 +47,62 @@
 @section('js')
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
+
+        function verTipos() {
+            Livewire.dispatch('limpiarTipos');
+        }
+
+        function verMarcas() {
+            Livewire.dispatch('limpiarMarcas');
+        }
+
+        function verModelos() {
+            Livewire.dispatch('limpiarModelos');
+        }
+
+        function verColores() {
+            Livewire.dispatch('limpiarColores');
+        }
+
+        function select_2(id, data, event)
+        {
+            let html = '<div class="input-group-prepend">' +
+                '<span class="input-group-text">' +
+                '<i class="fas fa-tag"></i>' +
+                '</span>' +
+                '</div> ' +
+                '<select id="'+ id +'"></select>';
+            $('#div_' + id).html(html);
+
+            $('#'  + id).select2({
+                dropdownParent: $('#modal-modelos'),
+                theme: 'bootstrap4',
+                data: data,
+                placeholder: 'Seleccione',
+                /*allowClear: true*/
+            });
+            $('#'  + id).val(null).trigger('change');
+            $('#'  + id).on('change', function() {
+                var val = $(this).val();
+                Livewire.dispatch(event, { id: val });
+            });
+        }
+
+        Livewire.on('selectTipos', ({ data }) => {
+            select_2('select_modelos_tipo', data, 'getSelectTipos');
+        });
+
+        Livewire.on('setSelectTipos', ({ id }) => {
+            $('#select_modelos_tipo').val(id).trigger('change');
+        });
+
+        Livewire.on('selectMarcas', ({ data }) => {
+            select_2('select_modelos_marca', data, 'getSelectMarcas');
+        });
+
+        Livewire.on('setSelectMarcas', ({ id }) => {
+            $('#select_modelos_marca').val(id).trigger('change');
+        });
 
         function buscar(){
             let input = $("#navbarSearch");

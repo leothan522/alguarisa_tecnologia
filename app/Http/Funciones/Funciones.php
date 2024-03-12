@@ -409,13 +409,21 @@ function estatusTienda($id, $boton = false)
     return $estatus;
 }
 
-function dataSelect2($rows)
+function dataSelect2($rows, $text = null)
 {
     $data = array();
     foreach ($rows as $row){
+        switch ($text){
+            case 'nombre':
+                $text = $row->nombre;
+                break;
+            default:
+                $text = $row->codigo.'  '.$row->nombre;
+                break;
+        }
         $option = [
             'id' => $row->id,
-            'text' => $row->codigo.'  '.$row->nombre
+            'text' => $text
         ];
         array_push($data, $option);
     }
