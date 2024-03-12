@@ -21,7 +21,11 @@
 @endsection
 
 @section('content')
-    <p>Welcome to this beautiful admin panel.</p>
+    {{--<p>Welcome to this beautiful admin panel.</p>--}}
+
+    <div>
+        @livewire('dashboard.bienes-component')
+    </div>
 
     <div class="row">
         @livewire('dashboard.tipos-component')
