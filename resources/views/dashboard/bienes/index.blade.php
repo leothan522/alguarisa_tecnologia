@@ -32,6 +32,7 @@
         @livewire('dashboard.marcas-component')
         @livewire('dashboard.colores-component')
         @livewire('dashboard.modelos-component')
+        @livewire('dashboard.condiciones-component')
     </div>
 
 @endsection
@@ -66,6 +67,10 @@
 
         function verColores() {
             Livewire.dispatch('limpiarColores');
+        }
+
+        function verCondiciones() {
+            Livewire.dispatch('limpiarCondiciones');
         }
 
         function select_2(id, data, event)
