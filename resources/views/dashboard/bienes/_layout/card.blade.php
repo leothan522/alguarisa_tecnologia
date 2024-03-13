@@ -45,6 +45,10 @@
             @include('dashboard.bienes._layout.show')
         </div>
 
+        <div @if(!$imagenes) class="d-none" @endif >
+            @include('dashboard.bienes._layout.imagenes')
+        </div>
+
         <div class="row m-5 @if(!$view) d-none @endif ">
             <div class="col-12">
                 Debes seleccionar un Bien para empezar...
@@ -55,7 +59,7 @@
 
     <div class="card-footer text-center @if(!$footer) d-none @endif">
 
-        <button type="button" class="btn btn-default btn-sm" {{--wire:click="btnImagen"--}}
+        <button type="button" class="btn btn-default btn-sm" wire:click="btnImagenes"
                 {{--@if(!$estatus) disabled @endif--}}>
             <i class="fas fa-images"></i> Imagenes
         </button>

@@ -175,6 +175,16 @@
             $('#select_bienes_modelo').val(id).trigger('change');
         });
 
+        function clickImgFrontal()
+        {
+            $('#customFileLangFrontal').click();
+        }
+
+        function clickImgPosterior()
+        {
+            $('#customFileLangPosterior').click();
+        }
+
         function buscar(){
             let input = $("#navbarSearch");
             let keyword  = input.val();

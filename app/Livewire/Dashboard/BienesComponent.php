@@ -5,6 +5,7 @@ namespace App\Livewire\Dashboard;
 use App\Models\Bien;
 use App\Models\Color;
 use App\Models\Condicion;
+use App\Models\Imagen;
 use App\Models\Marca;
 use App\Models\Modelo;
 use App\Models\Parametro;
@@ -12,16 +13,22 @@ use App\Models\Tipo;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class BienesComponent extends Component
 {
     use LivewireAlert;
+    use WithFileUploads;
 
     public $rows = 0, $numero = 14, $tableStyle = false;
     public $view = true, $form = false, $ver = false, $nuevo = false, $editar = false, $cancelar = false, $footer = false, $keyword;
     public $tipos_id, $marcas_id, $modelos_id, $colores_id, $serial, $identificador, $condiciones_id, $adicional;
     public $bienes_id, $verTipo, $verMarca, $verModelo, $verColor, $verCondicion;
+    public $imagenes = false, $idImgFrontal, $verImgFrontal, $idImgPosterior, $verImgPosterior, $borrarImgFrontal, $borrarImgPosterior;
+    #[Validate('image|max:1024')] // 1MB Max
+    public $frontalPhoto, $posteriorPhoto;
 
     public function mount()
     {
@@ -59,7 +66,9 @@ class BienesComponent extends Component
         $this->reset([
             'view', 'form', 'ver', 'nuevo', 'editar', 'cancelar', 'footer', 'keyword',
             'tipos_id', 'marcas_id', 'modelos_id', 'colores_id', 'serial', 'identificador', 'condiciones_id', 'adicional',
-            'verTipo', 'verMarca', 'verModelo', 'verColor', 'verCondicion'
+            'verTipo', 'verMarca', 'verModelo', 'verColor', 'verCondicion',
+            'imagenes', 'idImgFrontal', 'verImgFrontal', 'idImgPosterior', 'verImgPosterior',
+            'frontalPhoto', 'posteriorPhoto', 'borrarImgFrontal', 'borrarImgPosterior'
         ]);
         $this->resetErrorBag();
     }
@@ -97,6 +106,16 @@ class BienesComponent extends Component
         $this->ver = true;
         $this->editar = true;
         $this->footer = true;
+
+        $frontal = $this->dataImagen($this->bienes_id, 'frontal');
+        $this->idImgFrontal = $frontal['id'];
+        $this->verImgFrontal = $frontal['imagen'];
+        $this->borrarImgFrontal = $frontal['borrar'];
+        $posterior = $this->dataImagen($this->bienes_id, 'posterior');
+        $this->idImgPosterior = $posterior['id'];
+        $this->verImgPosterior = $posterior['imagen'];
+        $this->borrarImgPosterior = $posterior['borrar'];
+
     }
 
     public function rules()
@@ -177,6 +196,7 @@ class BienesComponent extends Component
     public function edit()
     {
         $this->ver = false;
+        $this->imagenes = false;
         $this->editar = false;
         $this->footer = false;
         $this->form = true;
@@ -225,8 +245,6 @@ class BienesComponent extends Component
         $this->limpiar();
     }
 
-
-
     public function btnCancelar()
     {
         if ($this->bienes_id){
@@ -234,6 +252,30 @@ class BienesComponent extends Component
         }else{
             $this->limpiar();
         }
+    }
+
+    public function btnImagenes()
+    {
+        $this->ver = false;
+        $this->cancelar = true;
+        $this->imagenes = true;
+    }
+
+    protected function dataImagen($id, $nombre): array
+    {
+        $data = [
+            'id' => null,
+            'imagen' => null,
+            'borrar' => null,
+        ];
+
+        $imagen = Imagen::where('bienes_id', $id)->where('nombre', $nombre)->first();
+        if ($imagen){
+            $data['id'] = $imagen->id;
+            $data['imagen'] = $imagen->mini;
+            $data['borrar'] = $imagen->imagen;
+        }
+        return $data;
     }
 
     #[On('initSelects')]

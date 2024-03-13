@@ -27,8 +27,8 @@ return new class extends Migration
             $table->foreign('modelos_id')->references('id')->on('modelos')->cascadeOnDelete();
             $table->foreign('colores_id')->references('id')->on('colores')->cascadeOnDelete();
             $table->foreign('condiciones_id')->references('id')->on('condiciones')->cascadeOnDelete();
-            $table->softDeletes();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

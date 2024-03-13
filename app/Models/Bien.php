@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Bien extends Model
@@ -48,6 +49,11 @@ class Bien extends Model
     public function condicion(): BelongsTo
     {
         return $this->belongsTo(Condicion::class, 'condiciones_id', 'id');
+    }
+
+    public function imagenes(): HasMany
+    {
+        return $this->hasMany(Imagen::class, 'bienes_id', 'id');
     }
 
     public function scopeBuscar($query, $keyword)
