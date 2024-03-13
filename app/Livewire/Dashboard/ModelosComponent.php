@@ -6,6 +6,7 @@ use App\Models\Color;
 use App\Models\Marca;
 use App\Models\Modelo;
 use App\Models\Tipo;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\On;
@@ -62,7 +63,12 @@ class ModelosComponent extends Component
     public function save()
     {
         $rules = [
-            'nombre'       =>  ['required', 'min:2', 'max:20'/*, Rule::unique('modelos', 'nombre')->ignore($this->modelos_id)*/],
+            'nombre'       =>  ['required', 'min:2', 'max:20',
+                Rule::unique('modelos', 'nombre')
+                    ->where(fn (Builder $query) =>
+                    $query->where('tipos_id', $this->tipos_id)
+                        ->where('marcas_id', $this->marcas_id))
+                    ->ignore($this->modelos_id)],
             'tipos_id'     => 'required',
             'marcas_id'     => 'required',
         ];
