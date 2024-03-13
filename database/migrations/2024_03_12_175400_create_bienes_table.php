@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('identificador')->nullable();
             $table->bigInteger('condiciones_id')->unsigned();
             $table->text('adicional')->nullable();
+            $table->text('auditoria')->nullable();
             $table->foreign('tipos_id')->references('id')->on('tipos')->cascadeOnDelete();
             $table->foreign('marcas_id')->references('id')->on('marcas')->cascadeOnDelete();
             $table->foreign('modelos_id')->references('id')->on('modelos')->cascadeOnDelete();

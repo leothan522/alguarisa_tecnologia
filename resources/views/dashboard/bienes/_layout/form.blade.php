@@ -187,7 +187,7 @@
         <div class="col-md-4">
             <button type="submit" class="btn btn-block @if($nuevo) btn-success @else btn-primary @endif float-right mr-1"
                     @if(!comprobarPermisos('bienes.create')) disabled @endif >
-                <i class="fas fa-save"></i> Guardar @if($editar) Cambios @endif
+                <i class="fas fa-save"></i> Guardar @if(!$nuevo) Cambios @endif
             </button>
         </div>
     </div>

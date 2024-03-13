@@ -442,13 +442,28 @@ function array_sort_by($arrIni, $col, $order = SORT_ASC)
     return $arrIni;
 }
 
-function nextCodigo($next = 1, $parametros_nombre = null, $parametros_tabla_id = null, $formato = null){
-    $codigo = null;
+function nextCodigo($parametros_nombre = null, $parametros_tabla_id = null, $formato = null){
+    $next = 1;
 
     //buscamos algun formato para el codigo
-    $parametro = Parametro::where("nombre", $parametros_nombre)->where('tabla_id', $parametros_tabla_id)->first();
+    if (!is_null($parametros_tabla_id)){
+        $parametro = Parametro::where("nombre", $parametros_nombre)
+            ->where('tabla_id', $parametros_tabla_id)
+            ->first();
+    }else{
+        $parametro = Parametro::where("nombre", $parametros_nombre)
+            ->first();
+    }
+
     if ($parametro) {
-        $codigo = $parametro->valor;
+        if (is_null($parametros_tabla_id)){
+            $codigo = $parametro->valor;
+            $next = $parametro->tabla_id;
+        }else{
+            $explode = explode(',', $parametro->valor);
+            $codigo = $explode[0];
+            $next = $explode[1];
+        }
     }else{
         if (is_null($formato)){
             $codigo = "N".$parametros_tabla_id.'-';
@@ -457,7 +472,7 @@ function nextCodigo($next = 1, $parametros_nombre = null, $parametros_tabla_id =
         }
     }
 
-    if (!is_numeric($next)){ $next = 1; }
+    if (!is_numeric($next)) { $next = 1; }
 
     $size = cerosIzquierda($next, numSizeCodigo());
 

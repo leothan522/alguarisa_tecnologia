@@ -1,74 +1,95 @@
-<div class="card card-navy" style="height: inherit; width: inherit; transition: all 0.15s ease 0s;"
-     xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="row" xmlns:wire="http://www.w3.org/1999/xhtml">
 
-    <div class="card-header">
-        <h3 class="card-title">
-            @if($nuevo)
-                Registrar
-            @endif
-            @if($editar)
-                Editar
-            @endif
-            Bienes
-        </h3>
-        <div class="card-tools">
-            {{--<button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i>
-            </button>--}}
-            @if(!$nuevo)
-                <button class="btn btn-tool" wire:click="create">
-                    <i class="fas fa-file"></i> Nuevo</button>
-            @endif
-            @if($editar)
-                <button class="btn btn-tool" {{--wire:click="destroy({{ $articulos_id }})"--}}
-                        @if(!comprobarPermisos('articulos.destroy')) disabled @endif >
-                    <i class="fas fa-edit"></i>
-                    Editar
-                </button>
-                {{--<a href="--}}{{--{{ route('etiquetas.print', $articulos_id) }}--}}{{--#" target="_blank" class="btn btn-tool"><i class="fas fa-print"></i> Imprimir Etiqueta</a>--}}
-            @endif
+    <div class="col-md-6">
 
-            @if($nuevo || $editar)
-                <button class="btn btn-tool" wire:click="limpiar">
-                    <i class="fas fa-ban"></i> Cancelar
-                </button>
-            @endif
+        <div class="card card-outline card-navy">
+
+            <div class="card-body box-profile">
+                {{--<h1 class="profile-username text-center text-bold">
+                    {{ mb_strtoupper($nombre) }}
+                </h1>--}}
+                <ul class="list-group list-group-unbordered {{--mt-3--}}">
+                    <li class="list-group-item">
+                        <b>Tipo</b> <a class="float-right text-uppercase">{{ $verTipo }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Marca</b> <a class="float-right text-uppercase">{{ $verMarca }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Modelo</b> <a class="float-right text-uppercase">{{ $verModelo }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Color</b> <a class="float-right text-uppercase">{{ $verColor }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Serial</b> <a class="float-right text-uppercase">{{ $serial }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Identificador</b> <a class="float-right text-uppercase">{{ $identificador }}</a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>Condición</b> <a class="float-right text-uppercase">{{ $verCondicion }}</a>
+                    </li>
+                </ul>
+
+            </div>
 
         </div>
+
+        {{--@if($verDefault)
+            <ul class="list-group text-sm">
+                <li class="list-group-item bg-warning text-bold">
+                    Tienda Default
+                    <span class="float-right text-bold"><i class="fas fa-certificate text-muted text-xs"></i></span>
+                </li>
+            </ul>
+        @endif--}}
+
+
     </div>
 
-    <div class="card-body">
+    <div class="col-md-6">
 
-        <div @if(!$form) class="d-none" @endif >
-            @include('dashboard.bienes._layout.form')
-        </div>
+        <div class="card card-navy card-outline">
+            <div class="card-body box-profile">
 
-        <div @if(!$show) class="d-none" @endif >
-            hola
-        </div>
+                <div class="row justify-content-center">
+                    <div class="row col-12 attachment-block p-3">
 
-        <div class="row m-5 @if(!$view) d-none @endif ">
-            <div class="col-12">
-                Debes seleccionar un Bien para empezar...
+
+                        <div class="col-12">
+                            <label class="col-md-12" for="name">
+                                Imagenes
+                                <span class="badge float-right"><i class="fas fa-images"></i></span>
+                            </label>
+
+                        </div>
+
+                        <div class="row col-12 justify-content-center mb-3 mt-3">
+                            <div class="col-5">
+                                <img class="img-thumbnail" src="{{ verImagen(/*$verImagen*/null, false, true) }}"
+                                     {{--width="101" height="100"--}}  alt="Logo Tienda"/>
+                            </div>
+                            <div class="col-5">
+                                <img class="img-thumbnail" src="{{ verImagen(/*$verImagen*/null, false, true) }}"
+                                     {{--width="101" height="100"--}}  alt="Logo Tienda"/>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                @if(!empty($adicional))
+                    <ul class="list-group list-group-unbordered mt-3">
+                        <li class="list-group-item">
+                            <b>Información Adicional</b> <br> <a class="text-uppercase">{{ $adicional }}</a>
+                        </li>
+                    </ul>
+                @endif
+
             </div>
         </div>
 
     </div>
-
-    <div class="card-footer text-center @if(!$footer) d-none @endif">
-
-        <button type="button" class="btn btn-default btn-sm" {{--wire:click="btnImagen"--}}
-                {{--@if(!$estatus) disabled @endif--}}>
-            <i class="fas fa-images"></i> Imagenes
-        </button>
-
-        <button type="button" class="btn btn-default btn-sm" wire:click="destroy()"
-                @if(!comprobarPermisos()) disabled @endif>
-            <i class="fas fa-trash-alt"></i> Eliminar
-        </button>
-
-    </div>
-
-
-    {!! verSpinner() !!}
 
 </div>

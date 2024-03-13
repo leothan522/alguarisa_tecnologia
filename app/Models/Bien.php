@@ -22,6 +22,7 @@ class Bien extends Model
         'identificador',
         'condiciones_id',
         'adicional',
+        'auditoria',
     ];
 
     public function tipo(): BelongsTo

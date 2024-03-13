@@ -2,10 +2,12 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Bien;
 use App\Models\Color;
 use App\Models\Condicion;
 use App\Models\Marca;
 use App\Models\Modelo;
+use App\Models\Parametro;
 use App\Models\Tipo;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -17,9 +19,9 @@ class BienesComponent extends Component
     use LivewireAlert;
 
     public $rows = 0, $numero = 14, $tableStyle = false;
-    public $view = true, $form = false, $show = false, $nuevo = false, $editar = false, $footer = false, $keyword;
+    public $view = true, $form = false, $ver = false, $nuevo = false, $editar = false, $cancelar = false, $footer = false, $keyword;
     public $tipos_id, $marcas_id, $modelos_id, $colores_id, $serial, $identificador, $condiciones_id, $adicional;
-    public $bienes_id;
+    public $bienes_id, $verTipo, $verMarca, $verModelo, $verColor, $verCondicion;
 
     public function mount()
     {
@@ -28,10 +30,18 @@ class BienesComponent extends Component
 
     public function render()
     {
-        /*if ($rowsTiendas > $this->numero) {
+        $bienes = Bien::buscar($this->keyword)
+            ->orderBy('created_at', 'DESC')
+            ->limit($this->rows)
+            ->get();
+        $rowsBienes = Bien::count();
+
+        if ($rowsBienes > $this->numero) {
             $this->tableStyle = true;
-        }*/
-        return view('livewire.dashboard.bienes-component');
+        }
+        return view('livewire.dashboard.bienes-component')
+            ->with('listarBienes', $bienes)
+            ->with('rows', $rowsBienes);
     }
 
     public function setLimit()
@@ -47,9 +57,9 @@ class BienesComponent extends Component
     public function limpiar()
     {
         $this->reset([
-            'view', 'form', 'show', 'nuevo', 'editar', 'footer', 'keyword',
+            'view', 'form', 'ver', 'nuevo', 'editar', 'cancelar', 'footer', 'keyword',
             'tipos_id', 'marcas_id', 'modelos_id', 'colores_id', 'serial', 'identificador', 'condiciones_id', 'adicional',
-            'bienes_id'
+            'verTipo', 'verMarca', 'verModelo', 'verColor', 'verCondicion'
         ]);
         $this->resetErrorBag();
     }
@@ -60,19 +70,46 @@ class BienesComponent extends Component
         $this->view = false;
         $this->form = true;
         $this->nuevo = true;
+        $this->cancelar = true;
+        $this->ver = false;
         $this->initSelects();
     }
 
+    public function show($id)
+    {
+        $this->limpiar();
+        $bien = Bien::find($id);
+        $this->bienes_id = $bien->id;
+        $this->tipos_id = $bien->tipos_id;
+        $this->verTipo = $bien->tipo->nombre;
+        $this->marcas_id = $bien->marcas_id;
+        $this->verMarca = $bien->marca->nombre;
+        $this->modelos_id = $bien->modelos_id;
+        $this->verModelo = $bien->modelo->nombre;
+        $this->colores_id = $bien->colores_id;
+        $this->verColor = $bien->color->nombre;
+        $this->serial = $bien->serial;
+        $this->identificador = $bien->identificador;
+        $this->condiciones_id = $bien->condiciones_id;
+        $this->verCondicion = $bien->condicion->nombre;
+        $this->adicional = $bien->adicional;
+        $this->view = false;
+        $this->ver = true;
+        $this->editar = true;
+        $this->footer = true;
+    }
 
     public function rules()
     {
         return [
             'serial'       =>  [
+                'nullable',
                 Rule::requiredIf(empty($this->identificador)),
                 'max:20',
                 Rule::unique('bienes', 'serial')
                     ->ignore($this->bienes_id)],
             'identificador' =>  [
+                'nullable',
                 Rule::requiredIf(empty($this->serial)),
                 'max:20',
                 Rule::unique('bienes', 'identificador')
@@ -88,11 +125,115 @@ class BienesComponent extends Component
     public function save()
     {
         $this->validate();
-        $numero = 'hola';
         if ($this->serial == '*'){
-            $numero = nextCodigo(null, 'sin_serial');
+            $serial = nextCodigo('sin_serial', null, 'S/S-');
+        }else{
+            if (!empty($this->serial)){
+                $serial = $this->serial;
+            }else{
+                $serial = null;
+            }
         }
-        $this->alert('success', 'guardar-'. $numero);
+
+        if (empty($this->identificador)){
+            $this->identificador = null;
+        }
+
+        if ($this->bienes_id && !$this->nuevo){
+            $bien = Bien::find($this->bienes_id);
+        }else{
+            $bien = new Bien();
+        }
+
+        $bien->tipos_id = $this->tipos_id;
+        $bien->marcas_id = $this->marcas_id;
+        $bien->modelos_id = $this->modelos_id;
+        $bien->colores_id = $this->colores_id;
+        $bien->serial = $serial;
+        $bien->identificador = $this->identificador;
+        $bien->condiciones_id = $this->condiciones_id;
+        $bien->adicional = $this->adicional;
+        $bien->save();
+
+        if ($this->serial == '*'){
+            $parametro = Parametro::where('nombre', 'sin_serial')->first();
+            if ($parametro){
+                $num = $parametro->tabla_id + 1;
+                $parametro->tabla_id = $num;
+            }else{
+                $parametro = new Parametro();
+                $parametro->nombre = 'sin_serial';
+                $parametro->tabla_id = 2;
+                $parametro->valor = 'S/S-';
+            }
+            $parametro->save();
+        }
+
+        $this->serial = $serial;
+        $this->show($bien->id);
+        $this->alert('success', 'Datos Guardados. ');
+    }
+
+    public function edit()
+    {
+        $this->ver = false;
+        $this->editar = false;
+        $this->footer = false;
+        $this->form = true;
+        $this->cancelar = true;
+        $this->initSelects();
+    }
+
+    public function destroy()
+    {
+        $this->confirm('¿Estas seguro?', [
+            'toast' => false,
+            'position' => 'center',
+            'showConfirmButton' => true,
+            'confirmButtonText' =>  '¡Sí, bórralo!',
+            'text' =>  '¡No podrás revertir esto!',
+            'cancelButtonText' => 'No',
+            'onConfirmed' => 'confirmed',
+        ]);
+    }
+
+    #[On('confirmed')]
+    public function confirmed()
+    {
+        $bien = Bien::find($this->bienes_id);
+
+        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+        $vinculado = false;
+
+        if ($vinculado) {
+            $this->alert('warning', '¡No se puede Borrar!', [
+                'position' => 'center',
+                'timer' => '',
+                'toast' => false,
+                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
+                'showConfirmButton' => true,
+                'onConfirmed' => '',
+                'confirmButtonText' => 'OK',
+            ]);
+        } else {
+            $bien->delete();
+            $this->alert(
+                'success',
+                'Registro Eliminado.'
+            );
+        }
+        $this->limpiar();
+    }
+
+
+
+    public function btnCancelar()
+    {
+        if ($this->bienes_id){
+            $this->show($this->bienes_id);
+        }else{
+            $this->limpiar();
+        }
     }
 
     #[On('initSelects')]

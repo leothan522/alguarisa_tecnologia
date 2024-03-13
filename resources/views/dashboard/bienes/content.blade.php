@@ -3,6 +3,6 @@
         @include('dashboard.bienes._layout.table')
     </div>
     <div class="col-md-8">
-        @include('dashboard.bienes._layout.show')
+        @include('dashboard.bienes._layout.card')
     </div>
 </div>
