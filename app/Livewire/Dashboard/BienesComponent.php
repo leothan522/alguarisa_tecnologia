@@ -7,6 +7,7 @@ use App\Models\Condicion;
 use App\Models\Marca;
 use App\Models\Modelo;
 use App\Models\Tipo;
+use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -18,6 +19,7 @@ class BienesComponent extends Component
     public $rows = 0, $numero = 14, $tableStyle = false;
     public $view = true, $form = false, $show = false, $nuevo = false, $editar = false, $footer = false, $keyword;
     public $tipos_id, $marcas_id, $modelos_id, $colores_id, $serial, $identificador, $condiciones_id, $adicional;
+    public $bienes_id;
 
     public function mount()
     {
@@ -47,6 +49,7 @@ class BienesComponent extends Component
         $this->reset([
             'view', 'form', 'show', 'nuevo', 'editar', 'footer', 'keyword',
             'tipos_id', 'marcas_id', 'modelos_id', 'colores_id', 'serial', 'identificador', 'condiciones_id', 'adicional',
+            'bienes_id'
         ]);
         $this->resetErrorBag();
     }
@@ -58,6 +61,38 @@ class BienesComponent extends Component
         $this->form = true;
         $this->nuevo = true;
         $this->initSelects();
+    }
+
+
+    public function rules()
+    {
+        return [
+            'serial'       =>  [
+                Rule::requiredIf(empty($this->identificador)),
+                'max:20',
+                Rule::unique('bienes', 'serial')
+                    ->ignore($this->bienes_id)],
+            'identificador' =>  [
+                Rule::requiredIf(empty($this->serial)),
+                'max:20',
+                Rule::unique('bienes', 'identificador')
+                    ->ignore($this->bienes_id)],
+            'tipos_id'      => 'required',
+            'marcas_id'      => 'required',
+            'modelos_id'      => 'required',
+            'colores_id'      => 'required',
+            'condiciones_id'      => 'required',
+        ];
+    }
+
+    public function save()
+    {
+        $this->validate();
+        $numero = 'hola';
+        if ($this->serial == '*'){
+            $numero = nextCodigo(null, 'sin_serial');
+        }
+        $this->alert('success', 'guardar-'. $numero);
     }
 
     #[On('initSelects')]
