@@ -73,7 +73,7 @@ class MarcasComponent extends Component
         $marca->nombre = $this->nombre;
 
         $marca->save();
-        //$this->dispatch('listarSelect', tabla: 'tipos')->to(ArticulosComponent::class);
+        $this->dispatch('initSelects', select: 'marcas')->to(BienesComponent::class);
         $this->limpiarMarcas();
         $this->alert('success', $message);
     }
@@ -123,7 +123,7 @@ class MarcasComponent extends Component
                 'success',
                 'Marca Eliminada.'
             );
-            //$this->dispatch('listarSelect', tabla: 'tipos')->to(ArticulosComponent::class);
+            $this->dispatch('initSelects', select: 'marcas')->to(BienesComponent::class);
         }
 
         $this->limpiarMarcas();

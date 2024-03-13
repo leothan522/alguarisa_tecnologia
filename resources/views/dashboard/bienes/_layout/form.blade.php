@@ -18,7 +18,7 @@
                     <div class="form-group">
                         <label for="email">Tipo:</label>
                         <div wire:ignore>
-                            <div class="input-group mb-3" id="div_select_categorias">
+                            <div class="input-group mb-3" id="div_select_bienes_tipo">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-bookmark"></i></span>
                                 </div>
@@ -27,7 +27,7 @@
                                 </select>
                             </div>
                         </div>
-                        @error('categorias_id')
+                        @error('tipos_id')
                         <span class="col-sm-12 text-sm text-bold text-danger">
                             <i class="icon fas fa-exclamation-triangle"></i>
                             {{ $message }}
@@ -38,7 +38,7 @@
                     <div class="form-group">
                         <label for="email">Marca:</label>
                         <div wire:ignore>
-                            <div class="input-group mb-3" id="div_select_procedencias">
+                            <div class="input-group mb-3" id="div_select_bienes_marca">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-bookmark"></i></span>
                                 </div>
@@ -47,7 +47,7 @@
                                 </select>
                             </div>
                         </div>
-                        @error('procedencias_id')
+                        @error('marcas_id')
                         <span class="col-sm-12 text-sm text-bold text-danger">
                             <i class="icon fas fa-exclamation-triangle"></i>
                             {{ $message }}
@@ -58,7 +58,7 @@
                     <div class="form-group">
                         <label for="email">Modelo:</label>
                         <div wire:ignore>
-                            <div class="input-group mb-3" id="div_select_procedencias">
+                            <div class="input-group mb-3" id="div_select_bienes_modelo">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-bookmark"></i></span>
                                 </div>
@@ -67,7 +67,7 @@
                                 </select>
                             </div>
                         </div>
-                        @error('procedencias_id')
+                        @error('modelos_id')
                         <span class="col-sm-12 text-sm text-bold text-danger">
                             <i class="icon fas fa-exclamation-triangle"></i>
                             {{ $message }}
@@ -78,7 +78,7 @@
                     <div class="form-group">
                         <label for="email">Color:</label>
                         <div wire:ignore>
-                            <div class="input-group mb-3" id="div_select_procedencias">
+                            <div class="input-group mb-3" id="div_select_bienes_color">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-bookmark"></i></span>
                                 </div>
@@ -87,7 +87,7 @@
                                 </select>
                             </div>
                         </div>
-                        @error('procedencias_id')
+                        @error('colores_id')
                         <span class="col-sm-12 text-sm text-bold text-danger">
                             <i class="icon fas fa-exclamation-triangle"></i>
                             {{ $message }}
@@ -105,7 +105,7 @@
 
             <div class="card card-outline card-navy">
                 <div class="card-header">
-                    <h5 class="card-title">Datos Especificos</h5>
+                    <h5 class="card-title">Datos Específicos</h5>
                     <div class="card-tools">
                         <span class="btn-tool"><i class="fas fa-book"></i></span>
                     </div>
@@ -145,9 +145,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="email">Estatus:</label>
+                        <label for="email">Condición:</label>
                         <div wire:ignore>
-                            <div class="input-group mb-3" id="div_select_procedencias">
+                            <div class="input-group mb-3" id="div_select_bienes_condicion">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text"><i class="far fa-bookmark"></i></span>
                                 </div>
@@ -156,7 +156,7 @@
                                 </select>
                             </div>
                         </div>
-                        @error('procedencias_id')
+                        @error('condiciones_id')
                         <span class="col-sm-12 text-sm text-bold text-danger">
                             <i class="icon fas fa-exclamation-triangle"></i>
                             {{ $message }}
@@ -185,9 +185,9 @@
 
 <div class="row justify-content-end">
         <div class="col-md-4">
-            <button type="submit" class="btn btn-block @if(/*$nuevo*/true) btn-success @else btn-primary @endif float-right mr-1"
-                    @if(!comprobarPermisos('articulos.create')) disabled @endif >
-                <i class="fas fa-save"></i> Guardar @if(/*$editar*/false) Cambios @endif
+            <button type="submit" class="btn btn-block @if($nuevo) btn-success @else btn-primary @endif float-right mr-1"
+                    @if(!comprobarPermisos('bienes.create')) disabled @endif >
+                <i class="fas fa-save"></i> Guardar @if($editar) Cambios @endif
             </button>
         </div>
     </div>

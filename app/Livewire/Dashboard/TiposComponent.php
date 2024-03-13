@@ -72,7 +72,7 @@ class TiposComponent extends Component
         $tipo->nombre = $this->nombre;
 
         $tipo->save();
-        //$this->dispatch('listarSelect', tabla: 'tipos')->to(ArticulosComponent::class);
+        $this->dispatch('initSelects', select: 'tipos')->to(BienesComponent::class);
         $this->limpiarTipos();
         $this->alert('success', $message);
     }
@@ -122,7 +122,7 @@ class TiposComponent extends Component
                 'success',
                 'Tipo Eliminado.'
             );
-            //$this->dispatch('listarSelect', tabla: 'tipos')->to(ArticulosComponent::class);
+            $this->dispatch('initSelects', select: 'tipos')->to(BienesComponent::class);
         }
 
         $this->limpiarTipos();

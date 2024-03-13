@@ -3,22 +3,22 @@
 
     <div class="card-header">
         <h3 class="card-title">
-            @if(/*$nuevo*/true)
+            @if($nuevo)
                 Registrar
             @endif
-            @if(/*$editar*/true)
+            @if($editar)
                 Editar
             @endif
-            Bien
+            Bienes
         </h3>
         <div class="card-tools">
             {{--<button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i>
             </button>--}}
-            @if(/*!$nuevo*/true)
+            @if(!$nuevo)
                 <button class="btn btn-tool" wire:click="create">
                     <i class="fas fa-file"></i> Nuevo</button>
             @endif
-            @if(/*$editar*/true)
+            @if($editar)
                 <button class="btn btn-tool" {{--wire:click="destroy({{ $articulos_id }})"--}}
                         @if(!comprobarPermisos('articulos.destroy')) disabled @endif >
                     <i class="fas fa-edit"></i>
@@ -27,8 +27,8 @@
                 {{--<a href="--}}{{--{{ route('etiquetas.print', $articulos_id) }}--}}{{--#" target="_blank" class="btn btn-tool"><i class="fas fa-print"></i> Imprimir Etiqueta</a>--}}
             @endif
 
-            @if(/*$nuevo || $editar*/true)
-                <button class="btn btn-tool" wire:click="limpiarArticulos">
+            @if($nuevo || $editar)
+                <button class="btn btn-tool" wire:click="limpiar">
                     <i class="fas fa-ban"></i> Cancelar
                 </button>
             @endif
@@ -38,32 +38,27 @@
 
     <div class="card-body">
 
-        @if(/*$nuevo || $editar*/true)
+        <div @if(!$form) class="d-none" @endif >
             @include('dashboard.bienes._layout.form')
-        @else
-            <div class="row m-5">
-                <div class="col-12">
-                    Debes seleccionar un Bien para empezar...
-                </div>
+        </div>
+
+        <div @if(!$show) class="d-none" @endif >
+            hola
+        </div>
+
+        <div class="row m-5 @if(!$view) d-none @endif ">
+            <div class="col-12">
+                Debes seleccionar un Bien para empezar...
             </div>
-        @endif
+        </div>
 
     </div>
 
-    <div class="card-footer text-center @if(/*!$footer*/true) d-none @endif">
+    <div class="card-footer text-center @if(!$footer) d-none @endif">
 
         <button type="button" class="btn btn-default btn-sm" {{--wire:click="btnImagen"--}}
                 {{--@if(!$estatus) disabled @endif--}}>
             <i class="fas fa-images"></i> Imagenes
-        </button>
-
-        <button type="button" class="btn btn-default btn-sm" {{--wire:click="btnActivoInactivo"--}}
-                @if(!comprobarPermisos('articulos.estatus')) disabled @endif >
-            @if(/*$estatus*/true)
-                <i class="fas fa-check"></i> Operativo
-            @else
-                <i class="fas fa-ban"></i> Inoperativo
-            @endif
         </button>
 
         <button type="button" class="btn btn-default btn-sm" wire:click="destroy()"

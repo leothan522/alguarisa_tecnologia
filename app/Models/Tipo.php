@@ -12,14 +12,19 @@ class Tipo extends Model
     protected $table = "tipos";
     protected $fillable = ['nombre'];
 
-    public function scopeBuscar($query, $keyword)
-    {
-        return $query->where('nombre', 'LIKE', "%$keyword%");
-    }
-
     public function modelos(): HasMany
     {
         return $this->hasMany(Modelo::class, 'tipos_id', 'id');
+    }
+
+    public function bienes(): HasMany
+    {
+        return $this->hasMany(Bien::class, 'tipos_id', 'id');
+    }
+
+    public function scopeBuscar($query, $keyword)
+    {
+        return $query->where('nombre', 'LIKE', "%$keyword%");
     }
 
 }

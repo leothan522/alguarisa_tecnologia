@@ -52,17 +52,17 @@ class ModelosComponent extends Component
 
         $tipos = Tipo::orderBy('nombre', 'ASC')->get();
         $data = dataSelect2($tipos, 'nombre');
-        $this->dispatch('selectTipos', data: $data);
+        $this->dispatch('modeloSelectTipos', data: $data);
 
         $marcas = Marca::orderBy('nombre', 'ASC')->get();
         $data = dataSelect2($marcas, 'nombre');
-        $this->dispatch('selectMarcas', data: $data);
+        $this->dispatch('modeloSelectMarcas', data: $data);
     }
 
     public function save()
     {
         $rules = [
-            'nombre'       =>  ['required', 'min:2', 'max:20', Rule::unique('modelos', 'nombre')->ignore($this->modelos_id)],
+            'nombre'       =>  ['required', 'min:2', 'max:20'/*, Rule::unique('modelos', 'nombre')->ignore($this->modelos_id)*/],
             'tipos_id'     => 'required',
             'marcas_id'     => 'required',
         ];
@@ -88,7 +88,7 @@ class ModelosComponent extends Component
         $modelos->tipos_id = $this->tipos_id;
         $modelos->marcas_id = $this->marcas_id;
         $modelos->save();
-        //$this->dispatch('listarSelect', tabla: 'tipos')->to(ArticulosComponent::class);
+        $this->dispatch('initSelects', select: 'modelo')->to(BienesComponent::class);
         $this->limpiarModelos();
         $this->alert('success', $message);
     }
@@ -100,8 +100,8 @@ class ModelosComponent extends Component
         $this->nombre = $modelos->nombre;
         $this->tipos_id = $modelos->tipos_id;
         $this->marcas_id = $modelos->marcas_id;
-        $this->dispatch('setSelectTipos', id: $this->tipos_id);
-        $this->dispatch('setSelectMarcas', id: $this->marcas_id);
+        $this->dispatch('setModeloSelectTipos', id: $this->tipos_id);
+        $this->dispatch('setModeloSelectMarcas', id: $this->marcas_id);
     }
 
     public function destroy($id)
@@ -142,7 +142,7 @@ class ModelosComponent extends Component
                 'success',
                 'Modelos Eliminado.'
             );
-            //$this->dispatch('listarSelect', tabla: 'tipos')->to(ArticulosComponent::class);
+            $this->dispatch('initSelects', select: 'modelo')->to(BienesComponent::class);
         }
 
         $this->limpiarModelos();
@@ -153,37 +153,38 @@ class ModelosComponent extends Component
         //
     }
 
-    #[On('selectTipos')]
-    public function selectTipos($data)
+    #[On('modeloSelectTipos')]
+    public function modeloSelectTipos($data)
     {
         //JS
     }
 
-    #[On('getSelectTipos')]
-    public function getSelectTipos($id)
+    #[On('getModeloSelectTipos')]
+    public function getModeloSelectTipos($id)
     {
         $this->tipos_id = $id;
     }
 
-    #[On('setSelectTipos')]
-    public function setSelectTipos($id)
+    #[On('setModeloSelectTipos')]
+    public function setModeloSelectTipos($id)
     {
         //JS
     }
 
-    #[On('selectMarcas')]
-    public function selectMarcas($data)
+    #[On('modeloSelectMarcas')]
+    public function modeloSelectMarcas($data)
     {
         //JS
     }
 
-    #[On('getSelectMarcas')]
-    public function getSelectMarcas($id)
+    #[On('getModeloSelectMarcas')]
+    public function getModeloSelectMarcas($id)
     {
         $this->marcas_id = $id;
     }
 
-    public function setSelectMarcas($id)
+    #[On('setModeloSelectMarcas')]
+    public function setModeloSelectMarcas($id)
     {
         //JS
     }

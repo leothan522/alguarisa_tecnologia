@@ -73,7 +73,7 @@
             Livewire.dispatch('limpiarCondiciones');
         }
 
-        function select_2(id, data, event)
+        function select_2_tablas(id, data, event, modal)
         {
             let html = '<div class="input-group-prepend">' +
                 '<span class="input-group-text">' +
@@ -84,7 +84,7 @@
             $('#div_' + id).html(html);
 
             $('#'  + id).select2({
-                dropdownParent: $('#modal-modelos'),
+                dropdownParent: $('#modal-' + modal),
                 theme: 'bootstrap4',
                 data: data,
                 placeholder: 'Seleccione',
@@ -97,20 +97,82 @@
             });
         }
 
-        Livewire.on('selectTipos', ({ data }) => {
-            select_2('select_modelos_tipo', data, 'getSelectTipos');
+        Livewire.on('modeloSelectTipos', ({ data }) => {
+            select_2_tablas('select_modelos_tipo', data, 'getModeloSelectTipos', 'modelos');
         });
 
-        Livewire.on('setSelectTipos', ({ id }) => {
+        Livewire.on('setModeloSelectTipos', ({ id }) => {
             $('#select_modelos_tipo').val(id).trigger('change');
         });
 
+        Livewire.on('modeloSelectMarcas', ({ data }) => {
+            select_2_tablas('select_modelos_marca', data, 'getModeloSelectMarcas', 'modelos');
+        });
+
+        Livewire.on('setModeloSelectMarcas', ({ id }) => {
+            $('#select_modelos_marca').val(id).trigger('change');
+        });
+
+        function select_2(id, data, event)
+        {
+            let html = '<div class="input-group-prepend">' +
+                '<span class="input-group-text">' +
+                '<i class="far fa-bookmark"></i>' +
+                '</span>' +
+                '</div> ' +
+                '<select id="'+ id +'"></select>';
+            $('#div_' + id).html(html);
+
+            $('#'  + id).select2({
+                theme: 'bootstrap4',
+                data: data,
+                placeholder: 'Seleccione',
+            });
+            $('#'  + id).val(null).trigger('change');
+            $('#'  + id).on('change', function() {
+                var val = $(this).val();
+                Livewire.dispatch(event, { id: val });
+            });
+        }
+
+        Livewire.on('selectTipos', ({ data }) => {
+            select_2('select_bienes_tipo', data, 'getselectTipos');
+        });
+
+        Livewire.on('setSelectTipos', ({ id }) => {
+            $('#select_bienes_tipo').val(id).trigger('change');
+        });
+
         Livewire.on('selectMarcas', ({ data }) => {
-            select_2('select_modelos_marca', data, 'getSelectMarcas');
+            select_2('select_bienes_marca', data, 'getselectMarcas');
         });
 
         Livewire.on('setSelectMarcas', ({ id }) => {
-            $('#select_modelos_marca').val(id).trigger('change');
+            $('#select_bienes_marca').val(id).trigger('change');
+        });
+
+        Livewire.on('selectColores', ({ data }) => {
+            select_2('select_bienes_color', data, 'getselectColores');
+        });
+
+        Livewire.on('setSelectColores', ({ id }) => {
+            $('#select_bienes_color').val(id).trigger('change');
+        });
+
+        Livewire.on('selectCondiciones', ({ data }) => {
+            select_2('select_bienes_condicion', data, 'getselectCondiciones');
+        });
+
+        Livewire.on('setSelectCondiciones', ({ id }) => {
+            $('#select_bienes_condicion').val(id).trigger('change');
+        });
+
+        Livewire.on('selectModelos', ({ data }) => {
+            select_2('select_bienes_modelo', data, 'getselectModelos');
+        });
+
+        Livewire.on('setSelectModelos', ({ id }) => {
+            $('#select_bienes_modelo').val(id).trigger('change');
         });
 
         function buscar(){

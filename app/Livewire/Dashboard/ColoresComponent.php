@@ -72,7 +72,7 @@ class ColoresComponent extends Component
         $color->nombre = $this->nombre;
 
         $color->save();
-        //$this->dispatch('listarSelect', tabla: 'tipos')->to(ArticulosComponent::class);
+        $this->dispatch('initSelects', select: 'color')->to(BienesComponent::class);
         $this->limpiarColores();
         $this->alert('success', $message);
     }
@@ -122,7 +122,7 @@ class ColoresComponent extends Component
                 'success',
                 'Color Eliminado.'
             );
-            //$this->dispatch('listarSelect', tabla: 'tipos')->to(ArticulosComponent::class);
+            $this->dispatch('initSelects', select: 'color')->to(BienesComponent::class);
         }
 
         $this->limpiarColores();

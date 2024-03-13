@@ -72,7 +72,7 @@ class CondicionesComponent extends Component
         $condicion->nombre = $this->nombre;
 
         $condicion->save();
-        //$this->dispatch('listarSelect', tabla: 'tipos')->to(ArticulosComponent::class);
+        $this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
         $this->limpiarCondiciones();
         $this->alert('success', $message);
     }
@@ -122,7 +122,7 @@ class CondicionesComponent extends Component
                 'success',
                 'Condición Eliminada.'
             );
-            //$this->dispatch('listarSelect', tabla: 'tipos')->to(ArticulosComponent::class);
+            $this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
         }
 
         $this->limpiarCondiciones();

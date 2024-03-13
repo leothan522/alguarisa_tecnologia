@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <div class="card-body table-responsive p-0" style="height: 76vh;">
+    <div class="card-body table-responsive p-0" @if($tableStyle) style="height: 76vh;" @endif>
 
         <table class="table table-head-fixed table-hover text-nowrap sticky-top">
             <thead>

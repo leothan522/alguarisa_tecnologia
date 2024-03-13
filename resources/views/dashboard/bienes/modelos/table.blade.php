@@ -19,9 +19,9 @@
         <table class="table table-sm table-head-fixed table-hover text-nowrap">
             <thead>
             <tr class="text-navy">
-                <th>Modelo</th>
                 <th>Tipo</th>
                 <th>Marca</th>
+                <th>Modelo</th>
                 <th style="width: 5%;">&nbsp;</th>
             </tr>
             </thead>
@@ -29,9 +29,9 @@
             @if($listarModelos->isNotEmpty())
                 @foreach($listarModelos as $modelo)
                     <tr>
-                        <td>{{ $modelo->nombre }}</td>
                         <td>{{ $modelo->tipo->nombre }}</td>
                         <td>{{ $modelo->marca->nombre }}</td>
+                        <td>{{ $modelo->nombre }}</td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit({{ $modelo->id }})" class="btn btn-primary btn-sm"
