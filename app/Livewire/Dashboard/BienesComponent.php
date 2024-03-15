@@ -62,7 +62,7 @@ class BienesComponent extends Component
     public function limpiar()
     {
         $this->reset([
-            'view', 'form', 'ver', 'nuevo', 'editar', 'cancelar', 'footer', 'keyword',
+            'view', 'form', 'ver', 'nuevo', 'editar', 'cancelar', 'footer',
             'tipos_id', 'marcas_id', 'modelos_id', 'colores_id', 'serial', 'identificador', 'condiciones_id', 'adicional',
             'verTipo', 'verMarca', 'verModelo', 'verColor', 'verCondicion',
             'imagenes', 'imagenFrontal', 'imagenPosterior'
@@ -188,6 +188,7 @@ class BienesComponent extends Component
 
         $this->serial = $serial;
         $this->show($bien->id);
+        $this->reset('keyword');
         $this->alert('success', 'Datos Guardados. ');
     }
 
@@ -241,6 +242,7 @@ class BienesComponent extends Component
             );
         }
         $this->limpiar();
+        $this->reset('keyword');
     }
 
     public function btnCancelar()
@@ -258,6 +260,18 @@ class BienesComponent extends Component
         $this->cancelar = true;
         $this->imagenes = true;
         $this->dispatch('showImagenes', id: $this->bienes_id)->to(ImagenesComponent::class);
+    }
+
+    #[On('buscar')]
+    public function buscar($keyword)
+    {
+        $this->keyword = $keyword;
+    }
+
+    public function limpiarBuscar()
+    {
+        $this->reset('keyword');
+        $this->btnCancelar();
     }
 
     #[On('initSelects')]

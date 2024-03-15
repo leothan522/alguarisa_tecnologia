@@ -72,13 +72,29 @@
         </button>
 
         <button type="button" class="btn btn-default btn-sm" wire:click="destroy"
-                @if(!comprobarPermisos()) disabled @endif>
+                @if(!comprobarPermisos('bienes.destroy')) disabled @endif>
             <i class="fas fa-trash-alt"></i> Eliminar
         </button>
 
     </div>
 
 
-    {!! verSpinner() !!}
+    {{--{!! verSpinner() !!}--}}
+
+    <div class="overlay-wrapper" wire:loading wire:target="create, show, save, edit, destroy, confirmed, btnCancelar, btnImagenes">
+        <div class="overlay">
+            <div class="spinner-border text-navy" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay-wrapper d-none cargar_bienes">
+        <div class="overlay">
+            <div class="spinner-border text-navy" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
 
 </div>

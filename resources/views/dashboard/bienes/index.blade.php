@@ -185,13 +185,18 @@
             $('#customFileLangPosterior').click();
         }
 
+        function verSpinnerOculto() {
+            $('.cargar_bienes').removeClass('d-none');
+        }
+
         function buscar(){
             let input = $("#navbarSearch");
             let keyword  = input.val();
             if (keyword.length > 0){
+                verSpinnerOculto();
                 input.blur();
-                alert('Falta vincular con el componente Livewire');
-                //Livewire.dispatch('buscar', { keyword: keyword });
+                //alert('Falta vincular con el componente Livewire');
+                Livewire.dispatch('buscar', { keyword: keyword });
             }
             return false;
         }

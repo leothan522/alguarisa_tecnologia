@@ -7,59 +7,44 @@
         </li>
         <li class="nav-item">
             <button type="button" class="btn btn-primary btn-sm btn-block m-1"
-                    data-toggle="modal" data-target="#modal-tipos" onclick="verTipos()"
-                {{--@if(!comprobarPermisos('tipos.index')) disabled @endif--}} >
+                    data-toggle="modal" data-target="#modal-tipos" onclick="verTipos()">
                 Tipos
             </button>
         </li>
         <li class="nav-item">
             <button type="button" class="btn btn-primary btn-sm btn-block m-1"
-                    data-toggle="modal" data-target="#modal-marcas" onclick="verMarcas()"
-            {{--@if(!comprobarPermisos('categorias.index')) disabled @endif --}} >
+                    data-toggle="modal" data-target="#modal-marcas" onclick="verMarcas()">
                 Marcas
             </button>
         </li>
         <li class="nav-item">
             <button type="button" class="btn btn-primary btn-sm btn-block m-1"
-                    data-toggle="modal" data-target="#modal-modelos" onclick="verModelos()"
-                    {{--@if(!comprobarPermisos('unidades.index')) disabled @endif--}} >
+                    data-toggle="modal" data-target="#modal-modelos" onclick="verModelos()">
                 Modelos
             </button>
         </li>
         <li class="nav-item">
             <button type="button" class="btn btn-primary btn-sm btn-block m-1"
-                    data-toggle="modal" data-target="#modal-colores" onclick="verColores()"
-                {{--@if(!comprobarPermisos('procedencias.index')) disabled @endif--}} >
+                    data-toggle="modal" data-target="#modal-colores" onclick="verColores()">
                 Colores
             </button>
         </li>
 
         <li class="nav-item">
             <button type="button" class="btn btn-primary btn-sm btn-block m-1"
-                    data-toggle="modal" data-target="#modal-condiciones" onclick="verCondiciones()"
-                {{--@if(!comprobarPermisos('procedencias.index')) disabled @endif--}} >
+                    data-toggle="modal" data-target="#modal-condiciones" onclick="verCondiciones()">
                 Condiciones
             </button>
         </li>
 
-        @if(auth()->user()->role == 100)
-
-            {{--<li class="nav-item">
-                <button type="button" class="btn btn-primary btn-sm btn-block m-1"
-                        data-toggle="modal" data-target="#modal-tributarios" onclick="verTributarios()"
-                        --}}{{--@if(!comprobarPermisos('tributarios.index')) disabled @endif--}}{{-- >
-                    Tributarios
-                </button>
-            </li>--}}
-
-        @endif
         <li class="dropdown-divider"></li>
+
         <li class="nav-item mb-2">
             <span class="text-small text-muted float-right">Reportes</span>
         </li>
         <li class="nav-item">
             <button type="button" class="btn btn-primary btn-sm btn-block m-1"
-                    data-toggle="modal" data-target="#modal-reportes-articulos"
+                    data-toggle="modal" data-target="#modal-reportes-articulos" disabled
                 {{--@if(!comprobarPermisos('almacenes.index')) disabled @endif--}} >
                 Bienes
             </button>

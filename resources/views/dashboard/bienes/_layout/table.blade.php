@@ -4,7 +4,7 @@
         <h3 class="card-title">
             @if($keyword)
                 Resultados para { <b class="text-warning">{{ $keyword }}</b> }
-                <button class="btn btn-tool text-warning" wire:click="">
+                <button class="btn btn-tool text-warning" wire:click="limpiarBuscar" onclick="verSpinnerOculto()">
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else

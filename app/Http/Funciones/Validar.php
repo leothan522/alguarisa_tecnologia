@@ -25,6 +25,59 @@ function comprobarAccesoEmpresa($permisos, $user_id)
 function allPermisos()
 {
     $permisos = [
+        'Bienes' => [
+            'route' => 'bienes.index',
+            'submenu' => [
+                'Crear Bienes' => 'bienes.create',
+                'Editar Bienes' => 'bienes.edit',
+                'Borrar Bienes' => 'bienes.destroy'
+            ]
+        ],
+        'Tipos' => [
+            'route' => 'tipos.index',
+            'submenu' => [
+                'Crear Tipos' => 'tipos.create',
+                'Editar Tipos' => 'tipos.edit',
+                'Borrar Tipos' => 'tipos.destroy'
+
+            ]
+        ],
+        'Marcas' => [
+            'route' => 'marcas.index',
+            'submenu' => [
+                'Crear Marcas' => 'marcas.create',
+                'Editar Marcas' => 'marcas.edit',
+                'Borrar Marcas' => 'marcas.destroy'
+
+            ]
+        ],
+        'Modelos' => [
+            'route' => 'modelos.index',
+            'submenu' => [
+                'Crear Modelos' => 'modelos.create',
+                'Editar Modelos' => 'modelos.edit',
+                'Borrar Modelos' => 'modelos.destroy'
+
+            ]
+        ],
+        'Colores' => [
+            'route' => 'colores.index',
+            'submenu' => [
+                'Crear Colores' => 'colores.create',
+                'Editar Colores' => 'colores.edit',
+                'Borrar Colores' => 'colores.destroy'
+
+            ]
+        ],
+        'Condiciones' => [
+            'route' => 'condiciones.index',
+            'submenu' => [
+                'Crear Condiciones' => 'condiciones.create',
+                'Editar Condiciones' => 'condiciones.edit',
+                'Borrar Condiciones' => 'condiciones.destroy'
+
+            ]
+        ],
         'Usuarios' => [
             'route' => 'usuarios.index',
             'submenu' => [
@@ -58,24 +111,6 @@ function allPermisos()
                 'Borrar Parroquias' => 'parroquias.destroy'
             ]
         ],
-        /*'Procedencias' => [
-            'route' => 'procedencias.index',
-            'submenu' => [
-                'Crear procedencias' => 'procedencias.create',
-                'Editar procedencias' => 'procedencias.edit',
-                'Borrar procedencias' => 'procedencias.destroy'
-
-            ]
-        ],
-        'Tributarios' => [
-            'route' => 'tributarios.index',
-            'submenu' => [
-                'Crear tributarios' => 'tributarios.create',
-                'Editar tributarios' => 'tributarios.edit',
-                'Borrar tributarios' => 'tributarios.destroy'
-
-            ]
-        ]*/
     ];
     return $permisos;
 }
