@@ -6,8 +6,14 @@
             @if($nuevo)
                 Registrar
             @endif
-            @if($editar)
+            @if($ver)
+                Ver
+            @endif
+            @if(!$editar && $cancelar && !$nuevo)
                 Editar
+            @endif
+            @if($imagenes)
+                Imagenes
             @endif
             Bienes
         </h3>
@@ -15,11 +21,12 @@
             {{--<button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i>
             </button>--}}
             @if(!$nuevo)
-                <button class="btn btn-tool" wire:click="create">
-                    <i class="fas fa-file"></i> Nuevo</button>
+                <button class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('bienes.create')) disabled @endif >
+                    <i class="fas fa-file"></i> Nuevo
+                </button>
             @endif
             @if($editar)
-                <button class="btn btn-tool" wire:click="edit">
+                <button class="btn btn-tool" wire:click="edit" @if(!comprobarPermisos('bienes.edit')) disabled @endif >
                     <i class="fas fa-edit"></i>
                     Editar
                 </button>
@@ -46,7 +53,7 @@
         </div>
 
         <div @if(!$imagenes) class="d-none" @endif >
-            @include('dashboard.bienes._layout.imagenes')
+            @livewire('dashboard.imagenes-component')
         </div>
 
         <div class="row m-5 @if(!$view) d-none @endif ">
@@ -60,8 +67,8 @@
     <div class="card-footer text-center @if(!$footer) d-none @endif">
 
         <button type="button" class="btn btn-default btn-sm" wire:click="btnImagenes"
-                {{--@if(!$estatus) disabled @endif--}}>
-            <i class="fas fa-images"></i> Imagenes
+            @if($imagenes || !comprobarPermisos('bienes.edit')) disabled @endif>
+            <i class="fas fa-images"></i> Cambiar Imagenes
         </button>
 
         <button type="button" class="btn btn-default btn-sm" wire:click="destroy"

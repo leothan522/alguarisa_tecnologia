@@ -26,9 +26,7 @@ class BienesComponent extends Component
     public $view = true, $form = false, $ver = false, $nuevo = false, $editar = false, $cancelar = false, $footer = false, $keyword;
     public $tipos_id, $marcas_id, $modelos_id, $colores_id, $serial, $identificador, $condiciones_id, $adicional;
     public $bienes_id, $verTipo, $verMarca, $verModelo, $verColor, $verCondicion;
-    public $imagenes = false, $idImgFrontal, $verImgFrontal, $idImgPosterior, $verImgPosterior, $borrarImgFrontal, $borrarImgPosterior;
-    #[Validate('image|max:1024')] // 1MB Max
-    public $frontalPhoto, $posteriorPhoto;
+    public $imagenes = false, $imagenFrontal, $imagenPosterior;
 
     public function mount()
     {
@@ -67,8 +65,7 @@ class BienesComponent extends Component
             'view', 'form', 'ver', 'nuevo', 'editar', 'cancelar', 'footer', 'keyword',
             'tipos_id', 'marcas_id', 'modelos_id', 'colores_id', 'serial', 'identificador', 'condiciones_id', 'adicional',
             'verTipo', 'verMarca', 'verModelo', 'verColor', 'verCondicion',
-            'imagenes', 'idImgFrontal', 'verImgFrontal', 'idImgPosterior', 'verImgPosterior',
-            'frontalPhoto', 'posteriorPhoto', 'borrarImgFrontal', 'borrarImgPosterior'
+            'imagenes', 'imagenFrontal', 'imagenPosterior'
         ]);
         $this->resetErrorBag();
     }
@@ -107,14 +104,15 @@ class BienesComponent extends Component
         $this->editar = true;
         $this->footer = true;
 
-        $frontal = $this->dataImagen($this->bienes_id, 'frontal');
-        $this->idImgFrontal = $frontal['id'];
-        $this->verImgFrontal = $frontal['imagen'];
-        $this->borrarImgFrontal = $frontal['borrar'];
-        $posterior = $this->dataImagen($this->bienes_id, 'posterior');
-        $this->idImgPosterior = $posterior['id'];
-        $this->verImgPosterior = $posterior['imagen'];
-        $this->borrarImgPosterior = $posterior['borrar'];
+        $imagen = Imagen::where('bienes_id', $id)->where('nombre', 'frontal')->first();
+        if ($imagen){
+            $this->imagenFrontal = $imagen->mini;
+        }
+
+        $imagen = Imagen::where('bienes_id', $id)->where('nombre', 'posterior')->first();
+        if ($imagen){
+            $this->imagenPosterior = $imagen->mini;
+        }
 
     }
 
@@ -259,23 +257,7 @@ class BienesComponent extends Component
         $this->ver = false;
         $this->cancelar = true;
         $this->imagenes = true;
-    }
-
-    protected function dataImagen($id, $nombre): array
-    {
-        $data = [
-            'id' => null,
-            'imagen' => null,
-            'borrar' => null,
-        ];
-
-        $imagen = Imagen::where('bienes_id', $id)->where('nombre', $nombre)->first();
-        if ($imagen){
-            $data['id'] = $imagen->id;
-            $data['imagen'] = $imagen->mini;
-            $data['borrar'] = $imagen->imagen;
-        }
-        return $data;
+        $this->dispatch('showImagenes', id: $this->bienes_id)->to(ImagenesComponent::class);
     }
 
     #[On('initSelects')]

@@ -36,16 +36,6 @@
 
         </div>
 
-        {{--@if($verDefault)
-            <ul class="list-group text-sm">
-                <li class="list-group-item bg-warning text-bold">
-                    Tienda Default
-                    <span class="float-right text-bold"><i class="fas fa-certificate text-muted text-xs"></i></span>
-                </li>
-            </ul>
-        @endif--}}
-
-
     </div>
 
     <div class="col-md-6">
@@ -67,12 +57,12 @@
 
                         <div class="row col-12 justify-content-center mb-3 mt-3">
                             <div class="col-5">
-                                <img class="img-thumbnail" src="{{ verImagen(/*$verImagen*/null, false, true) }}"
-                                     {{--width="101" height="100"--}}  alt="Logo Tienda"/>
+                                <img class="img-thumbnail" src="{{ verImagen($imagenFrontal, false, true) }}"
+                                     {{--width="101" height="100"--}}  alt="Imagen Frontal"/>
                             </div>
                             <div class="col-5">
-                                <img class="img-thumbnail" src="{{ verImagen(/*$verImagen*/null, false, true) }}"
-                                     {{--width="101" height="100"--}}  alt="Logo Tienda"/>
+                                <img class="img-thumbnail" src="{{ verImagen($imagenPosterior, false, true) }}"
+                                     {{--width="101" height="100"--}}  alt="Imagen Posterior"/>
                             </div>
                         </div>
 

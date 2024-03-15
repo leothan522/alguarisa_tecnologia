@@ -3,7 +3,7 @@
     <div class="card card-outline card-navy">
 
         <div class="card-header">
-            <h5 class="card-title">Imagenes</h5>
+            <h5 class="card-title">Cambiar Imagenes</h5>
             <div class="card-tools">
                 <span class="btn-tool"><i class="fas fa-images"></i></span>
             </div>
@@ -37,7 +37,7 @@
                                      {{--width="101" height="100"--}}  alt="Imagen Frontal del Bien" onclick="clickImgFrontal()" />
                                 @if($verImgFrontal)
                                     <button type="button" class="btn badge text-danger position-absolute float-right"
-                                            {{--wire:click="btnBorrarImagen"--}} >
+                                            wire:click="btnBorrarImagen('frontal')" >
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 @endif
@@ -54,7 +54,6 @@
                                         <small>Seleccionar Imagen</small>
                                     </label>
                                 </div>
-                                <input type="text" wire:model="borrarImgFrontal">
                             </div>
                             @error('frontalPhoto')
                             <span class="text-sm text-bold text-danger text-center">
@@ -89,7 +88,7 @@
                                      {{--width="101" height="100"--}}  alt="Imagen Posterior del Bien" onclick="clickImgPosterior()" />
                                 @if($verImgPosterior)
                                     <button type="button" class="btn badge text-danger position-absolute float-right"
-                                            {{--wire:click="btnBorrarImagen"--}} >
+                                            wire:click="btnBorrarImagen('posterior')" >
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
                                 @endif
@@ -106,7 +105,6 @@
                                         <small>Seleccionar Imagen</small>
                                     </label>
                                 </div>
-                                <input type="text" wire:model="borrarImgPosterior">
                             </div>
                             @error('posteriorPhoto')
                             <span class="text-sm text-bold text-danger text-center">
@@ -124,7 +122,7 @@
 
                 <div class="col-md-12">
                     <div class="col-md-4 float-right">
-                        <button type="submit" class="btn btn-block btn-primary">
+                        <button type="submit" class="btn btn-block btn-primary" @if(!$guardar) disabled @endif >
                             <i class="fas fa-save"></i> Guardar
                         </button>
                     </div>
@@ -133,6 +131,8 @@
             </form>
 
         </div>
+
+        {!! verSpinner() !!}
 
     </div>
 
