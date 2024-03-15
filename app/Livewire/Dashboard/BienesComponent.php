@@ -20,7 +20,6 @@ use Livewire\WithFileUploads;
 class BienesComponent extends Component
 {
     use LivewireAlert;
-    use WithFileUploads;
 
     public $rows = 0, $numero = 14, $tableStyle = false;
     public $view = true, $form = false, $ver = false, $nuevo = false, $editar = false, $cancelar = false, $footer = false, $keyword;

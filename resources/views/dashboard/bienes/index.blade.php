@@ -12,8 +12,18 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    {{--<li class="breadcrumb-item"><a href="#">Home</a></li>--}}
-                    <li class="breadcrumb-item active">Bienes Registrados</li>
+                    <li class="breadcrumb-item active">
+                        <a {{--href="#"--}}>
+                            <i class="fas fa-search"></i>
+                            Busqueda Avanzada
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-oficios">
+                        <a href="#" id="btn_header_oficios">
+                            <i class="fas fa-file-invoice"></i>
+                            Oficios
+                        </a>
+                    </li>
                 </ol>
             </div>
         </div>
@@ -33,6 +43,7 @@
         @livewire('dashboard.colores-component')
         @livewire('dashboard.modelos-component')
         @livewire('dashboard.condiciones-component')
+        @livewire('dashboard.modal-oficios-component')
     </div>
 
 @endsection
@@ -200,6 +211,10 @@
             }
             return false;
         }
+
+        $('#btn_header_oficios').click(function (e) {
+            e.preventDefault();
+        });
 
         console.log('Hi!');
     </script>
