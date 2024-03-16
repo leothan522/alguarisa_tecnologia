@@ -33,40 +33,38 @@
 
         <!-- TO DO List -->
         <ul class="todo-list" data-widget="todo-list">
-            @if(/*$listarBienes->isNotEmpty()*/false)
-                @foreach($listarBienes as $bien)
-                    <li class=" @if($bien->id == $bienes_id) text-warning @endif " >
+            @if(!empty($listarEquipos))
+                @foreach($listarEquipos as $key => $equipo)
+                    <li>
                     <!-- todo text -->
                     {{--<span class="text">
-                            {{ $bien->codigo }}
+                            {{ $equipo->codigo }}
                     </span>--}}
                     <!-- Emphasis label -->
                     <small class="text text-uppercase {{--badge-danger--}}">
-                        {{ $bien->tipo->nombre }}
-                        {{ $bien->marca->nombre }}
-                        {{ $bien->modelo->nombre }}
-                        @if(!is_null($bien->serial))
-                            , Serial: {{ $bien->serial }}
+                        {{ $equipo['tipo'] }}
+                        {{ $equipo['marca'] }}
+                        {{ $equipo['modelo'] }}
+                        @if(!is_null($equipo['serial']))
+                            , Serial: {{ $equipo['serial'] }}
                         @endif
-                        @if(!is_null($bien->identificador))
-                           , Identificador: {{ $bien->identificador }}
+                        @if(!is_null($equipo['identificador']))
+                           , Identificador: {{ $equipo['identificador'] }}
                         @endif
 
                     </small>
-                    <!-- General tools such as edit or delete-->
-                    <div class="tools text-primary" wire:click="show({{ $bien->id }})">
-                        <i class="fas fa-eye"></i>
-                    </div>
+                        @if(!$ver)
+                            <!-- General tools such as edit or delete-->
+                            <div class="tools text-danger" wire:click="btnQuitarEquipo({{ $key }})">
+                                <i class="fas fa-trash-alt"></i>
+                            </div>
+                        @endif
                     </li>
                 @endforeach
             @else
                 <li class="text-center">
                     <!-- todo text -->
-                    @if(/*$keyword*/false)
-                        <span class="text">Sin resultados</span>
-                    @else
-                        <span class="text">Sin Equipos vinculados</span>
-                    @endif
+                    <span class="text">Sin Equipos vinculados</span>
                 </li>
             @endif
 

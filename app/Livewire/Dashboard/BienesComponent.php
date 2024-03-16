@@ -120,12 +120,14 @@ class BienesComponent extends Component
         return [
             'serial'       =>  [
                 'nullable',
+                'alpha_dash:ascii',
                 Rule::requiredIf(empty($this->identificador)),
                 'max:20',
                 Rule::unique('bienes', 'serial')
                     ->ignore($this->bienes_id)],
             'identificador' =>  [
                 'nullable',
+                'alpha_dash:ascii',
                 Rule::requiredIf(empty($this->serial)),
                 'max:20',
                 Rule::unique('bienes', 'identificador')

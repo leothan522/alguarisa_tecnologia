@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Bien;
+use App\Models\Equipo;
 use App\Models\Oficio;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
@@ -16,7 +18,8 @@ class ModalOficiosComponent extends Component
     public $rows = 0, $numero = 14, $tableStyle = false;
     public $view = true, $form = false, $ver = false, $nuevo = false, $editar = false, $cancelar = false, $keyword;
     public $oficios_id, $oficio, $fecha, $equipos = 0, $repetido = false;
-    public $serial, $identificador;
+    public $serial;
+    public $listarEquipos = [];
 
     public function mount()
     {
@@ -54,7 +57,8 @@ class ModalOficiosComponent extends Component
         $this->reset([
             'view', 'form', 'ver', 'nuevo', 'editar', 'cancelar',
             'oficios_id', 'oficio', 'fecha', 'equipos', 'repetido',
-            'serial', 'identificador'
+            'serial',
+            'listarEquipos'
         ]);
         $this->resetErrorBag();
     }
@@ -77,6 +81,21 @@ class ModalOficiosComponent extends Component
         $this->oficio = $oficio->numero;
         $this->fecha = $oficio->fecha;
         $this->equipos = $oficio->equipos;
+
+        $equipos = Equipo::where('oficios_id', $this->oficios_id)->get();
+        foreach ($equipos as $equipo){
+            $bien = Bien::find($equipo->bienes_id);
+            $this->listarEquipos[] = [
+                'id' => $bien->id,
+                'tipo' => $bien->tipo->nombre,
+                'marca' => $bien->marca->nombre,
+                'modelo' => $bien->modelo->nombre,
+                'serial' => $bien->serial,
+                'identificador' => $bien->identificador
+            ];
+        }
+
+
         $this->view = false;
         $this->form = true;
         $this->ver = true;
@@ -104,14 +123,33 @@ class ModalOficiosComponent extends Component
 
         if ($this->oficios_id){
             $oficio = Oficio::find($this->oficios_id);
+            $borrar = true;
         }else{
             $oficio = new Oficio();
+            $borrar = false;
         }
 
         $oficio->numero = $this->oficio;
         $oficio->fecha = $this->fecha;
         $oficio->equipos = $this->equipos;
         $oficio->save();
+
+        if ($borrar){
+            $equipos = Equipo::where('oficios_id', $oficio->id)->get();
+            foreach ($equipos as $equipo){
+                $eliminar = Equipo::find($equipo->id);
+                $eliminar->delete();
+            }
+        }
+
+        if (!empty($this->listarEquipos)) {
+            foreach ($this->listarEquipos as $equipo){
+                $nuevo = new Equipo();
+                $nuevo->oficios_id = $oficio->id;
+                $nuevo->bienes_id = $equipo['id'];
+                $nuevo->save();
+            }
+        }
 
         $this->limpiar();
         $this->reset('keyword');
@@ -169,6 +207,61 @@ class ModalOficiosComponent extends Component
         $this->reset('keyword');
     }
 
+    public function btnSerial()
+    {
+        $rules = ['serial' => 'required|alpha_dash:ascii'];
+        $message = [
+            'serial.required' => 'El campo es obligatorio.',
+            'serial.alpha_dash' => 'El campo sólo debe contener letras, números, guiones y guiones bajos.'
+        ];
+        $this->validate($rules, $message);
+        $exite = false;
+
+        foreach ($this->listarEquipos as $equipo){
+            if (mb_strtoupper($equipo['serial']) == mb_strtoupper($this->serial) ||
+                mb_strtoupper($equipo['identificador']) == mb_strtoupper($this->serial)){
+                $exite = true;
+                break;
+            }
+        }
+
+        if (!$exite){
+            $bien = Bien::where('serial', $this->serial)->orWhere('identificador', $this->serial)->first();
+            if ($bien){
+                $this->listarEquipos[] = [
+                    'id' => $bien->id,
+                    'tipo' => $bien->tipo->nombre,
+                    'marca' => $bien->marca->nombre,
+                    'modelo' => $bien->modelo->nombre,
+                    'serial' => $bien->serial,
+                    'identificador' => $bien->identificador
+                ];
+                $this->equipos++;
+                $this->reset('serial');
+            }else{
+                $this->confirm('¿Registrar Bienes?', [
+                    'toast' => false,
+                    'position' => 'center',
+                    'showConfirmButton' => true,
+                    'confirmButtonText' =>  '¡Sí, Registrar Equipo!',
+                    'text' =>  '¡El Serial ó Identificador suministrado NO coindide con algún Bien registrado!',
+                    'cancelButtonText' => 'No',
+                    'onConfirmed' => 'nuevoEquipo',
+                ]);
+            }
+        }else{
+            $this->alert('warning', 'El equipo ya esta agregado.');
+            //$this->reset('serial');
+        }
+
+    }
+
+    public function btnQuitarEquipo($key)
+    {
+        unset($this->listarEquipos[$key]);
+        $this->equipos--;
+    }
+
     public function btnCancelar()
     {
         if ($this->oficios_id && !$this->ver){
@@ -198,6 +291,16 @@ class ModalOficiosComponent extends Component
         $this->btnCancelar();
     }
 
+    #[On('nuevoEquipo')]
+    public function nuevoEquipo()
+    {
+        $this->dispatch('clickNuevoBien');
+    }
 
+    #[On('clickNuevoBien')]
+    public function clickNuevoBien()
+    {
+        //JS
+    }
 
 }

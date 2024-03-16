@@ -90,37 +90,22 @@
                     </div>
 
                     @if(!$ver)
-                        <div class="row">
-                        <div class="col-md-6">
+                        <div class="row justify-content-center">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 {{--<label for="email">Nro. Oficio:</label>--}}
                                 <div class="input-group">
-                                    <input type="text" class="form-control" wire:model="serial" placeholder="Serial">
+                                    <input type="text" class="form-control" wire:model="serial" wire:keydown.enter="btnSerial" placeholder="Serial ó Identificador">
                                     <div class="input-group-append">
-                                        <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                        <button type="button" class="input-group-text" wire:click="btnSerial">
+                                            <i class="fas fa-search"></i>
+                                        </button>
                                     </div>
                                     @error('serial')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
                                         <i class="icon fas fa-exclamation-triangle"></i>
                                         {{ $message }}
                                     </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                {{--<label for="name">Fecha:</label>--}}
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" wire:model="identificador" placeholder="Identificador">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="fas fa-search"></i></span>
-                                    </div>
-                                    @error('identificador')
-                                    <span class="col-sm-12 text-sm text-bold text-danger">
-                                <i class="icon fas fa-exclamation-triangle"></i>
-                                {{ $message }}
-                            </span>
                                     @enderror
                                 </div>
                             </div>

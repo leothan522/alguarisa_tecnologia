@@ -21,7 +21,7 @@
             {{--<button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i>
             </button>--}}
             @if(!$nuevo)
-                <button class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('bienes.create')) disabled @endif >
+                <button class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('bienes.create')) disabled @endif id="btn_create_bien" >
                     <i class="fas fa-file"></i> Nuevo
                 </button>
             @endif

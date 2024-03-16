@@ -216,6 +216,11 @@
             e.preventDefault();
         });
 
+        Livewire.on('clickNuevoBien', () =>{
+            $('#btn_cerrar_model_oficios').click();
+            $('#btn_create_bien').click();
+        });
+
         console.log('Hi!');
     </script>
 @endsection

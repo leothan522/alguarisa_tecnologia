@@ -42,7 +42,7 @@
             {!! verSpinner() !!}
 
             <div class="modal-footer justify-content-end">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">{{ __('Close') }}</button>
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="btn_cerrar_model_oficios">{{ __('Close') }}</button>
             </div>
 
         </div>
