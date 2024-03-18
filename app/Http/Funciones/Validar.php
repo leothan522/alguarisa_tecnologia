@@ -25,6 +25,14 @@ function comprobarAccesoEmpresa($permisos, $user_id)
 function allPermisos()
 {
     $permisos = [
+        'Oficios' => [
+            'route' => 'oficios.index',
+            'submenu' => [
+                'Crear Oficios' => 'oficios.create',
+                'Editar Oficios' => 'oficios.edit',
+                'Borrar Oficios' => 'oficios.destroy'
+            ]
+        ],
         'Bienes' => [
             'route' => 'bienes.index',
             'submenu' => [
@@ -75,6 +83,15 @@ function allPermisos()
                 'Crear Condiciones' => 'condiciones.create',
                 'Editar Condiciones' => 'condiciones.edit',
                 'Borrar Condiciones' => 'condiciones.destroy'
+
+            ]
+        ],
+        'Ubicaciones' => [
+            'route' => 'ubicaciones.index',
+            'submenu' => [
+                'Crear Ubicación' => 'ubicaciones.create',
+                'Editar Ubicación' => 'ubicaciones.edit',
+                'Borrar Ubicación' => 'ubicaciones.destroy'
 
             ]
         ],

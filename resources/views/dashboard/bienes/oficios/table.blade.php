@@ -18,7 +18,7 @@
             </button>
 
             <button type="button" class="btn btn-tool" wire:click="create"
-                    @if(!comprobarPermisos('bienes.create')) disabled @endif >
+                    @if(!comprobarPermisos('oficios.create')) disabled @endif >
                 <i class="fas fa-file"></i> Nuevo
             </button>
 
