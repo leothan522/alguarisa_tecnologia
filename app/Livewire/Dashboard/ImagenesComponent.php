@@ -56,7 +56,7 @@ class ImagenesComponent extends Component
         $this->validate($rules, $messages);
 
         $alert = false;
-        $path = "bienes/bien_id_".$this->bienes_id;
+        $path = "bienes"; //bien_id_".$this->bienes_id;
 
         if ($this->frontalPhoto){
             $this->procesarImagen($this->idImgFrontal, $this->frontalPhoto, $path, 'frontal');
