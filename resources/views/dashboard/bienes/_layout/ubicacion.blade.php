@@ -91,7 +91,7 @@
 
                             <td style="width: 5%;">
                                 <button type="submit" class="btn @if(/*$ubicacions_id*/false) btn-primary @else btn-success @endif btn-sm"
-                                        @if(!comprobarPermisos('bien.ubicaciones')) disabled @endif >
+                                        @if(!comprobarPermisos('bien.edit')) disabled @endif >
                                     <i class="fas fa-save"></i>
                                 </button>
                             </td>
