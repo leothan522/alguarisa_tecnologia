@@ -10,25 +10,25 @@
                 </h1>--}}
                 <ul class="list-group list-group-unbordered {{--mt-3--}}">
                     <li class="list-group-item">
-                        <b>Tipo</b> <a class="float-right text-uppercase">{{ $verTipo }}</a>
+                        <b>Tipo</b> <span class="text-purple text-bold float-right text-uppercase">{{ $verTipo }}</span>
                     </li>
                     <li class="list-group-item">
-                        <b>Marca</b> <a class="float-right text-uppercase">{{ $verMarca }}</a>
+                        <b>Marca</b> <span class="text-purple text-bold float-right text-uppercase">{{ $verMarca }}</span>
                     </li>
                     <li class="list-group-item">
-                        <b>Modelo</b> <a class="float-right text-uppercase">{{ $verModelo }}</a>
+                        <b>Modelo</b> <span class="text-purple text-bold float-right text-uppercase">{{ $verModelo }}</span>
                     </li>
                     <li class="list-group-item">
-                        <b>Color</b> <a class="float-right text-uppercase">{{ $verColor }}</a>
+                        <b>Color</b> <span class="text-purple text-bold float-right text-uppercase">{{ $verColor }}</span>
                     </li>
                     <li class="list-group-item">
-                        <b>Serial</b> <a class="float-right text-uppercase">{{ $serial }}</a>
+                        <b>Serial</b> <span class="text-purple text-bold float-right text-uppercase">[{{ $serial }}]</span>
                     </li>
                     <li class="list-group-item">
-                        <b>Identificador</b> <a class="float-right text-uppercase">{{ $identificador }}</a>
+                        <b>Identificador</b> <span class="text-purple text-bold float-right text-uppercase">[{{ $identificador }}]</span>
                     </li>
                     <li class="list-group-item">
-                        <b>Condición</b> <a class="float-right text-uppercase">{{ $verCondicion }}</a>
+                        <b>Condición</b> <span class="text-purple text-bold float-right text-uppercase">{{ $verCondicion }}</span>
                     </li>
                 </ul>
 
