@@ -66,8 +66,20 @@
 
     <div class="card-footer text-center @if(!$footer) d-none @endif">
 
+        <button type="button" class="btn btn-default btn-sm" wire:click="btnUbicacion" onclick="verSpinnerOculto()"
+                data-toggle="modal" data-target="#modal-sm-bien-oficios"
+            {{--@if(!comprobarPermisos('bienes.edit')) disabled @endif--}}>
+            <i class="fas fa-file-invoice"></i> Vinculados
+        </button>
+
+        <button type="button" class="btn btn-default btn-sm" wire:click="btnUbicacion" onclick="verSpinnerOculto()"
+                data-toggle="modal" data-target="#modal-sm-bien-ubicacion"
+            {{--@if(!comprobarPermisos('bienes.edit')) disabled @endif--}}>
+            <i class="fas fa-thumbtack"></i> Ubicación
+        </button>
+
         <button type="button" class="btn btn-default btn-sm" wire:click="btnImagenes"
-            @if($imagenes || !comprobarPermisos('bienes.edit')) disabled @endif>
+                @if($imagenes || !comprobarPermisos('bienes.edit')) disabled @endif>
             <i class="fas fa-images"></i> Cambiar Imagenes
         </button>
 

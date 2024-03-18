@@ -43,7 +43,9 @@
         @livewire('dashboard.colores-component')
         @livewire('dashboard.modelos-component')
         @livewire('dashboard.condiciones-component')
+        @livewire('dashboard.ubicaciones-component')
         @livewire('dashboard.modal-oficios-component')
+        @livewire('dashboard.modal-ubicaciones-component')
     </div>
 
 @endsection
@@ -82,6 +84,10 @@
 
         function verCondiciones() {
             Livewire.dispatch('limpiarCondiciones');
+        }
+
+        function verUbicaciones() {
+            Livewire.dispatch('limpiarUnicaciones');
         }
 
         function select_2_tablas(id, data, event, modal)

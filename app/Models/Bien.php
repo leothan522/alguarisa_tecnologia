@@ -56,6 +56,11 @@ class Bien extends Model
         return $this->hasMany(Imagen::class, 'bienes_id', 'id');
     }
 
+    public function ubicaciones(): HasMany
+    {
+        return $this->hasMany(BienUbicacion::class, 'bienes_id', 'id');
+    }
+
     public function scopeBuscar($query, $keyword)
     {
         return $query->where('serial', 'LIKE', "%$keyword%")

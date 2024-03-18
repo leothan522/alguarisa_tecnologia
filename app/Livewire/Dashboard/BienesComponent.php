@@ -263,6 +263,11 @@ class BienesComponent extends Component
         $this->dispatch('showImagenes', id: $this->bienes_id)->to(ImagenesComponent::class);
     }
 
+    public function btnUbicacion()
+    {
+        $this->dispatch('getBienesUbicaciones', bienID: $this->bienes_id)->to(ModalUbicacionesComponent::class);
+    }
+
     #[On('buscar')]
     public function buscar($keyword)
     {
