@@ -109,9 +109,9 @@ class ImagenesComponent extends Component
         $path_data = "storage/imagenes/$path/size_".$nombre[1];
         $miniatura = crearMiniaturas($imagen->imagen, $path_data);
         $imagen->mini = $miniatura['mini'];
-        $imagen->detail = $miniatura['detail'];
+        /*$imagen->detail = $miniatura['detail'];
         $imagen->cart = $miniatura['cart'];
-        $imagen->banner = $miniatura['banner'];
+        $imagen->banner = $miniatura['banner'];*/
         $imagen->bienes_id = $this->bienes_id;
         $imagen->nombre = $name;
         $imagen->save();
