@@ -24,6 +24,7 @@
                         </thead>
                         <tbody>
                         @if($listarEquipos->isNotEmpty())
+                            @php($i = 0)
                             @foreach($listarEquipos as $equipo)
                                 @if($equipo->ver)
                                 <tr>
@@ -39,8 +40,16 @@
                                         </button>
                                     </td>
                                 </tr>
+                                    @php($i++)
                                 @endif
                             @endforeach
+                            @if($i == 0)
+                                <tr>
+                                    <td colspan="2" class="text-center text-danger">
+                                        Sin Oficio Vinculado.
+                                    </td>
+                                </tr>
+                            @endif
                         @else
                             <tr>
                                 <td colspan="2" class="text-center text-danger">

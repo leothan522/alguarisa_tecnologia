@@ -2,7 +2,9 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Bien;
 use App\Models\Marca;
+use App\Models\Modelo;
 use App\Models\Tipo;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -106,6 +108,13 @@ class MarcasComponent extends Component
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
+
+        $modelos = Modelo::where('marcas_id', $this->marcas_id)->first();
+        $bienes = Bien::where('marcas_id', $this->marcas_id)->first();
+
+        if ($modelos || $bienes){
+            $vinculado = true;
+        }
 
         if ($vinculado) {
             $this->alert('warning', '¡No se puede Borrar!', [

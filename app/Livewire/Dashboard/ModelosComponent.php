@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Bien;
 use App\Models\Color;
 use App\Models\Marca;
 use App\Models\Modelo;
@@ -131,6 +132,12 @@ class ModelosComponent extends Component
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
+
+        $bienes = Bien::where('modelos_id', $this->modelos_id)->first();
+
+        if ($bienes){
+            $vinculado = true;
+        }
 
         if ($vinculado) {
             $this->alert('warning', '¡No se puede Borrar!', [

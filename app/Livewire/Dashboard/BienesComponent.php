@@ -5,9 +5,11 @@ namespace App\Livewire\Dashboard;
 use App\Models\Bien;
 use App\Models\Color;
 use App\Models\Condicion;
+use App\Models\Equipo;
 use App\Models\Imagen;
 use App\Models\Marca;
 use App\Models\Modelo;
+use App\Models\Oficio;
 use App\Models\Parametro;
 use App\Models\Tipo;
 use Illuminate\Validation\Rule;
@@ -225,6 +227,11 @@ class BienesComponent extends Component
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
 
+        $oficios = Equipo::where('bienes_id', $this->bienes_id)->first();
+        if ($oficios){
+            $vinculado = true;
+        }
+
         if ($vinculado) {
             $this->alert('warning', '¡No se puede Borrar!', [
                 'position' => 'center',
@@ -241,9 +248,9 @@ class BienesComponent extends Component
                 'success',
                 'Registro Eliminado.'
             );
+            $this->limpiar();
+            $this->reset('keyword');
         }
-        $this->limpiar();
-        $this->reset('keyword');
     }
 
     public function btnCancelar()

@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Bien;
+use App\Models\Modelo;
 use App\Models\Tipo;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -105,6 +107,13 @@ class TiposComponent extends Component
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
+
+        $modelos = Modelo::where('tipos_id', $this->tipos_id)->first();
+        $bienes = Bien::where('tipos_id', $this->tipos_id)->first();
+
+        if ($modelos || $bienes){
+            $vinculado = true;
+        }
 
         if ($vinculado) {
             $this->alert('warning', '¡No se puede Borrar!', [
