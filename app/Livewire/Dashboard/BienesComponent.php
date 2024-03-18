@@ -145,7 +145,7 @@ class BienesComponent extends Component
     public function save()
     {
         $this->validate();
-        if ($this->serial == '*'){
+        if ($this->serial == '_'){
             $serial = nextCodigo('sin_serial', null, 'S/S-');
         }else{
             if (!empty($this->serial)){
