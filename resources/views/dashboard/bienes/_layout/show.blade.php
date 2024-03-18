@@ -22,10 +22,10 @@
                         <b>Color</b> <span class="text-purple text-bold float-right text-uppercase">{{ $verColor }}</span>
                     </li>
                     <li class="list-group-item">
-                        <b>Serial</b> <span class="text-purple text-bold float-right text-uppercase">[{{ $serial }}]</span>
+                        <b>Serial</b> <span class="text-purple text-bold float-right text-uppercase">@if($serial) [{{ $serial }}] @else -  @endif</span>
                     </li>
                     <li class="list-group-item">
-                        <b>Identificador</b> <span class="text-purple text-bold float-right text-uppercase">[{{ $identificador }}]</span>
+                        <b>Identificador</b> <span class="text-purple text-bold float-right text-uppercase">@if($identificador) [{{ $identificador }}] @else -  @endif</span>
                     </li>
                     <li class="list-group-item">
                         <b>Condición</b> <span class="text-purple text-bold float-right text-uppercase">{{ $verCondicion }}</span>

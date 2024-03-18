@@ -144,9 +144,11 @@ class BienesComponent extends Component
 
     public function save()
     {
+
         $this->validate();
+
         if ($this->serial == '_'){
-            $serial = nextCodigo('sin_serial', null, 'S-S-');
+            $serial = nextCodigo('sin_serial', null, 'S/S-');
         }else{
             if (!empty($this->serial)){
                 $serial = $this->serial;
@@ -175,7 +177,7 @@ class BienesComponent extends Component
         $bien->adicional = $this->adicional;
         $bien->save();
 
-        if ($this->serial == '*'){
+        if ($this->serial == '_'){
             $parametro = Parametro::where('nombre', 'sin_serial')->first();
             if ($parametro){
                 $num = $parametro->tabla_id + 1;

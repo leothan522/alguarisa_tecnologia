@@ -210,12 +210,19 @@ class ModalOficiosComponent extends Component
 
     public function btnSerial()
     {
+
         $rules = ['serial' => 'required|alpha_dash:ascii'];
         $message = [
             'serial.required' => 'El campo es obligatorio.',
             'serial.alpha_dash' => 'El campo sólo debe contener letras, números, guiones y guiones bajos.'
         ];
+
+        $this->serial = str_replace('/', '_-_', $this->serial);
+
         $this->validate($rules, $message);
+
+        $this->serial = str_replace('_-_', '/', $this->serial);
+
         $exite = false;
 
         foreach ($this->listarEquipos as $equipo){
