@@ -46,6 +46,7 @@
         @livewire('dashboard.ubicaciones-component')
         @livewire('dashboard.modal-oficios-component')
         @livewire('dashboard.modal-ubicaciones-component')
+        @livewire('dashboard.modal-oficios-vinculados-component')
     </div>
 
 @endsection
@@ -226,6 +227,11 @@
             $('#btn_cerrar_model_oficios').click();
             $('#btn_create_bien').click();
         });
+
+        function verOficio() {
+            $('#btn_modal_vinculados_cerrar').click();
+            $('#btn_header_oficios').click();
+        }
 
         console.log('Hi!');
     </script>

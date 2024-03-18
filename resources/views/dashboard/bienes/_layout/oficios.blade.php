@@ -17,41 +17,34 @@
                     <table class="table table-sm table-head-fixed table-hover text-nowrap">
                         <thead>
                         <tr class="text-navy">
-                            <th class="">Historico</th>
-                            {{--<th style="width: 10%">Oficios</th>--}}
+                            <th class="">Nro. Oficio</th>
+                            <th style="width: 10%">Fecha</th>
                             <th style="width: 5%">&nbsp;</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @if($listarBienUbicacion->isNotEmpty())
-                            @foreach($listarBienUbicacion as $ubicacion)
+                        @if($listarEquipos->isNotEmpty())
+                            @foreach($listarEquipos as $equipo)
+                                @if($equipo->ver)
                                 <tr>
                                     <td class="text-uppercase">
-                                        {{ $ubicacion->ubicacion->nombre }}
-                                        <small class="badge float-right">
-                                            @if($ubicacion->actual)
-                                                Actual
-                                            @else
-                                                <i class="fas fa-level-up-alt"></i>
-                                            @endif
-                                        </small>
+                                        {{ $equipo->oficio->numero }}
                                     </td>
-                                    {{--<td>
-                                        {{ $ubicacion->moneda }}
-                                    </td>--}}
+                                    <td class="text-right text-uppercase">
+                                        {{ verFecha($equipo->oficio->fecha) }}
+                                    </td>
                                     <td class="text-right">
-                                        @if($ubicacion->actual && comprobarPermisos('bienes.edit'))
-                                            <button class="btn btn-sm text-danger m-0" wire:click="destroy({{ $ubicacion->id }})">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        @endif
+                                        <button class="btn btn-sm text-primary m-0" wire:click="verOficio({{ $equipo->oficios_id }})" onclick="verOficio()">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
                                     </td>
                                 </tr>
+                                @endif
                             @endforeach
                         @else
                             <tr>
                                 <td colspan="2" class="text-center text-danger">
-                                    Sin Ubicación.
+                                    Sin Oficio Vinculado.
                                 </td>
                             </tr>
                         @endif
@@ -61,51 +54,11 @@
 
                 </div>
 
-                <form wire:submit="save" class="p-0 @if(!comprobarPermisos('bienes.edit')) d-none @endif ">
-                    <table class="table table-sm">
-                        <tbody>
-                        <tr>
-                            <td>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <select class="custom-select custom-select-sm @error("ubicaciones_id") is-invalid @enderror" wire:model="ubicaciones_id" id="ubicacion_select_ubicaciones">
-                                            <option value="">Seleccione</option>
-                                            @foreach($listarUbicaciones as $ubicacion)
-                                                <option value="{{ $ubicacion->id }}">{{ mb_strtoupper($ubicacion->nombre) }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </td>
-                            {{--<td>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <select class="custom-select custom-select-sm @error("moneda") is-invalid @enderror" wire:model="moneda">
-                                            <option value="">Seleccione</option>
-                                            <option value="Bolivares">Bolivares</option>
-                                            <option value="Dolares">Dolares</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </td>--}}
-
-                            <td style="width: 5%;">
-                                <button type="submit" class="btn @if(/*$ubicacions_id*/false) btn-primary @else btn-success @endif btn-sm"
-                                        @if(!comprobarPermisos('bien.ubicaciones')) disabled @endif >
-                                    <i class="fas fa-save"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </form>
-
-
 
             </div>
 
             <div class="modal-footer card-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="btn_modal_vinculados_cerrar">Cerrar</button>
             </div>
 
             {!! verSpinner() !!}

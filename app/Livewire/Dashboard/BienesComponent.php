@@ -268,6 +268,11 @@ class BienesComponent extends Component
         $this->dispatch('getBienesUbicaciones', bienID: $this->bienes_id)->to(ModalUbicacionesComponent::class);
     }
 
+    public function btnOficios()
+    {
+        $this->dispatch('getBienesOficios', bienID: $this->bienes_id)->to(ModalOficiosVinculadosComponent::class);
+    }
+
     #[On('buscar')]
     public function buscar($keyword)
     {

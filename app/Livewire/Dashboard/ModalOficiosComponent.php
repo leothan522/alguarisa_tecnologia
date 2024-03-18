@@ -73,6 +73,7 @@ class ModalOficiosComponent extends Component
         $this->ver = false;
     }
 
+    #[On('show')]
     public function show($id)
     {
         $this->limpiar();
