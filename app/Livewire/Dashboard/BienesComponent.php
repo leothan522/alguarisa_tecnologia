@@ -146,7 +146,7 @@ class BienesComponent extends Component
     {
         $this->validate();
         if ($this->serial == '_'){
-            $serial = nextCodigo('sin_serial', null, 'S/S-');
+            $serial = nextCodigo('sin_serial', null, 'S-S-');
         }else{
             if (!empty($this->serial)){
                 $serial = $this->serial;
