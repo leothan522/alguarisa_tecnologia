@@ -461,7 +461,7 @@ class BienesComponent extends Component
 
     protected function dataCondicion(): array
     {
-        $condiciones = Condicion::orderBy('nombre', 'ASC')->get();
+        $condiciones = Condicion::get();
         return dataSelect2($condiciones, 'nombre');
     }
 
