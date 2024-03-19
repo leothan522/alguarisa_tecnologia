@@ -145,7 +145,11 @@ class BienesComponent extends Component
     public function save()
     {
 
+        $this->serial = str_replace('/', '_-_', $this->serial);
+
         $this->validate();
+
+        $this->serial = str_replace('_-_', '/', $this->serial);
 
         if ($this->serial == '_'){
             $serial = nextCodigo('sin_serial', null, 'S/S-');
