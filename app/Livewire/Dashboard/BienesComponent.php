@@ -124,14 +124,14 @@ class BienesComponent extends Component
                 'nullable',
                 'alpha_dash:ascii',
                 Rule::requiredIf(empty($this->identificador)),
-                'max:20',
+                'max:50',
                 Rule::unique('bienes', 'serial')
                     ->ignore($this->bienes_id)],
             'identificador' =>  [
                 'nullable',
                 'alpha_dash:ascii',
                 Rule::requiredIf(empty($this->serial)),
-                'max:20',
+                'max:50',
                 Rule::unique('bienes', 'identificador')
                     ->ignore($this->bienes_id)],
             'tipos_id'      => 'required',
