@@ -39,7 +39,7 @@ class ModalOficiosComponent extends Component
         }
         return view('livewire.dashboard.modal-oficios-component')
             ->with('listarOficios', $oficios)
-            ->with('rows', $rowsOficios);
+            ->with('total', $rowsOficios);
     }
 
     public function setLimit()
@@ -125,14 +125,21 @@ class ModalOficiosComponent extends Component
         if ($this->oficios_id){
             $oficio = Oficio::find($this->oficios_id);
             $borrar = true;
+            if (is_null($oficio->auditoria)){
+                $auditoria = "[ 'accion' => 'edit', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+            }else{
+                $auditoria = $oficio->auditoria.", [ 'accion' => 'edit', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+            }
         }else{
             $oficio = new Oficio();
             $borrar = false;
+            $auditoria = "[ 'accion' => 'create', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
         }
 
         $oficio->numero = $this->oficio;
         $oficio->fecha = $this->fecha;
         $oficio->equipos = $this->equipos;
+        $oficio->auditoria = $auditoria;
         $oficio->save();
 
         if ($borrar){

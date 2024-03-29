@@ -8,7 +8,7 @@
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Registrados
+                Registrados [ <b class="text-warning">{{ $total }}</b> ]
             @endif
         </h3>
 
@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <div class="card-body table-responsive p-0" @if($tableStyle) style="height: 76vh;" @endif >
+    <div class="card-body table-responsive p-0" @if($tableStyle) style="height: 55vh;" @endif >
 
         <table class="table table-head-fixed table-hover text-nowrap sticky-top">
             <thead>

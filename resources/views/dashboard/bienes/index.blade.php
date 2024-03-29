@@ -19,9 +19,9 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-oficios">
-                        <a href="#" id="btn_header_oficios">
+                        <a href="#" class="btn bg-gradient-primary btn-sm" id="btn_header_oficios">
                             <i class="fas fa-file-invoice"></i>
-                            Oficios
+                            Oficios Entregados
                         </a>
                     </li>
                 </ol>

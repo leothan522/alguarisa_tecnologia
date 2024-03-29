@@ -47,7 +47,7 @@ class BienesComponent extends Component
         }
         return view('livewire.dashboard.bienes-component')
             ->with('listarBienes', $bienes)
-            ->with('rows', $rowsBienes);
+            ->with('total', $rowsBienes);
     }
 
     public function setLimit()
@@ -167,8 +167,14 @@ class BienesComponent extends Component
 
         if ($this->bienes_id && !$this->nuevo){
             $bien = Bien::find($this->bienes_id);
+            if (is_null($bien->auditoria)){
+                $auditoria = "[ 'accion' => 'edit', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+            }else{
+                $auditoria = $bien->auditoria.", [ 'accion' => 'edit', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+            }
         }else{
             $bien = new Bien();
+            $auditoria = "[ 'accion' => 'create', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
         }
 
         $bien->tipos_id = $this->tipos_id;
@@ -179,6 +185,7 @@ class BienesComponent extends Component
         $bien->identificador = $this->identificador;
         $bien->condiciones_id = $this->condiciones_id;
         $bien->adicional = $this->adicional;
+        $bien->auditoria = $auditoria;
         $bien->save();
 
         if ($this->serial == '_'){

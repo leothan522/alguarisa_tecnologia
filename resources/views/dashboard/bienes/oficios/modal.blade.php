@@ -6,7 +6,7 @@
 
                     <div class="col-md-6">
                         <h4 class="modal-title">
-                            Oficios
+                            Oficios Entregados
                         </h4>
                     </div>
                     <div class="col-md-5 justify-content-end">

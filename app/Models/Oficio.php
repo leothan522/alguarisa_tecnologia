@@ -16,7 +16,8 @@ class Oficio extends Model
     protected $fillable = [
         'numero',
         'fecha',
-        'equipos'
+        'equipos',
+        'auditoria'
     ];
 
     public function equipos(): HasMany

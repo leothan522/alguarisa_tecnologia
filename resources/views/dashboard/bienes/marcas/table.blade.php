@@ -17,7 +17,7 @@
             </button>
         </div>
     </div>
-    <div class="card-body table-responsive p-0" style="height: 60vh;">
+    <div class="card-body table-responsive p-0" style="height: 47vh;">
         <table class="table table-sm table-head-fixed table-hover text-nowrap">
             <thead>
             <tr class="text-navy">

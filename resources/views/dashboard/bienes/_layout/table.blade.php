@@ -3,12 +3,12 @@
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
-                Resultados para { <b class="text-warning">{{ $keyword }}</b> }
+                Busqueda {{--para--}} { <b class="text-warning">{{ $keyword }}</b> }
                 <button class="btn btn-tool text-warning" wire:click="limpiarBuscar" onclick="verSpinnerOculto()">
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Registrados
+                Registrados [ <b class="text-warning">{{ $total }}</b> ]
             @endif
         </h3>
 
@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <div class="card-body table-responsive p-0" @if($tableStyle) style="height: 76vh;" @endif>
+    <div class="card-body table-responsive p-0" @if($tableStyle) style="height: 72vh;" @endif >
 
         <table class="table table-head-fixed table-hover text-nowrap sticky-top">
             <thead>
