@@ -1,6 +1,6 @@
 <form wire:submit="save" xmlns:wire="http://www.w3.org/1999/xhtml">
 
-<div class="row">
+    <div class="row">
 
         <div class="col-12">
 
@@ -22,17 +22,20 @@
                     <div class="card-tools">
                         {{--<span class="btn-tool"><i class="fas fa-book"></i></span>--}}
                         @if($editar)
-                            <button type="button" class="btn btn-tool" wire:click="destroy" @if(!comprobarPermisos('oficios.destroy')) disabled @endif >
+                            <button type="button" class="btn btn-tool" wire:click="destroy"
+                                    @if(!comprobarPermisos('oficios.destroy')) disabled @endif >
                                 <i class="fa fa-trash-alt"></i> Eliminar
                             </button>
                         @endif
                         @if(!$nuevo)
-                            <button type="button" class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('oficios.create')) disabled @endif >
+                            <button type="button" class="btn btn-tool" wire:click="create"
+                                    @if(!comprobarPermisos('oficios.create')) disabled @endif >
                                 <i class="fas fa-file"></i> Nuevo
                             </button>
                         @endif
                         @if($editar)
-                            <button type="button" class="btn btn-tool" wire:click="edit" @if(!comprobarPermisos('oficios.edit')) disabled @endif >
+                            <button type="button" class="btn btn-tool" wire:click="edit"
+                                    @if(!comprobarPermisos('oficios.edit')) disabled @endif >
                                 <i class="fa fa-edit"></i> Editar
                             </button>
                         @endif
@@ -54,7 +57,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="far fa-bookmark"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" wire:model="oficio" placeholder="Nro. Oficio" @if($ver) readonly @endif  >
+                                    <input type="text" class="form-control" wire:model="oficio"
+                                           placeholder="Nro. Oficio" @if($ver) readonly @endif >
                                     @error('oficio')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
                                         <i class="icon fas fa-exclamation-triangle"></i>
@@ -64,7 +68,8 @@
                                 </div>
                                 @error('oficio')
                                 <div class="form-check m-2">
-                                    <input type="checkbox" class="form-check-input" id="exampleCheck1" wire:click="btnRepetido">
+                                    <input type="checkbox" class="form-check-input" id="exampleCheck1"
+                                           wire:click="btnRepetido">
                                     <label class="form-check-label" for="exampleCheck1">Repetido</label>
                                 </div>
                                 @enderror
@@ -77,7 +82,8 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="far fa-bookmark"></i></span>
                                     </div>
-                                    <input type="date" class="form-control" wire:model="fecha" placeholder="alfanumérico" @if($ver) readonly @endif >
+                                    <input type="date" class="form-control" wire:model="fecha"
+                                           placeholder="alfanumérico" @if($ver) readonly @endif >
                                     @error('fecha')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
                                         <i class="icon fas fa-exclamation-triangle"></i>
@@ -91,21 +97,53 @@
 
                     @if(!$ver)
                         <div class="row justify-content-center">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                {{--<label for="email">Nro. Oficio:</label>--}}
-                                <div class="input-group">
-                                    <input type="text" class="form-control" wire:model="serial" wire:keydown.enter="btnSerial" placeholder="Serial ó Identificador">
-                                    <div class="input-group-append">
-                                        <button type="button" class="input-group-text" wire:click="btnSerial">
-                                            <i class="fas fa-search"></i>
-                                        </button>
-                                    </div>
-                                    @error('serial')
-                                    <span class="col-sm-12 text-sm text-bold text-danger">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {{--<label for="email">Nro. Oficio:</label>--}}
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" wire:model="serial"
+                                               wire:keydown.enter="btnSerial" placeholder="Serial ó Identificador">
+                                        <div class="input-group-append">
+                                            <button type="button" class="input-group-text" wire:click="btnSerial">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
+                                        @error('serial')
+                                        <span class="col-sm-12 text-sm text-bold text-danger">
                                         <i class="icon fas fa-exclamation-triangle"></i>
                                         {{ $message }}
                                     </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    <div>
+                        @include('dashboard.bienes.oficios.bienes')
+                    </div>
+
+
+                    @if(!$ver || $adicional)
+                        <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                {{--<label for="email">Nro. Oficio:</label>--}}
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <i class="far fa-bookmark"></i>
+                                            {{--Información Adicional--}}
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control" wire:model="adicional" placeholder="Información Adicional (Opcional)" @if($ver) readonly @endif >
+                                    {{--<textarea class="form-control" wire:model="adicional" placeholder="Información Adicional (Opcional)"></textarea>--}}
+                                    @error('adicional')
+                                    <span class="col-sm-12 text-sm text-bold text-danger">
+                                            <i class="icon fas fa-exclamation-triangle"></i>
+                                            {{ $message }}
+                                        </span>
                                     @enderror
                                 </div>
                             </div>
@@ -113,24 +151,23 @@
                     </div>
                     @endif
 
-                    <div>
-                        @include('dashboard.bienes.oficios.bienes')
-                    </div>
-
                 </div>
 
             </div>
 
         </div>
 
-</div>
-
-<div class="row justify-content-end @if($ver) d-none @endif ">
-    <div class="col-md-4">
-        <button type="submit" class="btn btn-block @if($nuevo) btn-success @else btn-primary @endif float-right mr-1">
-            <i class="fas fa-save"></i> Guardar @if(!$nuevo) Cambios @endif
-        </button>
     </div>
-</div>
+
+    <div class="row justify-content-end @if($ver) d-none @endif ">
+        <div class="col-md-4">
+            <button type="submit"
+                    class="btn btn-block @if($nuevo) btn-success @else btn-primary @endif float-right mr-1">
+                <i class="fas fa-save"></i> Guardar @if(!$nuevo)
+                    Cambios
+                @endif
+            </button>
+        </div>
+    </div>
 
 </form>

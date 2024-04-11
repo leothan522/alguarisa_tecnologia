@@ -236,6 +236,11 @@ class BienesComponent extends Component
     public function confirmed()
     {
         $bien = Bien::find($this->bienes_id);
+        if (is_null($bien->auditoria)){
+            $auditoria = "[ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+        }else{
+            $auditoria = $bien->auditoria.", [ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+        }
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
@@ -256,6 +261,8 @@ class BienesComponent extends Component
                 'confirmButtonText' => 'OK',
             ]);
         } else {
+            $bien->auditoria = $auditoria;
+            $bien->save();
             $bien->delete();
             $this->alert(
                 'success',

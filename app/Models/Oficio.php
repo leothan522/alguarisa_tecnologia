@@ -17,6 +17,8 @@ class Oficio extends Model
         'numero',
         'fecha',
         'equipos',
+        'adicional',
+        'pdf',
         'auditoria'
     ];
 

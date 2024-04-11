@@ -20,6 +20,7 @@ class ModalOficiosComponent extends Component
     public $oficios_id, $oficio, $fecha, $equipos = 0, $repetido = false;
     public $serial;
     public $listarEquipos = [];
+    public $adicional, $pdf;
 
     public function mount()
     {
@@ -32,7 +33,7 @@ class ModalOficiosComponent extends Component
             ->orderBy('created_at', 'DESC')
             ->limit($this->rows)
             ->get();
-        $rowsOficios = Oficio::count();
+        $rowsOficios = Oficio::buscar($this->keyword)->count();
 
         if ($rowsOficios > $this->numero) {
             $this->tableStyle = true;
@@ -58,7 +59,8 @@ class ModalOficiosComponent extends Component
             'view', 'form', 'ver', 'nuevo', 'editar', 'cancelar',
             'oficios_id', 'oficio', 'fecha', 'equipos', 'repetido',
             'serial',
-            'listarEquipos'
+            'listarEquipos',
+            'adicional', 'pdf'
         ]);
         $this->resetErrorBag();
     }
@@ -82,6 +84,8 @@ class ModalOficiosComponent extends Component
         $this->oficio = $oficio->numero;
         $this->fecha = $oficio->fecha;
         $this->equipos = $oficio->equipos;
+        $this->adicional = $oficio->adicional;
+        $this->pdf = $oficio->pdf;
 
         $equipos = Equipo::where('oficios_id', $this->oficios_id)->get();
         foreach ($equipos as $equipo){
@@ -113,12 +117,14 @@ class ModalOficiosComponent extends Component
         }
         $rules = [
             'oficio' => $unico,
-            'fecha' => 'required'
+            'fecha' => 'required',
+            'adicional' => 'required_if:equipos,0'
         ];
         $messages = [
             'oficio.required' => 'El numero es obligatorio.',
             'fecha.required' => 'La fecha es obligatoria.',
             'oficio.unique' => 'El numero ya ha sido registrado.',
+            'adicional.required_if' => 'El campo adicional es obligatorio cuando equipos vinculados es 0.',
         ];
         $this->validate($rules, $messages);
 
@@ -139,6 +145,7 @@ class ModalOficiosComponent extends Component
         $oficio->numero = $this->oficio;
         $oficio->fecha = $this->fecha;
         $oficio->equipos = $this->equipos;
+        $oficio->adicional = $this->adicional;
         $oficio->auditoria = $auditoria;
         $oficio->save();
 
@@ -190,6 +197,11 @@ class ModalOficiosComponent extends Component
     public function confirmed()
     {
         $oficio = Oficio::find($this->oficios_id);
+        if (is_null($oficio->auditoria)){
+            $auditoria = "[ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+        }else{
+            $auditoria = $oficio->auditoria.", [ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+        }
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
@@ -205,6 +217,8 @@ class ModalOficiosComponent extends Component
                 'confirmButtonText' => 'OK',
             ]);
         } else {
+            $oficio->auditoria = $auditoria;
+            $oficio->save();
             $oficio->delete();
             $this->alert(
                 'success',

@@ -53,7 +53,7 @@ class MarcasComponent extends Component
     public function save()
     {
         $rules = [
-            'nombre'       =>  ['required', 'min:2', 'max:20'/*, 'alpha_dash:ascii'*/, Rule::unique('marcas', 'nombre')->ignore($this->marcas_id)],
+            'nombre'       =>  ['required', 'min:2', 'max:40'/*, 'alpha_dash:ascii'*/, Rule::unique('marcas', 'nombre')->ignore($this->marcas_id)],
         ];
         /*$messages = [
             'nombre.required' => 'El nombre es obligatorio.',

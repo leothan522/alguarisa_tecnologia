@@ -64,7 +64,7 @@ class ModelosComponent extends Component
     public function save()
     {
         $rules = [
-            'nombre'       =>  ['required', 'min:2', 'max:20',
+            'nombre'       =>  ['required', 'min:2', 'max:40',
                 Rule::unique('modelos', 'nombre')
                     ->where(fn (Builder $query) =>
                     $query->where('tipos_id', $this->tipos_id)
@@ -78,7 +78,7 @@ class ModelosComponent extends Component
             'marcas_id.required' => 'La Marca es obligatoria.',
             'nombre.required' => 'La Modelo es obligatorio.',
             'nombre.min' => 'El modelo debe contener al menos 2 caracteres.',
-            'nombre.max' => 'El modelo no debe ser mayor que 20 caracteres.'
+            'nombre.max' => 'El modelo no debe ser mayor que 40 caracteres.'
         ];
 
         $this->validate($rules, $messages);

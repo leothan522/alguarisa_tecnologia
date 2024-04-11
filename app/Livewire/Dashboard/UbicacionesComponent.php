@@ -51,7 +51,7 @@ class UbicacionesComponent extends Component
     public function save()
     {
         $rules = [
-            'nombre'       =>  ['required', 'min:2', 'max:20'/*, 'alpha_dash:ascii'*/, Rule::unique('ubicaciones', 'nombre')->ignore($this->ubicaciones_id)],
+            'nombre'       =>  ['required', 'min:2', 'max:60'/*, 'alpha_dash:ascii'*/, Rule::unique('ubicaciones', 'nombre')->ignore($this->ubicaciones_id)],
         ];
         /*$messages = [
             'nombre.required' => 'El nombre es obligatorio.',

@@ -41,7 +41,10 @@
 
             {!! verSpinner() !!}
 
-            <div class="modal-footer justify-content-end">
+            <div class="modal-footer @if($keyword && $view) justify-content-between @else justify-content-end @endif ">
+                @if($keyword && $view)
+                    <span>Resultados [<b class="text-warning">{{ $total }}</b>]</span>
+                @endif
                 <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="btn_cerrar_model_oficios">{{ __('Close') }}</button>
             </div>
 
