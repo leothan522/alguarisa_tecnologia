@@ -39,6 +39,7 @@ Route::middleware([
     //alguarisa
     Route::get('territorio', [TerritorioController::class, 'index'])->name('territorio.index');
     Route::get('bienes', [BienesController::class, 'index'])->name('bienes.index');
+    Route::get('bienes/export', [BienesController::class, 'export'])->name('bienes.export');
 
 });
 

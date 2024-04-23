@@ -50,11 +50,10 @@
             <span class="text-small text-muted float-right">Reportes</span>
         </li>
         <li class="nav-item">
-            <button type="button" class="btn btn-primary btn-sm btn-block m-1"
-                    data-toggle="modal" data-target="#modal-reportes-articulos" disabled
-                {{--@if(!comprobarPermisos('almacenes.index')) disabled @endif--}} >
+            <a href="{{ route('bienes.export') }}" target="_blank" class="btn btn-primary btn-sm btn-block m-1"
+                    {{--data-toggle="modal" data-target="#modal-reportes-articulos" disabled--}} >
                 Bienes
-            </button>
+            </a>
         </li>
         <li class="dropdown-divider"></li>
     </ul>
