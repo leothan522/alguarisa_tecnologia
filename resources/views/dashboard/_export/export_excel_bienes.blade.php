@@ -1,6 +1,7 @@
 <table>
     <thead>
     <tr>
+        <th>ID</th>
         <th>Tipo</th>
         <th>Marca</th>
         <th>Modelo</th>
@@ -13,10 +14,15 @@
     <tbody>
     @foreach($bienes as $bien)
         <tr>
+            <td>{{ $bien->id}}</td>
             <td>{{ $bien->tipo->nombre }}</td>
             <td>{{ $bien->marca->nombre }}</td>
             <td>{{ $bien->modelo->nombre }}</td>
-            <td>{{ $bien->serial }}</td>
+            <td>
+                @if($bien->serial)
+                    [{{ $bien->serial }}]
+                @endif
+            </td>
             <td>{{ $bien->color->nombre }}</td>
             <td>{{ $bien->identificador }}</td>
             <td>{{ $bien->adicional }}</td>

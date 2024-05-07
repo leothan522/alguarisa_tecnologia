@@ -30,7 +30,7 @@ class ModalOficiosComponent extends Component
     public function render()
     {
         $oficios = Oficio::buscar($this->keyword)
-            ->orderBy('created_at', 'DESC')
+            ->orderBy('fecha', 'DESC')
             ->limit($this->rows)
             ->get();
         $rowsOficios = Oficio::buscar($this->keyword)->count();
