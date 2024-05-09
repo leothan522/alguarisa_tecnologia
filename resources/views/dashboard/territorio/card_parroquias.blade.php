@@ -7,7 +7,7 @@
                     <button class="btn btn-tool text-danger" wire:click="limpiarParroquias"><i class="fas fa-times-circle"></i>
                     </button>
                 @else
-                    Filtrando por municipio{{-- { <b class="text-danger">{{ $keywordParroquia }}</b> }--}}
+                    Filtrando por municipio { <b class="text-danger">{{ $verMunicipio }}</b> }
                     <button class="btn btn-tool text-danger" wire:click="limpiarParroquias"><i class="fas fa-times-circle"></i>
                     </button>
                 @endif

@@ -27,10 +27,10 @@
             <tr class="text-navy">
                 <th class="text-center"><i class="fas fa-cloud"></i></th>
                 <th>Nombre</th>
-                <th>Email</th>
+                <th class="d-none d-lg-table-cell">Email</th>
                 <th class="text-center">Rol</th>
                 <th class="text-center">Estatus</th>
-                <th class="text-right">Creado</th>
+                <th class="text-right d-none {{--d-lg-table-cell--}}">Creado</th>
                 <th style="width: 5%;">&nbsp;</th>
             </tr>
             </thead>
@@ -41,13 +41,13 @@
                     <tr>
                         <td class="text-center">{!! iconoPlataforma($user->plataforma) !!}</td>
                         <td>{{ ucwords($user->name) }}</td>
-                        <td>{{ strtolower($user->email) }}</td>
+                        <td class="d-none d-lg-table-cell">{{ strtolower($user->email) }}</td>
                         <td class="text-center">{{ verRole($user->role, $user->roles_id) }}</td>
                         <td class="text-center">
                             {!! verEstatusUsuario($user->estatus, true) !!}
                             {{--<span class="text-sm"> ID: {{ $user->id }}</span>--}}
                         </td>
-                        <td class="text-right">{{ haceCuanto($user->created_at)  }}</td>
+                        <td class="text-right d-none {{--d-lg-table-cell--}}">{{ haceCuanto($user->created_at)  }}</td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit({{ $user->id }})" class="btn btn-primary btn-sm"

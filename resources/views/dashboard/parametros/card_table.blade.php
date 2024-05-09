@@ -45,7 +45,7 @@
                                 null
                             @else
                                 @if($parametro->tabla_id == "-1")
-                                    json{...}
+                                    JSON {...}
                                 @else
                                     {{ $parametro->valor }}
                                 @endif

@@ -11,12 +11,13 @@ use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
 
 class UsuariosComponent extends Component
 {
     use LivewireAlert;
-    use WithPagination;
+    use WithPagination, WithoutUrlPagination;
 
     public $view = "create", $keyword;
     public $name, $email, $password, $role, $usuarios_id;

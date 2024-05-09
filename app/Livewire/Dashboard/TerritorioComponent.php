@@ -8,16 +8,18 @@ use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
 
 class TerritorioComponent extends Component
 {
     use LivewireAlert;
-    use WithPagination;
+    use WithPagination, WithoutUrlPagination;
 
     public $viewMunicipio = "create", $keywordMunicipios, $viewParroquia = 'create', $keywordParroquia, $idMunicipio;
     public $municipio_id, $municipioNombre, $municipioAbreviatura, $municipioFamilias;
     public $parroquia_id, $parroquiaNombre, $parroquiaAbreviatura, $parroquiaMunicipio, $parroquiaFamilias, $parroquiaMax;
+    public $tabMunicipio = 'active', $tabParroquia, $verMunicipio;
 
     public function render()
     {
@@ -181,7 +183,7 @@ class TerritorioComponent extends Component
         $this->resetErrorBag();
         $this->reset([
             'viewParroquia', 'parroquia_id', 'parroquiaNombre', 'parroquiaAbreviatura', 'parroquiaMunicipio',
-            'keywordParroquia', 'idMunicipio', 'parroquiaFamilias', 'parroquiaMax'
+            'keywordParroquia', 'idMunicipio', 'parroquiaFamilias', 'parroquiaMax', 'verMunicipio'
         ]);
         $municipios = dataSelect2(Municipio::orderBy('nombre', 'ASC')->get());
         $this->dispatch('selectMunicipios', municipios: $municipios);
@@ -352,7 +354,12 @@ class TerritorioComponent extends Component
     public function filtrarParroquias($id)
     {
         $this->reset(['keywordParroquia']);
+        $this->resetPage(pageName: 'pagePar');
         $this->idMunicipio = $id;
+        $municipio = Municipio::find($id);
+        $this->verMunicipio = $municipio->nombre;
+        $this->tabMunicipio = null;
+        $this->tabParroquia = 'active';
     }
 
     // *********************************** Complementos ***************************************
@@ -362,6 +369,16 @@ class TerritorioComponent extends Component
     {
         $this->keywordMunicipios = $keyword;
         $this->keywordParroquia = $keyword;
+    }
+
+    public function tabActive($opcion)
+    {
+        if ($opcion == 'municipio'){
+            $this->reset(['tabMunicipio', 'tabParroquia']);
+        }else{
+            $this->tabMunicipio = null;
+            $this->tabParroquia = 'active';
+        }
     }
 
     #[On('municipioSeleccionado')]
