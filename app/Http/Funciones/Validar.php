@@ -39,7 +39,8 @@ function allPermisos()
                 'Crear Bienes' => 'bienes.create',
                 'Editar Bienes' => 'bienes.edit',
                 'Borrar Bienes' => 'bienes.destroy',
-                'Exportar Excel'      => 'bienes.export'
+                'Exportar Excel'      => 'bienes.export',
+                'Imprimir Etiquetas'  => 'etiquetas.print'
             ]
         ],
         'Tipos' => [
