@@ -40,11 +40,13 @@ Route::middleware([
     Route::get('territorio', [TerritorioController::class, 'index'])->name('territorio.index');
     Route::get('bienes', [BienesController::class, 'index'])->name('bienes.index');
     Route::get('bienes/export', [BienesController::class, 'export'])->name('bienes.export');
+    Route::get('bienes/{id}/etiquetas/', [BienesController::class, 'printEtiqueta'])->name('etiquetas.print');
 
 });
 
 Route::get('dashboard/perfil', [UsuariosController::class, 'perfil'])->middleware('auth')->name('usuarios.perfil');
 Route::get('chat-directo/{id?}', [ChatController::class, 'index'])->middleware(['user.android'])->name('chat.directo');
+Route::get('bienes/{id}/consulta', [BienesController::class, 'webEtiqueta'])->name('etiquetas.web');
 
 Route::get('/prueba', function () {
     //Alert::alert('Title', 'Message', 'Type');

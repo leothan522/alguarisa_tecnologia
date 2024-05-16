@@ -9,6 +9,10 @@
         <th>Color</th>
         <th>Identicador</th>
         <th>Observación</th>
+        <th>Oficios Vinculados</th>
+        @if(auth()->user()->role == 100)
+            <th>Auditoria</th>
+        @endif
     </tr>
     </thead>
     <tbody>
@@ -26,6 +30,16 @@
             <td>{{ $bien->color->nombre }}</td>
             <td>{{ $bien->identificador }}</td>
             <td>{{ $bien->adicional }}</td>
+            <td>
+                @if($bien->oficios)
+                    @foreach($bien->oficios as $oficio)
+                        [{{ $oficio }}]
+                    @endforeach
+                @endif
+            </td>
+            @if(auth()->user()->role == 100)
+                <td>{!! $bien->auditoria !!}</td>
+            @endif
         </tr>
     @endforeach
     </tbody>

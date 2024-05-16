@@ -38,7 +38,8 @@ function allPermisos()
             'submenu' => [
                 'Crear Bienes' => 'bienes.create',
                 'Editar Bienes' => 'bienes.edit',
-                'Borrar Bienes' => 'bienes.destroy'
+                'Borrar Bienes' => 'bienes.destroy',
+                'Exportar Excel'      => 'bienes.export'
             ]
         ],
         'Tipos' => [

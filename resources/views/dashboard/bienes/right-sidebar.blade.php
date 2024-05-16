@@ -50,7 +50,7 @@
             <span class="text-small text-muted float-right">Reportes</span>
         </li>
         <li class="nav-item">
-            <a href="{{ route('bienes.export') }}" target="_blank" class="btn btn-primary btn-sm btn-block m-1"
+            <a href="{{ route('bienes.export') }}" target="_blank" class="btn btn-primary btn-sm btn-block m-1 text-white"
                     {{--data-toggle="modal" data-target="#modal-reportes-articulos" disabled--}} >
                 Bienes
             </a>

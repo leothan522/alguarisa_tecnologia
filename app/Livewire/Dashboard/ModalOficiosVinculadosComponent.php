@@ -20,12 +20,14 @@ class ModalOficiosVinculadosComponent extends Component
             $exite = Oficio::where('id', $equipo->oficios_id)->first();
             if ($exite){
                 $equipo->ver = true;
+                $equipo->fecha = $exite->fecha;
             }else{
                 $equipo->ver = false;
+                $equipo->fecha = null;
             }
         });
         return view('livewire.dashboard.modal-oficios-vinculados-component')
-            ->with('listarEquipos', $oficios);
+            ->with('listarEquipos', $oficios->sortByDesc('fecha'));
     }
 
     #[On('getBienesOficios')]

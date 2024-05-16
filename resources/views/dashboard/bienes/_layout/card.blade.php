@@ -83,6 +83,10 @@
             <i class="fas fa-images"></i> Cambiar Imagenes
         </button>
 
+        <a href="{{ route('etiquetas.print', $bienes_id ?? 0) }}" target="_blank" class="btn btn-default btn-sm">
+            <i class="fas fa-print"></i> Imprimir Etiqueta
+        </a>
+
         <button type="button" class="btn btn-default btn-sm" wire:click="destroy"
                 @if(!comprobarPermisos('bienes.destroy')) disabled @endif>
             <i class="fas fa-trash-alt"></i> Eliminar
