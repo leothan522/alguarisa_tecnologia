@@ -12,17 +12,17 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active">
-                        <a {{--href="#"--}}>
+                    <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-busqueda-avanzada">
+                        <button class="btn bg-gradient-primary btn-sm">
                             <i class="fas fa-search"></i>
                             Busqueda Avanzada
-                        </a>
+                        </button>
                     </li>
                     <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-oficios">
-                        <a href="#" class="btn bg-gradient-primary btn-sm" id="btn_header_oficios">
+                        <button class="btn bg-gradient-primary btn-sm" id="btn_header_oficios">
                             <i class="fas fa-file-invoice"></i>
                             Oficios Entregados
-                        </a>
+                        </button>
                     </li>
                 </ol>
             </div>
@@ -232,6 +232,10 @@
             $('#btn_modal_vinculados_cerrar').click();
             $('#btn_header_oficios').click();
         }
+
+        Livewire.on('cerrarBusqueda', () => {
+            $('#cerrar_busqueda_avanzada').click();
+        });
 
         console.log('Hi!');
     </script>
