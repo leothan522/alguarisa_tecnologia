@@ -235,6 +235,7 @@
         }
 
         Livewire.on('cerrarBusqueda', () => {
+            verSpinnerOculto();
             $('#cerrar_busqueda_avanzada').click();
         });
 

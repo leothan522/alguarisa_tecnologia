@@ -59,7 +59,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group form-group-sm">
+                            <div class="form-group form-group-sm d-none">
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
@@ -69,7 +69,7 @@
                                     <input type="text" class="form-control form-group-sm" wire:model="serial" placeholder="(Opcional)">
                                 </div>
                             </div>
-                            <div class="form-group form-group-sm">
+                            <div class="form-group form-group-sm d-none">
                                 <div class="input-group input-group-sm">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text">
@@ -93,7 +93,10 @@
 
             {!! verSpinner() !!}
 
-            <div class="modal-footer">
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default btn-sm" wire:click="limpiarBusqueda">
+                    <i class="fas fa-redo"></i> Limpiar
+                </button>
                 <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="cerrar_busqueda_avanzada">{{ __('Close') }}</button>
             </div>
 

@@ -2,8 +2,13 @@
 
     <div class="card-header">
         <h3 class="card-title">
-            @if($keyword)
-                Busqueda {{--para--}} { <b class="text-warning">{{ $keyword }}</b> }
+            @if($keyword || !empty($busqueda))
+                @if($keyword)
+                    Busqueda { <b class="text-warning">{{ $keyword }}</b> }
+                @else
+                    { <b class="text-warning">Busqueda Avanzada</b> }
+                @endif
+
                 <button class="btn btn-tool text-warning" wire:click="limpiarBuscar" onclick="verSpinnerOculto()">
                     <i class="fas fa-times-circle"></i>
                 </button>

@@ -22,6 +22,14 @@ class ModalBusquedaComponent extends Component
         return view('livewire.dashboard.modal-busqueda-component');
     }
 
+    public function limpiarBusqueda()
+    {
+        $this->reset([
+            'tipos_id', 'marcas_id', 'colores_id', 'condiciones_id', 'modelos_id', 'serial', 'identificador'
+        ]);
+        $this->modalBusqueda();
+    }
+
     #[On('modalBusqueda')]
     public function modalBusqueda()
     {
@@ -63,8 +71,21 @@ class ModalBusquedaComponent extends Component
 
     public function initBusqueda()
     {
-        $this->dispatch('cerrarBusqueda');
-        $this->alert('info', 'Aún en Desarrollo. ¡Muy pronto!');
+        if ($this->tipos_id || $this->marcas_id || $this->modelos_id || $this->colores_id || $this->condiciones_id){
+            $data = [
+                'tipo' => $this->tipos_id,
+                'marca' => $this->marcas_id,
+                'modelo' => $this->modelos_id,
+                'color' => $this->colores_id,
+                'condicion' => $this->condiciones_id,
+                'serial' => $this->serial,
+                'identificador' => $this->identificador
+            ];
+            $this->dispatch('busquedaAvanzada', data: $data)->to(BienesComponent::class);
+            $this->dispatch('cerrarBusqueda');
+        }else{
+            $this->alert('warning', 'Debes Establecer al menos un filtro para la busqueda.');
+        }
     }
 
     #[On('cerrarBusqueda')]

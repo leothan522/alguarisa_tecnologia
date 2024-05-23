@@ -28,6 +28,7 @@ class BienesComponent extends Component
     public $tipos_id, $marcas_id, $modelos_id, $colores_id, $serial, $identificador, $condiciones_id, $adicional;
     public $bienes_id, $verTipo, $verMarca, $verModelo, $verColor, $verCondicion;
     public $imagenes = false, $imagenFrontal, $imagenPosterior;
+    public $busqueda;
 
     public function mount()
     {
@@ -36,10 +37,7 @@ class BienesComponent extends Component
 
     public function render()
     {
-        $bienes = Bien::buscar($this->keyword)
-            ->orderBy('created_at', 'DESC')
-            ->limit($this->rows)
-            ->get();
+        $bienes = $this->getBienes();
         $rowsBienes = Bien::count();
 
         if ($rowsBienes > $this->numero) {
@@ -48,6 +46,34 @@ class BienesComponent extends Component
         return view('livewire.dashboard.bienes-component')
             ->with('listarBienes', $bienes)
             ->with('total', $rowsBienes);
+    }
+
+    public function getBienes()
+    {
+        if (empty($this->busqueda)){
+            $bienes = Bien::buscar($this->keyword)
+                ->orderBy('created_at', 'DESC')
+                ->limit($this->rows)
+                ->get();
+        }else{
+            $tipo = $this->busqueda['tipo'];
+            $marca = $this->busqueda['marca'];
+            $modelo = $this->busqueda['modelo'];
+            $color = $this->busqueda['color'];
+            $condicion = $this->busqueda['condicion'];
+            $serial = $this->busqueda['serial'];
+            $identidicador = $this->busqueda['identificador'];
+
+            $bienes = Bien::orWhere('tipos_id', $tipo)
+                ->orWhere('marcas_id', $marca)
+                ->orWhere('modelos_id', $modelo)
+                ->orWhere('colores_id', $color)
+                ->orWhere('condiciones_id', $condicion)
+                ->orderBy('created_at', 'DESC')
+                ->limit($this->rows)
+                ->get();
+        }
+        return $bienes;
     }
 
     public function setLimit()
@@ -308,7 +334,7 @@ class BienesComponent extends Component
 
     public function limpiarBuscar()
     {
-        $this->reset('keyword');
+        $this->reset('keyword', 'busqueda');
         $this->btnCancelar();
     }
 
@@ -529,6 +555,12 @@ class BienesComponent extends Component
     public function setSelectModelos($id)
     {
         //JS
+    }
+
+    #[On('busquedaAvanzada')]
+    public function busquedaAvanzada($data)
+    {
+        $this->busqueda = $data;
     }
 
 }
