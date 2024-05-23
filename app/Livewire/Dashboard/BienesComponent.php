@@ -531,16 +531,4 @@ class BienesComponent extends Component
         //JS
     }
 
-    public function busqueda()
-    {
-        $this->dispatch('cerrarBusqueda');
-        $this->alert('info', 'Aún en Desarrollo. ¡Muy pronto!');
-    }
-
-    #[On('cerrarBusqueda')]
-    public function cerrarBusqueda()
-    {
-        //JS
-    }
-
 }

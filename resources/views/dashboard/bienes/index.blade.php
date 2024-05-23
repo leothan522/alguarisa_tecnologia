@@ -13,7 +13,7 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-busqueda-avanzada">
-                        <button class="btn bg-gradient-primary btn-sm">
+                        <button class="btn bg-gradient-primary btn-sm" onclick="busquedaAvanzada()">
                             <i class="fas fa-search"></i>
                             Busqueda Avanzada
                         </button>
@@ -47,6 +47,7 @@
         @livewire('dashboard.modal-oficios-component')
         @livewire('dashboard.modal-ubicaciones-component')
         @livewire('dashboard.modal-oficios-vinculados-component')
+        @livewire('dashboard.modal-busqueda-component')
     </div>
 
 @endsection
@@ -235,6 +236,50 @@
 
         Livewire.on('cerrarBusqueda', () => {
             $('#cerrar_busqueda_avanzada').click();
+        });
+
+        function busquedaAvanzada() {
+            Livewire.dispatch('modalBusqueda');
+        }
+
+        Livewire.on('busquedaSelectTipos', ({ data }) => {
+            select_2_tablas('select_busqueda_tipo', data, 'getBusquedaSelectTipos', 'busqueda-avanzada');
+        });
+
+        Livewire.on('setBusquedaSelectTipos', ({ id }) => {
+            $('#select_busqueda_tipo').val(id).trigger('change');
+        });
+
+        Livewire.on('busquedaSelectMarcas', ({ data }) => {
+            select_2_tablas('select_busqueda_marca', data, 'getBusquedaSelectMarcas', 'busqueda-avanzada');
+        });
+
+        Livewire.on('setBusquedaSelectMarcas', ({ id }) => {
+            $('#select_busqueda_marca').val(id).trigger('change');
+        });
+
+        Livewire.on('busquedaSelectColor', ({ data }) => {
+            select_2_tablas('select_busqueda_color', data, 'getBusquedaSelectColor', 'busqueda-avanzada');
+        });
+
+        Livewire.on('setBusquedaSelectColor', ({ id }) => {
+            $('#select_busqueda_color').val(id).trigger('change');
+        });
+
+        Livewire.on('busquedaSelectCondicion', ({ data }) => {
+            select_2_tablas('select_busqueda_condicion', data, 'getBusquedaSelectCondicion', 'busqueda-avanzada');
+        });
+
+        Livewire.on('setBusquedaSelectCondicion', ({ id }) => {
+            $('#select_busqueda_condicion').val(id).trigger('change');
+        });
+
+        Livewire.on('busquedaSelectModelo', ({ data }) => {
+            select_2_tablas('select_busqueda_modelo', data, 'getBusquedaSelectModelo', 'busqueda-avanzada');
+        });
+
+        Livewire.on('setBusquedaSelectModelo', ({ id }) => {
+            $('#select_busqueda_modelo').val(id).trigger('change');
         });
 
         console.log('Hi!');
