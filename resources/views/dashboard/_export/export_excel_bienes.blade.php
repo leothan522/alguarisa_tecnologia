@@ -5,11 +5,13 @@
         <th>Tipo</th>
         <th>Marca</th>
         <th>Modelo</th>
-        <th>Serial</th>
         <th>Color</th>
+        <th>Serial</th>
         <th>Identicador</th>
-        <th>Observación</th>
+        <th>Imagen Frontal</th>
+        <th>Imagen Posterior</th>
         <th>Oficios Vinculados</th>
+        <th>Observación</th>
         @if(auth()->user()->role == 100)
             <th>Auditoria</th>
         @endif
@@ -22,14 +24,15 @@
             <td>{{ $bien->tipo->nombre }}</td>
             <td>{{ $bien->marca->nombre }}</td>
             <td>{{ $bien->modelo->nombre }}</td>
+            <td>{{ $bien->color->nombre }}</td>
             <td>
                 @if($bien->serial)
                     [{{ $bien->serial }}]
                 @endif
             </td>
-            <td>{{ $bien->color->nombre }}</td>
             <td>{{ $bien->identificador }}</td>
-            <td>{{ $bien->adicional }}</td>
+            <td>{{ $bien->frontal }}</td>
+            <td>{{ $bien->posterior }}</td>
             <td>
                 @if($bien->oficios)
                     @foreach($bien->oficios as $oficio)
@@ -37,6 +40,7 @@
                     @endforeach
                 @endif
             </td>
+            <td>{{ $bien->adicional }}</td>
             @if(auth()->user()->role == 100)
                 <td>{!! $bien->auditoria !!}</td>
             @endif

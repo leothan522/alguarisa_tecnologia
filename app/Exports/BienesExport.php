@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Bien;
 use App\Models\Equipo;
+use App\Models\Imagen;
 use App\Models\Oficio;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
@@ -32,8 +33,18 @@ class BienesExport implements FromView, ShouldAutoSize, WithTitle
                 asort($arrayOficios, SORT_NATURAL | SORT_FLAG_CASE);
                 $bien->oficios = $arrayOficios;
             }
-
-
+            $frontal = Imagen::where('bienes_id', $bien->id)->where('nombre', 'frontal')->first();
+            if (!empty($frontal) && file_exists(public_path($frontal->mini))){
+                $bien->frontal = "SI";
+            }else{
+                $bien->frontal = "NO";
+            }
+            $posterior = Imagen::where('bienes_id', $bien->id)->where('nombre', 'posterior')->first();
+            if (!empty($posterior) && file_exists(public_path($posterior->mini))){
+                $bien->posterior = "SI";
+            }else{
+                $bien->posterior = "NO";
+            }
         });
         return view('dashboard._export.export_excel_bienes')
             ->with('bienes', $bienes);
