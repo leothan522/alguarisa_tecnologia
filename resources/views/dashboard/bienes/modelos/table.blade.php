@@ -2,12 +2,12 @@
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
-                Resultados de la Busqueda { <b class="text-warning">{{ $keyword }}</b> }
+                Búsqueda { <b class="text-warning">{{ $keyword }}</b> }
                 <button class="btn btn-tool text-warning" wire:click="limpiarModelos">
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Modelos Registrados [ <b class="text-warning">{{ $rowsModelos }}</b> ]
+                Modelos [ <b class="text-warning">{{ $rowsModelos }}</b> ]
             @endif
         </h3>
 
@@ -31,9 +31,9 @@
             @if($listarModelos->isNotEmpty())
                 @foreach($listarModelos as $modelo)
                     <tr>
-                        <td>{{ $modelo->tipo->nombre }}</td>
-                        <td>{{ $modelo->marca->nombre }}</td>
-                        <td>{{ $modelo->nombre }}</td>
+                        <td class="text-uppercase">{{ $modelo->tipo->nombre }}</td>
+                        <td class="text-uppercase">{{ $modelo->marca->nombre }}</td>
+                        <td class="text-uppercase">{{ $modelo->nombre }}</td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit({{ $modelo->id }})" class="btn btn-primary btn-sm"

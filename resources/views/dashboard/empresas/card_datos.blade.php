@@ -7,7 +7,7 @@
         <div class="card-tools">
             @if($nuevo)
                 <button type="button" class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('empresas.create')) disabled @endif>
-                    <i class="fas fa-file"></i> Nueva Tienda
+                    <i class="fas fa-file"></i> Nueva Empresa
                 </button>
             @endif
             @if($btn_cancelar)

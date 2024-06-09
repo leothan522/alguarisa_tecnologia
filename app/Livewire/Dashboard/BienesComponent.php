@@ -262,6 +262,15 @@ class BienesComponent extends Component
     public function confirmed()
     {
         $bien = Bien::find($this->bienes_id);
+
+        if (!empty($bien->serial)){
+            $bien->serial = "*".$bien->serial;
+        }
+
+        if (!empty($bien->identificador)){
+            $bien->identificador = "*".$bien->identificador;
+        }
+
         if (is_null($bien->auditoria)){
             $auditoria = "[ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
         }else{

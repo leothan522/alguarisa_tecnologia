@@ -29,7 +29,7 @@
             @if($listarColores->isNotEmpty())
                 @foreach($listarColores as $color)
                     <tr>
-                        <td>{{ $color->nombre }}</td>
+                        <td class="text-uppercase">{{ $color->nombre }}</td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit({{ $color->id }})" class="btn btn-primary btn-sm"

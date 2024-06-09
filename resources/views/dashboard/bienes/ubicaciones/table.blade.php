@@ -2,12 +2,12 @@
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
-                Resultados de la Busqueda { <b class="text-warning">{{ $keyword }}</b> }
+                Búsqueda { <b class="text-warning">{{ $keyword }}</b> }
                 <button class="btn btn-tool text-warning" wire:click="limpiarUbicaciones">
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Ubicaciones Registradas [ <b class="text-warning">{{ $rowsUbicaciones }}</b> ]
+                Ubicaciones [ <b class="text-warning">{{ $rowsUbicaciones }}</b> ]
             @endif
         </h3>
 
@@ -29,7 +29,7 @@
             @if($listarUbicaciones->isNotEmpty())
                 @foreach($listarUbicaciones as $ubicacion)
                     <tr>
-                        <td>{{ $ubicacion->nombre }}</td>
+                        <td class="text-uppercase">{{ $ubicacion->nombre }}</td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit({{ $ubicacion->id }})" class="btn btn-primary btn-sm"

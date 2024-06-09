@@ -2,12 +2,12 @@
     <div class="card-header">
         <h3 class="card-title">
             @if(/*$keyword*/false)
-                Resultados de la Busqueda { <b class="text-warning">{{ $keyword }}</b> }
+                Búsqueda { <b class="text-warning">{{ $keyword }}</b> }
                 <button class="btn btn-tool text-warning" wire:click="limpiarTipos">
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Tipos Registrados [ <b class="text-warning">{{--{{ $rowsTipos }}--}}0</b> ]
+                Tipos [ <b class="text-warning">{{--{{ $rowsTipos }}--}}0</b> ]
             @endif
         </h3>
 
@@ -29,7 +29,7 @@
             @if(/*$listarTipos->isNotEmpty()*/false)
                 @foreach($listarTipos as $tipo)
                     <tr>
-                        <td>{{ $tipo->nombre }}</td>
+                        <td class="text-uppercase">{{ $tipo->nombre }}</td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit({{ $tipo->id }})" class="btn btn-primary btn-sm"

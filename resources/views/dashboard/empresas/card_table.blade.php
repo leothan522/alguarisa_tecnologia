@@ -3,12 +3,12 @@
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
-                Resultados para { <b class="text-warning">{{ $keyword }}</b> }
+                Búsqueda { <b class="text-warning">{{ $keyword }}</b> }
                 <button class="btn btn-tool text-warning" wire:click="show({{ $empresas_id }})" >
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Tiendas
+                Empresas
             @endif
         </h3>
 

@@ -10,19 +10,19 @@
                 </h1>
                 <ul class="list-group list-group-unbordered mt-3">
                     <li class="list-group-item">
-                        <b>RIF</b> <a class="float-right">{{ $rif }}</a>
+                        <b>RIF</b> <a class="float-right text-uppercase">{{ $rif }}</a>
                     </li>
                     <li class="list-group-item">
                         <b>Jefe</b> <a
-                                class="float-right">{{ $jefe }}</a>
+                                class="float-right text-uppercase">{{ $jefe }}</a>
                     </li>
                     <li class="list-group-item">
                         <b>Moneda Base</b> <a
-                                class="float-right">{{ $moneda }}</a>
+                                class="float-right text-uppercase">{{ $moneda }}</a>
                     </li>
                     <li class="list-group-item">
                         <b>Telefonos</b> <a
-                                class="float-right">{{ $telefonos }}</a>
+                                class="float-right text-uppercase">{{ $telefonos }}</a>
                     </li>
                     <li class="list-group-item">
                         <b>Email</b> <a
@@ -34,8 +34,7 @@
                     </li>
                     @if(auth()->user()->role == 100)
                         <li class="list-group-item">
-                            <b>empresas_id</b> <a
-                                    class="float-right">{{ $empresas_id }}</a>
+                            <b>empresas_id</b> <a class="float-right">{{ $empresas_id }}</a>
                         </li>
                     @endif
                     @if($verDefault)

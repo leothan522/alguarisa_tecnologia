@@ -2,12 +2,12 @@
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
-                Resultados de la Busqueda { <b class="text-warning">{{ $keyword }}</b> }
+                Búsqueda { <b class="text-warning">{{ $keyword }}</b> }
                 <button class="btn btn-tool text-warning" wire:click="limpiarCondiciones">
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Condiciones Registradas [ <b class="text-warning">{{ $rowsCondiciones }}</b> ]
+                Condiciones [ <b class="text-warning">{{ $rowsCondiciones }}</b> ]
             @endif
         </h3>
 
@@ -29,7 +29,7 @@
             @if($listarCondiciones->isNotEmpty())
                 @foreach($listarCondiciones as $condicion)
                     <tr>
-                        <td>{{ $condicion->nombre }}</td>
+                        <td class="text-uppercase">{{ $condicion->nombre }}</td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit({{ $condicion->id }})" class="btn btn-primary btn-sm"

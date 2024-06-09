@@ -34,8 +34,8 @@
                     @php($itemMunicipio++)
                     <tr>
                         <td class="text-center">{{ $itemMunicipio }}</td>
-                        <td>{{ $municipio->nombre }}</td>
-                        <td>{{ $municipio->mini }}</td>
+                        <td class="text-uppercase">{{ $municipio->nombre }}</td>
+                        <td class="text-uppercase">{{ $municipio->mini }}</td>
                         <td class="text-right">{{ formatoMillares($municipio->familias, 0) }}</td>
                         <td class="text-center">
                             <button type="button" class="btn btn-success btn-sm" wire:click="filtrarParroquias({{ $municipio->id }})">

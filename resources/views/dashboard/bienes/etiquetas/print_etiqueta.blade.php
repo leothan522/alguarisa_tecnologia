@@ -5,13 +5,13 @@
 @section('content')
 
     <div class="row m-3">
-        <div class="col-12 text-bold">
+        <div class="col-12 text-bold ">
             ALIMENTOS DEL GUÁRICO S.A. <br>
             @if(!empty($serial))
-                Serial: {{ $serial }}
+                Serial: <span class="text-uppercase">{{ $serial }}</span>
             @else
                 @if(!empty($identificador))
-                    Identificador: {{ $identificador }}
+                    Identificador: <span class="text-uppercase">{{ $identificador }}</span>
                 @endif
             @endif
         </div>

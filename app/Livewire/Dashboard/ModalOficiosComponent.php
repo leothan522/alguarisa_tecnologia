@@ -197,6 +197,9 @@ class ModalOficiosComponent extends Component
     public function confirmed()
     {
         $oficio = Oficio::find($this->oficios_id);
+
+
+
         if (is_null($oficio->auditoria)){
             $auditoria = "[ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
         }else{

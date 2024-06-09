@@ -4,7 +4,7 @@
         <h3 class="card-title">
             @if($keyword || !empty($busqueda))
                 @if($keyword)
-                    Busqueda { <b class="text-warning">{{ $keyword }}</b> }
+                    Búsqueda { <b class="text-warning">{{ $keyword }}</b> }
                 @else
                     { <b class="text-warning">Busqueda Avanzada</b> }
                 @endif
