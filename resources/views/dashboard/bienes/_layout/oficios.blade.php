@@ -35,9 +35,11 @@
                                         {{ verFecha($equipo->oficio->fecha) }}
                                     </td>
                                     <td class="text-right">
-                                        <button class="btn btn-sm text-primary m-0" wire:click="verOficio({{ $equipo->oficios_id }})" onclick="verOficio()">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
+                                        @if(!$web)
+                                            <button class="btn btn-sm text-primary m-0" wire:click="verOficio({{ $equipo->oficios_id }})" onclick="verOficio()">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        @endif
                                     </td>
                                 </tr>
                                     @php($i++)

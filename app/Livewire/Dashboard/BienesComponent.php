@@ -338,6 +338,7 @@ class BienesComponent extends Component
     #[On('buscar')]
     public function buscar($keyword)
     {
+        $this->reset('busqueda');
         $this->keyword = $keyword;
     }
 
@@ -569,6 +570,7 @@ class BienesComponent extends Component
     #[On('busquedaAvanzada')]
     public function busquedaAvanzada($data)
     {
+        $this->reset('keyword');
         $this->busqueda = $data;
     }
 

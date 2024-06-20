@@ -89,7 +89,7 @@
         }
 
         function verUbicaciones() {
-            Livewire.dispatch('limpiarUnicaciones');
+            Livewire.dispatch('limpiarUbicaciones');
         }
 
         function select_2_tablas(id, data, event, modal)

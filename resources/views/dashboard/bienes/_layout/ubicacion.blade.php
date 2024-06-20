@@ -40,10 +40,12 @@
                                         {{ $ubicacion->moneda }}
                                     </td>--}}
                                     <td class="text-right">
-                                        @if($ubicacion->actual && comprobarPermisos('bienes.edit'))
+                                        @if(!$web)
+                                            @if($ubicacion->actual && comprobarPermisos('bienes.edit'))
                                             <button class="btn btn-sm text-danger m-0" wire:click="destroy({{ $ubicacion->id }})">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
+                                        @endif
                                         @endif
                                     </td>
                                 </tr>
@@ -61,44 +63,46 @@
 
                 </div>
 
-                <form wire:submit="save" class="p-0 @if(!comprobarPermisos('bienes.edit')) d-none @endif ">
-                    <table class="table table-sm">
-                        <tbody>
-                        <tr>
-                            <td>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <select class="custom-select custom-select-sm @error("ubicaciones_id") is-invalid @enderror" wire:model="ubicaciones_id" id="ubicacion_select_ubicaciones">
-                                            <option value="">Seleccione</option>
-                                            @foreach($listarUbicaciones as $ubicacion)
-                                                <option value="{{ $ubicacion->id }}">{{ mb_strtoupper($ubicacion->nombre) }}</option>
-                                            @endforeach
-                                        </select>
+                @if(!$web)
+                    <form wire:submit="save" class="p-0 @if(!comprobarPermisos('bienes.edit')) d-none @endif ">
+                        <table class="table table-sm">
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <select class="custom-select custom-select-sm @error("ubicaciones_id") is-invalid @enderror" wire:model="ubicaciones_id" id="ubicacion_select_ubicaciones">
+                                                <option value="">Seleccione</option>
+                                                @foreach($listarUbicaciones as $ubicacion)
+                                                    <option value="{{ $ubicacion->id }}">{{ mb_strtoupper($ubicacion->nombre) }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            {{--<td>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <select class="custom-select custom-select-sm @error("moneda") is-invalid @enderror" wire:model="moneda">
-                                            <option value="">Seleccione</option>
-                                            <option value="Bolivares">Bolivares</option>
-                                            <option value="Dolares">Dolares</option>
-                                        </select>
+                                </td>
+                                {{--<td>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <select class="custom-select custom-select-sm @error("moneda") is-invalid @enderror" wire:model="moneda">
+                                                <option value="">Seleccione</option>
+                                                <option value="Bolivares">Bolivares</option>
+                                                <option value="Dolares">Dolares</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>--}}
+                                </td>--}}
 
-                            <td style="width: 5%;">
-                                <button type="submit" class="btn @if(/*$ubicacions_id*/false) btn-primary @else btn-success @endif btn-sm"
-                                        @if(!comprobarPermisos('bienes.edit')) disabled @endif >
-                                    <i class="fas fa-save"></i>
-                                </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </form>
+                                <td style="width: 5%;">
+                                    <button type="submit" class="btn @if(/*$ubicacions_id*/false) btn-primary @else btn-success @endif btn-sm"
+                                            @if(!comprobarPermisos('bienes.edit')) disabled @endif >
+                                        <i class="fas fa-save"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                @endif
 
 
 

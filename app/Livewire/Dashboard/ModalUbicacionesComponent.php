@@ -4,6 +4,7 @@ namespace App\Livewire\Dashboard;
 
 use App\Models\BienUbicacion;
 use App\Models\Ubicacion;
+use Illuminate\Support\Facades\Route;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -14,9 +15,15 @@ class ModalUbicacionesComponent extends Component
 
     public $listarUbicaciones = [];
     public $bienes_id, $ubicaciones_id, $actual;
+    public $web = false;
 
     public function render()
     {
+        $ruta = Route::currentRouteName();
+        if ($ruta == "etiquetas.web"){
+            $this->web = true;
+        }
+
         $ubicaciones = BienUbicacion::where('bienes_id', $this->bienes_id)->orderBy('created_at', 'DESC')->get();
         return view('livewire.dashboard.modal-ubicaciones-component')
             ->with('listarBienUbicacion', $ubicaciones);
