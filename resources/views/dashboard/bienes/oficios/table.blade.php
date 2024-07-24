@@ -14,7 +14,7 @@
 
         <div class="card-tools">
             <button type="button" class="btn btn-tool" wire:click="limpiar">
-                <i class="fas fa-sync"></i> Actualizar
+                <i class="fas fa-sync-alt"></i> Actualizar
             </button>
 
             <button type="button" class="btn btn-tool" wire:click="create"

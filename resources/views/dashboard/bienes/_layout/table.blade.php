@@ -18,6 +18,9 @@
         </h3>
 
         <div class="card-tools">
+            <button type="button" class="btn btn-tool" wire:click="limpiar" onclick="verSpinnerOculto()">
+                <i class="fas fa-sync-alt"></i>
+            </button>
             <button type="button" class="btn btn-tool" wire:click="setLimit" @if($rows > $listarBienes->count()) disabled @endif >
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
