@@ -20,16 +20,16 @@
                     <div class="tab-pane fade @if($tabMunicipio) active show @endif" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
 
                         @include('dashboard.territorio.card_municipios')
-                        @include('dashboard.territorio.modal_municipios')
 
                     </div>
                     <div class="tab-pane fade @if($tabParroquia) active show @endif" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
 
                         @include('dashboard.territorio.card_parroquias')
-                        @include('dashboard.territorio.modal_parroquias')
 
                     </div>
                 </div>
+                @include('dashboard.territorio.modal_municipios')
+                @include('dashboard.territorio.modal_parroquias')
             </div>
             <!-- /.card -->
         </div>
