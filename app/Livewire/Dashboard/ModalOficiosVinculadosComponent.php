@@ -46,7 +46,10 @@ class ModalOficiosVinculadosComponent extends Component
 
     public function verOficio($id)
     {
-        $this->dispatch('show', id: $id)->to(ModalOficiosComponent::class);
+        $oficio = Oficio::find($id);
+        if ($oficio){
+            $this->dispatch('show', id: $id)->to(ModalOficiosComponent::class);
+        }
     }
 
 

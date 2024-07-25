@@ -26,6 +26,7 @@ class MarcasComponent extends Component
     public function render()
     {
         $marcas = Marca::buscar($this->keyword)
+            ->orderBy('created_at', 'DESC')
             ->limit($this->rows)
             ->get()
         ;
@@ -72,19 +73,24 @@ class MarcasComponent extends Component
             $marca = Marca::find($this->marcas_id);
             $message = "Marca Actualizada.";
         }
-        $marca->nombre = $this->nombre;
 
-        $marca->save();
-        $this->dispatch('initSelects', select: 'marcas')->to(BienesComponent::class);
+        if ($marca){
+            $marca->nombre = $this->nombre;
+            $marca->save();
+            $this->dispatch('initSelects', select: 'marcas')->to(BienesComponent::class);
+            $this->alert('success', $message);
+        }
+
         $this->limpiarMarcas();
-        $this->alert('success', $message);
     }
 
     public function edit($id)
     {
         $marca = Marca::find($id);
-        $this->marcas_id = $marca->id;
-        $this->nombre = $marca->nombre;
+        if ($marca){
+            $this->marcas_id = $marca->id;
+            $this->nombre = $marca->nombre;
+        }
     }
 
     public function destroy($id)
@@ -127,12 +133,11 @@ class MarcasComponent extends Component
                 'confirmButtonText' => 'OK',
             ]);
         } else {
-            $marca->delete();
-            $this->alert(
-                'success',
-                'Marca Eliminada.'
-            );
-            $this->dispatch('initSelects', select: 'marcas')->to(BienesComponent::class);
+            if ($marca){
+                $marca->delete();
+                $this->alert('success', 'Marca Eliminada.');
+                $this->dispatch('initSelects', select: 'marcas')->to(BienesComponent::class);
+            }
         }
 
         $this->limpiarMarcas();

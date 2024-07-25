@@ -208,18 +208,6 @@
             $('.cargar_bienes').removeClass('d-none');
         }
 
-        function buscar(){
-            let input = $("#navbarSearch");
-            let keyword  = input.val();
-            if (keyword.length > 0){
-                verSpinnerOculto();
-                input.blur();
-                //alert('Falta vincular con el componente Livewire');
-                Livewire.dispatch('buscar', { keyword: keyword });
-            }
-            return false;
-        }
-
         $('#btn_header_oficios').click(function (e) {
             e.preventDefault();
         });
@@ -282,6 +270,22 @@
         Livewire.on('setBusquedaSelectModelo', ({ id }) => {
             $('#select_busqueda_modelo').val(id).trigger('change');
         });
+
+        Livewire.on('cerrarModalPropiedades', ({ selector }) => {
+            $('#' + selector).click();
+        });
+
+        function buscar(){
+            let input = $("#navbarSearch");
+            let keyword  = input.val();
+            if (keyword.length > 0){
+                verSpinnerOculto();
+                input.blur();
+                //alert('Falta vincular con el componente Livewire');
+                Livewire.dispatch('buscar', { keyword: keyword });
+            }
+            return false;
+        }
 
         console.log('Hi!');
     </script>

@@ -25,6 +25,7 @@ class TiposComponent extends Component
     public function render()
     {
         $tipos = Tipo::buscar($this->keyword)
+            ->orderBy('created_at', 'DESC')
             ->limit($this->rows)
             ->get()
         ;
@@ -71,19 +72,24 @@ class TiposComponent extends Component
             $tipo = Tipo::find($this->tipos_id);
             $message = "Tipo Actualizado.";
         }
-        $tipo->nombre = $this->nombre;
 
-        $tipo->save();
-        $this->dispatch('initSelects', select: 'tipos')->to(BienesComponent::class);
+        if ($tipo){
+            $tipo->nombre = $this->nombre;
+            $tipo->save();
+            $this->dispatch('initSelects', select: 'tipos')->to(BienesComponent::class);
+            $this->alert('success', $message);
+        }
+
         $this->limpiarTipos();
-        $this->alert('success', $message);
     }
 
     public function edit($id)
     {
         $tipo = Tipo::find($id);
-        $this->tipos_id = $tipo->id;
-        $this->nombre = $tipo->nombre;
+        if ($tipo){
+            $this->tipos_id = $tipo->id;
+            $this->nombre = $tipo->nombre;
+        }
     }
 
     public function destroy($id)
@@ -126,12 +132,11 @@ class TiposComponent extends Component
                 'confirmButtonText' => 'OK',
             ]);
         } else {
-            $tipo->delete();
-            $this->alert(
-                'success',
-                'Tipo Eliminado.'
-            );
-            $this->dispatch('initSelects', select: 'tipos')->to(BienesComponent::class);
+            if ($tipo){
+                $tipo->delete();
+                $this->alert('success', 'Tipo Eliminado.');
+                $this->dispatch('initSelects', select: 'tipos')->to(BienesComponent::class);
+            }
         }
 
         $this->limpiarTipos();

@@ -24,6 +24,7 @@ class CondicionesComponent extends Component
     public function render()
     {
         $condiciones = Condicion::buscar($this->keyword)
+            ->orderBy('created_at', 'DESC')
             ->limit($this->rows)
             ->get()
         ;
@@ -70,19 +71,24 @@ class CondicionesComponent extends Component
             $condicion = Condicion::find($this->condiciones_id);
             $message = "Condición Actualizada.";
         }
-        $condicion->nombre = $this->nombre;
 
-        $condicion->save();
-        $this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
+        if ($condicion){
+            $condicion->nombre = $this->nombre;
+            $condicion->save();
+            $this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
+            $this->alert('success', $message);
+        }
+
         $this->limpiarCondiciones();
-        $this->alert('success', $message);
     }
 
     public function edit($id)
     {
         $condicion = Condicion::find($id);
-        $this->condiciones_id = $condicion->id;
-        $this->nombre = $condicion->nombre;
+        if ($condicion){
+            $this->condiciones_id = $condicion->id;
+            $this->nombre = $condicion->nombre;
+        }
     }
 
     public function destroy($id)
@@ -124,12 +130,11 @@ class CondicionesComponent extends Component
                 'confirmButtonText' => 'OK',
             ]);
         } else {
-            $condicion->delete();
-            $this->alert(
-                'success',
-                'Condición Eliminada.'
-            );
-            $this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
+            if ($condicion){
+                $condicion->delete();
+                $this->alert('success', 'Condición Eliminada.');
+                $this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
+            }
         }
 
         $this->limpiarCondiciones();

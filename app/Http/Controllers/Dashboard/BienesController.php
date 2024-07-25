@@ -25,6 +25,10 @@ class BienesController extends Controller
     public function printEtiqueta($id)
     {
         $bien = Bien::find($id);
+        if (!$bien){
+            return redirect()->route('web.index');
+        }
+
         $identificador = null;
         $serial = null;
 

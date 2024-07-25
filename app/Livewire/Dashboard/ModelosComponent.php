@@ -28,8 +28,8 @@ class ModelosComponent extends Component
     public function render()
     {
         $modelos = Modelo::buscar($this->keyword)
+            ->orderBy('created_at', 'DESC')
             ->limit($this->rows)
-            ->orderBy('id', 'DESC')
             ->get()
         ;
         $rowsModelos = Modelo::count();
@@ -91,24 +91,30 @@ class ModelosComponent extends Component
             $modelos = Modelo::find($this->modelos_id);
             $message = "Modelo Actualizado.";
         }
-        $modelos->nombre = $this->nombre;
-        $modelos->tipos_id = $this->tipos_id;
-        $modelos->marcas_id = $this->marcas_id;
-        $modelos->save();
-        $this->dispatch('initSelects', select: 'modelo')->to(BienesComponent::class);
+
+        if ($modelos){
+            $modelos->nombre = $this->nombre;
+            $modelos->tipos_id = $this->tipos_id;
+            $modelos->marcas_id = $this->marcas_id;
+            $modelos->save();
+            $this->dispatch('initSelects', select: 'modelo')->to(BienesComponent::class);
+            $this->alert('success', $message);
+        }
+
         $this->limpiarModelos();
-        $this->alert('success', $message);
     }
 
     public function edit($id)
     {
         $modelos = Modelo::find($id);
-        $this->modelos_id = $modelos->id;
-        $this->nombre = $modelos->nombre;
-        $this->tipos_id = $modelos->tipos_id;
-        $this->marcas_id = $modelos->marcas_id;
-        $this->dispatch('setModeloSelectTipos', id: $this->tipos_id);
-        $this->dispatch('setModeloSelectMarcas', id: $this->marcas_id);
+        if ($modelos){
+            $this->modelos_id = $modelos->id;
+            $this->nombre = $modelos->nombre;
+            $this->tipos_id = $modelos->tipos_id;
+            $this->marcas_id = $modelos->marcas_id;
+            $this->dispatch('setModeloSelectTipos', id: $this->tipos_id);
+            $this->dispatch('setModeloSelectMarcas', id: $this->marcas_id);
+        }
     }
 
     public function destroy($id)
@@ -150,12 +156,11 @@ class ModelosComponent extends Component
                 'confirmButtonText' => 'OK',
             ]);
         } else {
-            $modelos->delete();
-            $this->alert(
-                'success',
-                'Modelos Eliminado.'
-            );
-            $this->dispatch('initSelects', select: 'modelo')->to(BienesComponent::class);
+            if ($modelos){
+                $modelos->delete();
+                $this->alert('success', 'Modelos Eliminado.');
+                $this->dispatch('initSelects', select: 'modelo')->to(BienesComponent::class);
+            }
         }
 
         $this->limpiarModelos();

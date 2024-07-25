@@ -79,33 +79,37 @@ class ModalOficiosComponent extends Component
     public function show($id)
     {
         $this->limpiar();
+        $this->reset(['oficios_id']);
         $oficio = Oficio::find($id);
-        $this->oficios_id = $oficio->id;
-        $this->oficio = $oficio->numero;
-        $this->fecha = $oficio->fecha;
-        $this->equipos = $oficio->equipos;
-        $this->adicional = $oficio->adicional;
-        $this->pdf = $oficio->pdf;
 
-        $equipos = Equipo::where('oficios_id', $this->oficios_id)->get();
-        foreach ($equipos as $equipo){
-            $bien = Bien::find($equipo->bienes_id);
-            $this->listarEquipos[] = [
-                'id' => $bien->id,
-                'tipo' => $bien->tipo->nombre,
-                'marca' => $bien->marca->nombre,
-                'modelo' => $bien->modelo->nombre,
-                'serial' => $bien->serial,
-                'identificador' => $bien->identificador
-            ];
+        if ($oficio){
+            $this->oficios_id = $oficio->id;
+            $this->oficio = $oficio->numero;
+            $this->fecha = $oficio->fecha;
+            $this->equipos = $oficio->equipos;
+            $this->adicional = $oficio->adicional;
+            $this->pdf = $oficio->pdf;
+
+            $equipos = Equipo::where('oficios_id', $this->oficios_id)->get();
+            foreach ($equipos as $equipo){
+                $bien = Bien::find($equipo->bienes_id);
+                $this->listarEquipos[] = [
+                    'id' => $bien->id,
+                    'tipo' => $bien->tipo->nombre,
+                    'marca' => $bien->marca->nombre,
+                    'modelo' => $bien->modelo->nombre,
+                    'serial' => $bien->serial,
+                    'identificador' => $bien->identificador
+                ];
+            }
+
+            $this->view = false;
+            $this->form = true;
+            $this->ver = true;
+            $this->editar = true;
+            $this->cancelar = true;
         }
 
-
-        $this->view = false;
-        $this->form = true;
-        $this->ver = true;
-        $this->editar = true;
-        $this->cancelar = true;
     }
 
     public function save()
@@ -142,34 +146,36 @@ class ModalOficiosComponent extends Component
             $auditoria = "[ 'accion' => 'create', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
         }
 
-        $oficio->numero = $this->oficio;
-        $oficio->fecha = $this->fecha;
-        $oficio->equipos = $this->equipos;
-        $oficio->adicional = $this->adicional;
-        $oficio->auditoria = $auditoria;
-        $oficio->save();
+        if ($oficio){
+            $oficio->numero = $this->oficio;
+            $oficio->fecha = $this->fecha;
+            $oficio->equipos = $this->equipos;
+            $oficio->adicional = $this->adicional;
+            $oficio->auditoria = $auditoria;
+            $oficio->save();
 
-        if ($borrar){
-            $equipos = Equipo::where('oficios_id', $oficio->id)->get();
-            foreach ($equipos as $equipo){
-                $eliminar = Equipo::find($equipo->id);
-                $eliminar->delete();
+            if ($borrar){
+                $equipos = Equipo::where('oficios_id', $oficio->id)->get();
+                foreach ($equipos as $equipo){
+                    $eliminar = Equipo::find($equipo->id);
+                    $eliminar->delete();
+                }
             }
-        }
 
-        if (!empty($this->listarEquipos)) {
-            foreach ($this->listarEquipos as $equipo){
-                $nuevo = new Equipo();
-                $nuevo->oficios_id = $oficio->id;
-                $nuevo->bienes_id = $equipo['id'];
-                $nuevo->save();
+            if (!empty($this->listarEquipos)) {
+                foreach ($this->listarEquipos as $equipo){
+                    $nuevo = new Equipo();
+                    $nuevo->oficios_id = $oficio->id;
+                    $nuevo->bienes_id = $equipo['id'];
+                    $nuevo->save();
+                }
             }
+
+            $this->reset('keyword');
+            $this->alert('success', 'Datos Guardados.');
         }
 
         $this->limpiar();
-        $this->reset('keyword');
-
-        $this->alert('success', 'Datos Guardados.');
     }
 
     public function edit()
@@ -198,14 +204,6 @@ class ModalOficiosComponent extends Component
     {
         $oficio = Oficio::find($this->oficios_id);
 
-
-
-        if (is_null($oficio->auditoria)){
-            $auditoria = "[ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
-        }else{
-            $auditoria = $oficio->auditoria.", [ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
-        }
-
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
 
@@ -220,14 +218,20 @@ class ModalOficiosComponent extends Component
                 'confirmButtonText' => 'OK',
             ]);
         } else {
-            $oficio->auditoria = $auditoria;
-            $oficio->save();
-            $oficio->delete();
-            $this->alert(
-                'success',
-                'Registro Eliminado.'
-            );
+            if ($oficio){
+                if (is_null($oficio->auditoria)){
+                    $auditoria = "[ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+                }else{
+                    $auditoria = $oficio->auditoria.", [ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+                }
+
+                $oficio->auditoria = $auditoria;
+                $oficio->save();
+                $oficio->delete();
+                $this->alert('success', 'Registro Eliminado.');
+            }
         }
+
         $this->limpiar();
         $this->reset('keyword');
     }

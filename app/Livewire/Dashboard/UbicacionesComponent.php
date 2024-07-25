@@ -24,6 +24,7 @@ class UbicacionesComponent extends Component
     public function render()
     {
         $ubicaciones = Ubicacion::buscar($this->keyword)
+            ->orderBy('created_at', 'DESC')
             ->limit($this->rows)
             ->get()
         ;
@@ -70,19 +71,24 @@ class UbicacionesComponent extends Component
             $ubicacion = Ubicacion::find($this->ubicaciones_id);
             $message = "Ubicación Actualizada.";
         }
-        $ubicacion->nombre = $this->nombre;
 
-        $ubicacion->save();
-        //$this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
+        if ($ubicacion){
+            $ubicacion->nombre = $this->nombre;
+            $ubicacion->save();
+            //$this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
+            $this->alert('success', $message);
+        }
+
         $this->limpiarUbicaciones();
-        $this->alert('success', $message);
     }
 
     public function edit($id)
     {
         $ubicacion = Ubicacion::find($id);
-        $this->ubicaciones_id = $ubicacion->id;
-        $this->nombre = $ubicacion->nombre;
+        if ($ubicacion){
+            $this->ubicaciones_id = $ubicacion->id;
+            $this->nombre = $ubicacion->nombre;
+        }
     }
 
     public function destroy($id)
@@ -124,12 +130,11 @@ class UbicacionesComponent extends Component
                 'confirmButtonText' => 'OK',
             ]);
         } else {
-            $ubicacion->delete();
-            $this->alert(
-                'success',
-                'Condición Eliminada.'
-            );
-            //$this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
+            if ($ubicacion){
+                $ubicacion->delete();
+                $this->alert('success', 'Condición Eliminada.');
+                //$this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
+            }
         }
 
         $this->limpiarUbicaciones();

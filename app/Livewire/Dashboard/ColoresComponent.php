@@ -24,6 +24,7 @@ class ColoresComponent extends Component
     public function render()
     {
         $colores = Color::buscar($this->keyword)
+            ->orderBy('created_at', 'DESC')
             ->limit($this->rows)
             ->get()
         ;
@@ -70,19 +71,24 @@ class ColoresComponent extends Component
             $color = Color::find($this->colores_id);
             $message = "Color Actualizado.";
         }
-        $color->nombre = $this->nombre;
 
-        $color->save();
-        $this->dispatch('initSelects', select: 'color')->to(BienesComponent::class);
+        if ($color){
+            $color->nombre = $this->nombre;
+            $color->save();
+            $this->dispatch('initSelects', select: 'color')->to(BienesComponent::class);
+            $this->alert('success', $message);
+        }
+
         $this->limpiarColores();
-        $this->alert('success', $message);
     }
 
     public function edit($id)
     {
         $color = Color::find($id);
-        $this->colores_id = $color->id;
-        $this->nombre = $color->nombre;
+        if ($color){
+            $this->colores_id = $color->id;
+            $this->nombre = $color->nombre;
+        }
     }
 
     public function destroy($id)
@@ -124,12 +130,11 @@ class ColoresComponent extends Component
                 'confirmButtonText' => 'OK',
             ]);
         } else {
-            $color->delete();
-            $this->alert(
-                'success',
-                'Color Eliminado.'
-            );
-            $this->dispatch('initSelects', select: 'color')->to(BienesComponent::class);
+            if ($color){
+                $color->delete();
+                $this->alert('success', 'Color Eliminado.');
+                $this->dispatch('initSelects', select: 'color')->to(BienesComponent::class);
+            }
         }
 
         $this->limpiarColores();

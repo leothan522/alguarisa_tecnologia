@@ -111,34 +111,37 @@ class BienesComponent extends Component
     public function show($id)
     {
         $this->limpiar();
+        $this->reset(['bienes_id']);
         $bien = Bien::find($id);
-        $this->bienes_id = $bien->id;
-        $this->tipos_id = $bien->tipos_id;
-        $this->verTipo = $bien->tipo->nombre;
-        $this->marcas_id = $bien->marcas_id;
-        $this->verMarca = $bien->marca->nombre;
-        $this->modelos_id = $bien->modelos_id;
-        $this->verModelo = $bien->modelo->nombre;
-        $this->colores_id = $bien->colores_id;
-        $this->verColor = $bien->color->nombre;
-        $this->serial = $bien->serial;
-        $this->identificador = $bien->identificador;
-        $this->condiciones_id = $bien->condiciones_id;
-        $this->verCondicion = $bien->condicion->nombre;
-        $this->adicional = $bien->adicional;
-        $this->view = false;
-        $this->ver = true;
-        $this->editar = true;
-        $this->footer = true;
+        if ($bien){
+            $this->bienes_id = $bien->id;
+            $this->tipos_id = $bien->tipos_id;
+            $this->verTipo = $bien->tipo->nombre;
+            $this->marcas_id = $bien->marcas_id;
+            $this->verMarca = $bien->marca->nombre;
+            $this->modelos_id = $bien->modelos_id;
+            $this->verModelo = $bien->modelo->nombre;
+            $this->colores_id = $bien->colores_id;
+            $this->verColor = $bien->color->nombre;
+            $this->serial = $bien->serial;
+            $this->identificador = $bien->identificador;
+            $this->condiciones_id = $bien->condiciones_id;
+            $this->verCondicion = $bien->condicion->nombre;
+            $this->adicional = $bien->adicional;
+            $this->view = false;
+            $this->ver = true;
+            $this->editar = true;
+            $this->footer = true;
 
-        $imagen = Imagen::where('bienes_id', $id)->where('nombre', 'frontal')->first();
-        if ($imagen){
-            $this->imagenFrontal = $imagen->mini;
-        }
+            $imagen = Imagen::where('bienes_id', $id)->where('nombre', 'frontal')->first();
+            if ($imagen){
+                $this->imagenFrontal = $imagen->mini;
+            }
 
-        $imagen = Imagen::where('bienes_id', $id)->where('nombre', 'posterior')->first();
-        if ($imagen){
-            $this->imagenPosterior = $imagen->mini;
+            $imagen = Imagen::where('bienes_id', $id)->where('nombre', 'posterior')->first();
+            if ($imagen){
+                $this->imagenPosterior = $imagen->mini;
+            }
         }
 
     }
@@ -203,35 +206,42 @@ class BienesComponent extends Component
             $auditoria = "[ 'accion' => 'create', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
         }
 
-        $bien->tipos_id = $this->tipos_id;
-        $bien->marcas_id = $this->marcas_id;
-        $bien->modelos_id = $this->modelos_id;
-        $bien->colores_id = $this->colores_id;
-        $bien->serial = $serial;
-        $bien->identificador = $this->identificador;
-        $bien->condiciones_id = $this->condiciones_id;
-        $bien->adicional = $this->adicional;
-        $bien->auditoria = $auditoria;
-        $bien->save();
+        if ($bien){
 
-        if ($this->serial == '_'){
-            $parametro = Parametro::where('nombre', 'sin_serial')->first();
-            if ($parametro){
-                $num = $parametro->tabla_id + 1;
-                $parametro->tabla_id = $num;
-            }else{
-                $parametro = new Parametro();
-                $parametro->nombre = 'sin_serial';
-                $parametro->tabla_id = 2;
-                $parametro->valor = 'S/S-';
+            $bien->tipos_id = $this->tipos_id;
+            $bien->marcas_id = $this->marcas_id;
+            $bien->modelos_id = $this->modelos_id;
+            $bien->colores_id = $this->colores_id;
+            $bien->serial = $serial;
+            $bien->identificador = $this->identificador;
+            $bien->condiciones_id = $this->condiciones_id;
+            $bien->adicional = $this->adicional;
+            $bien->auditoria = $auditoria;
+            $bien->save();
+
+            if ($this->serial == '_'){
+                $parametro = Parametro::where('nombre', 'sin_serial')->first();
+                if ($parametro){
+                    $num = $parametro->tabla_id + 1;
+                    $parametro->tabla_id = $num;
+                }else{
+                    $parametro = new Parametro();
+                    $parametro->nombre = 'sin_serial';
+                    $parametro->tabla_id = 2;
+                    $parametro->valor = 'S/S-';
+                }
+                $parametro->save();
             }
-            $parametro->save();
+
+            $this->serial = $serial;
+            $this->show($bien->id);
+            $this->reset('keyword');
+            $this->alert('success', 'Datos Guardados. ');
+
+        }else{
+            $this->limpiar();
         }
 
-        $this->serial = $serial;
-        $this->show($bien->id);
-        $this->reset('keyword');
-        $this->alert('success', 'Datos Guardados. ');
     }
 
     public function edit()
@@ -263,20 +273,6 @@ class BienesComponent extends Component
     {
         $bien = Bien::find($this->bienes_id);
 
-        if (!empty($bien->serial)){
-            $bien->serial = "*".$bien->serial;
-        }
-
-        if (!empty($bien->identificador)){
-            $bien->identificador = "*".$bien->identificador;
-        }
-
-        if (is_null($bien->auditoria)){
-            $auditoria = "[ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
-        }else{
-            $auditoria = $bien->auditoria.", [ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
-        }
-
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
 
@@ -296,15 +292,30 @@ class BienesComponent extends Component
                 'confirmButtonText' => 'OK',
             ]);
         } else {
-            $bien->auditoria = $auditoria;
-            $bien->save();
-            $bien->delete();
-            $this->alert(
-                'success',
-                'Registro Eliminado.'
-            );
+
+            if ($bien){
+                if (!empty($bien->serial)){
+                    $bien->serial = "*".$bien->serial;
+                }
+
+                if (!empty($bien->identificador)){
+                    $bien->identificador = "*".$bien->identificador;
+                }
+
+                if (is_null($bien->auditoria)){
+                    $auditoria = "[ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+                }else{
+                    $auditoria = $bien->auditoria.", [ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+                }
+
+                $bien->auditoria = $auditoria;
+                $bien->save();
+                $bien->delete();
+                $this->alert('success', 'Registro Eliminado.');
+                $this->reset('keyword');
+            }
+
             $this->limpiar();
-            $this->reset('keyword');
         }
     }
 
@@ -319,20 +330,40 @@ class BienesComponent extends Component
 
     public function btnImagenes()
     {
-        $this->ver = false;
-        $this->cancelar = true;
-        $this->imagenes = true;
-        $this->dispatch('showImagenes', id: $this->bienes_id)->to(ImagenesComponent::class);
+        $bien = Bien::find($this->bienes_id);
+        if ($bien){
+            $this->ver = false;
+            $this->cancelar = true;
+            $this->imagenes = true;
+            $this->dispatch('showImagenes', id: $this->bienes_id)->to(ImagenesComponent::class);
+        }else{
+            $this->reset(['bienes_id']);
+            $this->limpiar();
+        }
     }
 
     public function btnUbicacion()
     {
-        $this->dispatch('getBienesUbicaciones', bienID: $this->bienes_id)->to(ModalUbicacionesComponent::class);
+        $bien = Bien::find($this->bienes_id);
+        if ($bien){
+            $this->dispatch('getBienesUbicaciones', bienID: $this->bienes_id)->to(ModalUbicacionesComponent::class);
+        }else{
+            $this->reset(['bienes_id']);
+            $this->limpiar();
+            $this->dispatch('cerrarModalPropiedades', selector: 'btn_modal_bienes_propiedad_ubicacion');
+        }
     }
 
     public function btnOficios()
     {
-        $this->dispatch('getBienesOficios', bienID: $this->bienes_id)->to(ModalOficiosVinculadosComponent::class);
+        $bien = Bien::find($this->bienes_id);
+        if ($bien){
+            $this->dispatch('getBienesOficios', bienID: $this->bienes_id)->to(ModalOficiosVinculadosComponent::class);
+        }else{
+            $this->reset(['bienes_id']);
+            $this->limpiar();
+            $this->dispatch('cerrarModalPropiedades', selector: 'btn_modal_vinculados_cerrar');
+        }
     }
 
     #[On('buscar')]
@@ -572,6 +603,12 @@ class BienesComponent extends Component
     {
         $this->reset('keyword');
         $this->busqueda = $data;
+    }
+
+    #[On('cerrarModalPropiedades')]
+    public function cerrarModalPropiedades($selector)
+    {
+        //JS
     }
 
 }

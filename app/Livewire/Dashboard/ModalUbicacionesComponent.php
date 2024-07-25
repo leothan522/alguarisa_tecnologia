@@ -66,11 +66,13 @@ class ModalUbicacionesComponent extends Component
     public function destroy($id)
     {
         $bienUbicacion = BienUbicacion::find($id);
-        $bienUbicacion->delete();
-        $existe = BienUbicacion::where('bienes_id', $this->bienes_id)->orderBy('created_at', 'DESC')->first();
-        if ($existe) {
-            $existe->actual = 1;
-            $existe->save();
+        if ($bienUbicacion){
+            $bienUbicacion->delete();
+            $existe = BienUbicacion::where('bienes_id', $this->bienes_id)->orderBy('created_at', 'DESC')->first();
+            if ($existe) {
+                $existe->actual = 1;
+                $existe->save();
+            }
         }
     }
 

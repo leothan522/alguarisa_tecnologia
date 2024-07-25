@@ -34,9 +34,9 @@
             @if($listarModelos->isNotEmpty())
                 @foreach($listarModelos as $modelo)
                     <tr>
-                        <td class="text-uppercase">{{ $modelo->tipo->nombre }}</td>
-                        <td class="text-uppercase">{{ $modelo->marca->nombre }}</td>
-                        <td class="text-uppercase">{{ $modelo->nombre }}</td>
+                        <td class="text-uppercase"><small>{{ $modelo->tipo->nombre }}</small></td>
+                        <td class="text-uppercase"><small>{{ $modelo->marca->nombre }}</small></td>
+                        <td class="text-uppercase"><small>{{ $modelo->nombre }}</small></td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit({{ $modelo->id }})" class="btn btn-primary btn-sm"
