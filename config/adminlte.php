@@ -15,7 +15,7 @@ return [
     */
 
     'title' => 'Alguarisa',
-    'title_prefix' => '',
+    'title_prefix' => ''.mb_strtoupper(env('APP_NAME', 'Laravel')).' | ',
     'title_postfix' => '',
 
     /*
@@ -213,7 +213,7 @@ return [
     |
     */
 
-    'sidebar_mini' => 'xs',
+    'sidebar_mini' => 'lg',
     'sidebar_collapse' => true,
     'sidebar_collapse_auto_size' => false,
     'sidebar_collapse_remember' => false,
@@ -336,7 +336,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Usuarios',
-                    'icon' => 'fas fa-fw fa-users',
+                    'icon' => 'fas fa-fw fa-users-cog',
                     'route'  => 'usuarios.index',
                     'can'  => 'usuarios',
                 ],

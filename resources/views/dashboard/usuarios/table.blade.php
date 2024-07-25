@@ -16,7 +16,7 @@
                 <i class="fas fa-sync-alt"></i>
             </button>
             @if(comprobarPermisos('usuarios.excel'))
-                <a href="{{ route('usuarios.excel', $keyword) }}" class="btn btn-tool text-success swalDefaultInfo">
+                <a href="{{ route('dashboard.usuarios.excel', $keyword) }}" class="btn btn-tool text-success swalDefaultInfo">
                     <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i>
                 </a>
             @endif
