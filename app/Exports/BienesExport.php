@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Bien;
+use App\Models\BienUbicacion;
 use App\Models\Equipo;
 use App\Models\Imagen;
 use App\Models\Oficio;
@@ -21,6 +22,7 @@ class BienesExport implements FromView, ShouldAutoSize, WithTitle
     {
         $bienes = Bien::all();
         $bienes->each(function ($bien){
+
             $arrayOficios = [];
             $equipos = Equipo::where('bienes_id', $bien->id)->get();
             if ($equipos->isNotEmpty()){
@@ -33,18 +35,28 @@ class BienesExport implements FromView, ShouldAutoSize, WithTitle
                 asort($arrayOficios, SORT_NATURAL | SORT_FLAG_CASE);
                 $bien->oficios = $arrayOficios;
             }
+
             $frontal = Imagen::where('bienes_id', $bien->id)->where('nombre', 'frontal')->first();
             if (!empty($frontal) && file_exists(public_path($frontal->mini))){
                 $bien->frontal = "SI";
             }else{
                 $bien->frontal = "NO";
             }
+
             $posterior = Imagen::where('bienes_id', $bien->id)->where('nombre', 'posterior')->first();
             if (!empty($posterior) && file_exists(public_path($posterior->mini))){
                 $bien->posterior = "SI";
             }else{
                 $bien->posterior = "NO";
             }
+
+            $ubicacion = BienUbicacion::where('bienes_id', $bien->id)->orderBy('actual', 'DESC')->first();
+            if ($ubicacion){
+                $bien->ubicacion = mb_strtoupper(verUtf8($ubicacion->ubicacion->nombre));
+            }else{
+                $bien->ubicacion = null;
+            }
+
         });
         return view('dashboard._export.export_excel_bienes')
             ->with('bienes', $bienes);

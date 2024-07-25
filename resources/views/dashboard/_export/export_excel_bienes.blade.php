@@ -10,6 +10,7 @@
         <th>Identicador</th>
         <th>Imagen Frontal</th>
         <th>Imagen Posterior</th>
+        <th>Ubicación</th>
         <th>Oficios Vinculados</th>
         <th>Observación</th>
         @if(auth()->user()->role == 100)
@@ -33,6 +34,7 @@
             <td>{{ $bien->identificador }}</td>
             <td>{{ $bien->frontal }}</td>
             <td>{{ $bien->posterior }}</td>
+            <td>{{ $bien->ubicacion }}</td>
             <td>
                 @if($bien->oficios)
                     @foreach($bien->oficios as $oficio)
