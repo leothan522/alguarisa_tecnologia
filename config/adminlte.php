@@ -332,7 +332,7 @@ return [
         [
             'text'      => 'Configuración',
             'icon'      => 'fas fa-fw fa-cogs',
-            'can'       => ['usuarios', 'parametros'],
+            'can'       => ['usuarios', 'empresas', 'territorio', 'parametros', 'pruebas'],
             'submenu' => [
                 [
                     'text' => 'Usuarios',
@@ -357,6 +357,12 @@ return [
                     'icon' => 'fas fa-fw fa-list',
                     'route' => 'parametros.index',
                     'can' => 'parametros',
+                ],
+                [
+                    'text' => 'Pruebas',
+                    'icon' => 'fas fa-fw fa-tools',
+                    'route' => 'pruebas.index',
+                    'can' => 'pruebas',
                 ]
             ],
         ],
