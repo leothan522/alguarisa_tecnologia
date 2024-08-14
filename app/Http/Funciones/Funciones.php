@@ -36,69 +36,6 @@ function crearJson($array)
     return json_encode($json);
 }
 
-//Alertas de sweetAlert2
-function verSweetAlert2($mensaje, $alert = null, $type = 'success', $icono = '<i class="fa fa-trash-alt"></i>', $title = '¡Éxito!')
-{
-    switch ($alert){
-        default:
-            alert()->success('¡Éxito!',$mensaje)->persistent(true,false);
-            break;
-        case "iconHtml":
-            alert($title, $mensaje, $type)->iconHtml($icono)->persistent(true,false)->toHtml();
-            break;
-        case "toast":
-            toast($mensaje, $type)->width('400px');
-            break;
-    }
-    /*alert()->success('SuccessAlert','Lorem ipsum dolor sit amet.');
-        alert()->info('InfoAlert','Lorem ipsum dolor sit amet.');
-        alert()->warning('WarningAlert','Lorem ipsum dolor sit amet.');
-        alert()->error('ErrorAlert','Lorem ipsum dolor sit amet.');
-        alert()->question('QuestionAlert','Lorem ipsum dolor sit amet.');
-        toast('Success Toast','success');.
-        // example:
-        alert()->success('Post Created', '<strong>Successfully</strong>')->toHtml();
-        // example:
-        alert('Title','Lorem Lorem Lorem', 'success')->addImage('https://unsplash.it/400/200');
-        // example:
-        alert('Title','Lorem Lorem Lorem', 'success')->width('720px');
-        // example:
-        alert('Title','Lorem Lorem Lorem', 'success')->padding('50px');
-        */
-    // example:
-    //alert()->success('¡Éxito!',$mensaje)->persistent(true,false);
-    // example:
-    //alert()->success('SuccessAlert','Lorem ipsum dolor sit amet.')->showConfirmButton('Confirm', '#3085d6');
-    // example:
-    //alert()->question('Are you sure?','You won\'t be able to revert this!')->showCancelButton('Cancel', '#aaa');
-    // example:
-    //toast('Post Updated','success','top-right')->showCloseButton();
-    // example:
-    //toast('Post Updated','success','top-right')->hideCloseButton();
-    // example:
-    /*alert()->question('Are you sure?','You won\'t be able to revert this!')
-        ->showConfirmButton('Yes! Delete it', '#3085d6')
-        ->showCancelButton('Cancel', '#aaa')->reverseButtons();*/
-
-    // example:
-    // alert()->error('Oops...', 'Something went wrong!')->footer('<a href="#">Why do I have this issue?</a>');
-    // example:
-    //alert()->success('Post Created', 'Successfully')->toToast();
-    // example:
-    //alert('Title','Lorem Lorem Lorem', 'success')->background('#2acc56');
-    // example:
-    //()->success('Post Created', 'Successfully')->buttonsStyling(false);
-    // example:
-    //alert()->success('Post Created', 'Successfully')->iconHtml('<i class="far fa-thumbs-up"></i>');
-    // example:
-    //alert()->question('Are you sure?','You won\'t be able to revert this!')->showCancelButton()->showConfirmButton()->focusConfirm(true);
-    // example:
-    //alert()->question('Are you sure?','You won\'t be able to revert this!')->showCancelButton()->showConfirmButton()->focusCancel(true);
-    // example:
-    //toast('Signed in successfully','success')->timerProgressBar();
-
-}
-
 function verSpinner()
 {
     $spinner = '
@@ -152,15 +89,6 @@ function verUtf8($string){
     return mb_convert_encoding($string, 'UTF-8');
 }
 
-function iconoPlataforma($plataforma)
-{
-    if ($plataforma == 0) {
-        return '<i class="fas fa-desktop"></i>';
-    } else {
-        return '<i class="fas fa-mobile"></i>';
-    }
-}
-
 function verRole($role, $roles_id)
 {
     $roles = [
@@ -181,32 +109,15 @@ function verRole($role, $roles_id)
     }
 }
 
-function verEstatusUsuario($i, $icon = null)
-{
-    if (is_null($icon)){
-        $suspendido = "Suspendido";
-        $activado = "Activo";
-    }else{
-        $suspendido = '<i class="fa fa-user-slash"></i>';
-        $activado = '<i class="fa fa-user-check"></i>';
-    }
-    $status = [
-        '0' => '<span class="text-danger">'.$suspendido.'</span>',
-        '1' => '<span class="text-success">'.$activado.'</span>'/*,
-        '2' => '<span class="text-success">Confirmado</span>'*/
-    ];
-    return $status[$i];
+function verFecha($fecha, $format = null){
+    $carbon = new Carbon();
+    if ($format == null){ $format = "j/m/Y"; }
+    return $carbon->parse($fecha)->format($format);
 }
 
 function haceCuanto($fecha){
     $carbon = new Carbon();
     return $carbon->parse($fecha)->diffForHumans();
-}
-
-function verFecha($fecha, $format = null){
-    $carbon = new Carbon();
-    if ($format == null){ $format = "j/m/Y"; }
-    return $carbon->parse($fecha)->format($format);
 }
 
 function generarStringAleatorio($largo = 10, $espacio = false): string
@@ -259,7 +170,6 @@ function numSizeCodigo(){
     return $default;
 }
 
-//funcion formato millares
 function formatoMillares($cantidad, $decimal = 2)
 {
     return number_format($cantidad, $decimal, ',', '.');
@@ -363,6 +273,114 @@ Comprobaremos si la segunda hora que le pasamos es inferior a la primera, con lo
 Y al final devolveremos true o false dependiendo si el valor introducido se encuentra entre lo que le hemos pasado.*/
 }
 
+function dataSelect2($rows, $text = null)
+{
+    $data = array();
+    foreach ($rows as $row){
+        switch ($text){
+            case 'nombre':
+                $text = $row->nombre;
+                break;
+            default:
+                $text = $row->codigo.'  '.$row->nombre;
+                break;
+        }
+        $option = [
+            'id' => $row->id,
+            'text' => $text
+        ];
+        array_push($data, $option);
+    }
+    return $data;
+}
+
+function array_sort_by($arrIni, $col, $order = SORT_ASC)
+{
+    $arrAux = array();
+    foreach ($arrIni as $key=> $row)
+    {
+        $arrAux[$key] = is_object($row) ? $arrAux[$key] = $row->$col : $row[$col];
+        $arrAux[$key] = strtolower($arrAux[$key]);
+    }
+    array_multisort($arrAux, $order, $arrIni);
+    return $arrIni;
+}
+
+function nextCodigo($parametros_nombre, $parametros_tabla_id, $nombre_formato = null){
+
+    $next = 1;
+    $codigo = null;
+
+    //buscamos algun formato para el codigo
+    if (!is_null($nombre_formato)){
+        $parametro = Parametro::where("nombre", $nombre_formato)->where('tabla_id', $parametros_tabla_id)->first();
+        if ($parametro) {
+            $codigo = $parametro->valor;
+        }else{
+            $codigo = "N".$parametros_tabla_id.'-';
+        }
+    }
+
+    //buscamos el proximo numero
+    $parametro = Parametro::where("nombre", $parametros_nombre)->where('tabla_id', $parametros_tabla_id)->first();
+    if ($parametro){
+        $next = $parametro->valor;
+        $parametro->valor = $next + 1;
+        $parametro->save();
+    }else{
+        $parametro = new Parametro();
+        $parametro->nombre = $parametros_nombre;
+        $parametro->tabla_id = $parametros_tabla_id;
+        $parametro->valor = 2;
+        $parametro->save();
+    }
+
+    if (!is_numeric($next)){ $next = 1; }
+
+    $size = cerosIzquierda($next, numSizeCodigo());
+
+    return $codigo . $size;
+
+}
+
+//Ceros a la izquierda
+function cerosIzquierda($cantidad, $cantCeros = 2)
+{
+    if ($cantidad == 0) {
+        return 0;
+    }
+    return str_pad($cantidad, $cantCeros, "0", STR_PAD_LEFT);
+}
+
+function cuantosDias($fecha_inicio, $fecha_final){
+
+    if ($fecha_inicio == null){
+        return 0;
+    }
+
+    $carbon = new Carbon();
+    $fechaEmision = $carbon->parse($fecha_inicio);
+    $fechaExpiracion = $carbon->parse($fecha_final);
+    $diasDiferencia = $fechaExpiracion->diffInDays($fechaEmision);
+    return $diasDiferencia;
+}
+
+//calculo de porcentaje
+function obtenerPorcentaje($cantidad, $total)
+{
+    if ($total != 0) {
+        $porcentaje = ((float)$cantidad * 100) / $total; // Regla de tres
+        $porcentaje = round($porcentaje, 2);  // Quitar los decimales
+        return $porcentaje;
+    }
+    return 0;
+}
+
+//***********************************************************************************
+
+
+
+
 //Estado de Tienda Abierto o Cerrada
 function estatusTienda($id, $boton = false)
 {
@@ -407,121 +425,4 @@ function estatusTienda($id, $boton = false)
     }
 
     return $estatus;
-}
-
-function dataSelect2($rows, $text = null)
-{
-    $data = array();
-    foreach ($rows as $row){
-        switch ($text){
-            case 'nombre':
-                $text = $row->nombre;
-                break;
-            default:
-                $text = $row->codigo.'  '.$row->nombre;
-                break;
-        }
-        $option = [
-            'id' => $row->id,
-            'text' => $text
-        ];
-        array_push($data, $option);
-    }
-    return $data;
-}
-
-function array_sort_by($arrIni, $col, $order = SORT_ASC)
-{
-    $arrAux = array();
-    foreach ($arrIni as $key=> $row)
-    {
-        $arrAux[$key] = is_object($row) ? $arrAux[$key] = $row->$col : $row[$col];
-        $arrAux[$key] = strtolower($arrAux[$key]);
-    }
-    array_multisort($arrAux, $order, $arrIni);
-    return $arrIni;
-}
-
-function nextCodigo($parametros_nombre = null, $parametros_tabla_id = null, $formato = null){
-    $next = 1;
-
-    //buscamos algun formato para el codigo
-    if (!is_null($parametros_tabla_id)){
-        $parametro = Parametro::where("nombre", $parametros_nombre)
-            ->where('tabla_id', $parametros_tabla_id)
-            ->first();
-    }else{
-        $parametro = Parametro::where("nombre", $parametros_nombre)
-            ->first();
-    }
-
-    if ($parametro) {
-        if (is_null($parametros_tabla_id)){
-            $codigo = $parametro->valor;
-            $next = $parametro->tabla_id;
-        }else{
-            $explode = explode(',', $parametro->valor);
-            $codigo = $explode[0];
-            $next = $explode[1];
-        }
-    }else{
-        if (is_null($formato)){
-            $codigo = "N".$parametros_tabla_id.'-';
-        }else{
-            $codigo = $formato;
-        }
-    }
-
-    if (!is_numeric($next)) { $next = 1; }
-
-    $size = cerosIzquierda($next, numSizeCodigo());
-
-    return $codigo . $size;
-
-}
-
-//Ceros a la izquierda
-function cerosIzquierda($cantidad, $cantCeros = 2)
-{
-    if ($cantidad == 0) {
-        return 0;
-    }
-    return str_pad($cantidad, $cantCeros, "0", STR_PAD_LEFT);
-}
-
-function telefonoSoporte()
-{
-    $parametro = Parametro::where('nombre', 'telefono_soporte')->first();
-    if ($parametro){
-        $telefono = strtoupper($parametro->valor);
-    }else{
-        $telefono = "0212.999.99.99";
-    }
-    return $telefono;
-}
-
-//***********************************************************************************
-
-function cuantosDias($fecha_inicio, $fecha_final){
-
-    if ($fecha_inicio == null){
-        return 0;
-    }
-
-    $carbon = new Carbon();
-    $fechaEmision = $carbon->parse($fecha_inicio);
-    $fechaExpiracion = $carbon->parse($fecha_final);
-    $diasDiferencia = $fechaExpiracion->diffInDays($fechaEmision);
-    return $diasDiferencia;
-}
-
-//calculo de porcentaje
-function obtenerPorcentaje($cantidad, $total)
-{
-    if ($total != 0) {
-        $porcentaje = ((float)$cantidad * 100) / $total; // Regla de tres
-        $porcentaje = round($porcentaje, 2);  // Quitar los decimales
-        return $porcentaje;
-    }
-    return 0;
 }
