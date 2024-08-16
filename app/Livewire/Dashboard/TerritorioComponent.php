@@ -14,7 +14,6 @@ use Livewire\WithPagination;
 class TerritorioComponent extends Component
 {
     use LivewireAlert;
-    use WithPagination, WithoutUrlPagination;
 
     public $rows = 0, $numero = 15, $tableStyle = false;
     public $viewMunicipio = "create", $keywordMunicipios, $viewParroquia = 'create', $keywordParroquia, $idMunicipio;
@@ -49,8 +48,12 @@ class TerritorioComponent extends Component
             ;
     }
 
-    public function setLimit()
+    public function setLimit($parroquia = false)
     {
+        if ($parroquia){
+            $this->tabActive('parroquia');
+        }
+
         if (numRowsPaginate() < $this->numero) {
             $rows = $this->numero;
         } else {
@@ -68,6 +71,7 @@ class TerritorioComponent extends Component
         $this->reset([
             'viewMunicipio', 'municipio_id', 'municipioNombre', 'municipioAbreviatura', 'keywordMunicipios', 'municipioFamilias'
         ]);
+        $this->tabActive('municipio');
     }
 
     public function saveMunicipio()
@@ -205,6 +209,7 @@ class TerritorioComponent extends Component
         ]);
         $municipios = dataSelect2(Municipio::orderBy('nombre', 'ASC')->get());
         $this->dispatch('selectMunicipios', municipios: $municipios);
+        $this->tabActive('parroquia');
     }
 
     public function saveParroquia()
@@ -400,6 +405,7 @@ class TerritorioComponent extends Component
             $this->verMunicipio = $municipio->nombre;
             $this->tabMunicipio = null;
             $this->tabParroquia = 'active';
+            $this->dispatch('setBreadcrumb');
         }
     }
 
@@ -441,6 +447,12 @@ class TerritorioComponent extends Component
 
     #[On('editSelectMunicipio')]
     public function editSelectMunicipio($municipio)
+    {
+        //JS
+    }
+
+    #[On('setBreadcrumb')]
+    public function setBreadcrumb()
     {
         //JS
     }
