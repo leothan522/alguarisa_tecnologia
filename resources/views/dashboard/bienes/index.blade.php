@@ -68,6 +68,10 @@
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
 
+        $(document).on('select2:open', () => {
+            document.querySelector('.select2-search__field').focus();
+        });
+
         function verTipos() {
             Livewire.dispatch('limpiarTipos');
         }
@@ -274,18 +278,6 @@
         Livewire.on('cerrarModalPropiedades', ({ selector }) => {
             $('#' + selector).click();
         });
-
-        function buscar(){
-            let input = $("#navbarSearch");
-            let keyword  = input.val();
-            if (keyword.length > 0){
-                verSpinnerOculto();
-                input.blur();
-                //alert('Falta vincular con el componente Livewire');
-                Livewire.dispatch('buscar', { keyword: keyword });
-            }
-            return false;
-        }
 
         console.log('Hi!');
     </script>
