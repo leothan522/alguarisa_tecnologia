@@ -79,7 +79,7 @@
                                 </div>
                             </div>
                             <div class="d-md-none">
-                                <button class="btn btn-primary btn-sm" {{--data-toggle="modal" data-target="#modal-default" wire:click="showCliente({{ $cliente->id }})"--}}>
+                                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-show-parroquias" wire:click="editParroquia({{ $parroquia->id }})">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
