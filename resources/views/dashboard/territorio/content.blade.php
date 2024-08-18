@@ -34,5 +34,7 @@
 
         @include('dashboard.territorio.form_municipios')
         @include('dashboard.territorio.form_parroquias')
+        @include('dashboard.territorio.show_municipio')
+        {{--@include('dashboard.territorio.show_parroquia')--}}
     </div>
 </div>

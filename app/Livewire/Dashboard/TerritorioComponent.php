@@ -17,7 +17,7 @@ class TerritorioComponent extends Component
 
     public $rows = 0, $numero = 15, $tableStyle = false;
     public $viewMunicipio = "create", $keywordMunicipios, $viewParroquia = 'create', $keywordParroquia, $idMunicipio;
-    public $municipio_id, $municipioNombre, $municipioAbreviatura, $municipioFamilias;
+    public $municipio_id, $municipioNombre, $municipioAbreviatura, $municipioFamilias, $municipioParroquias, $municipioEstatus;
     public $parroquia_id, $parroquiaNombre, $parroquiaAbreviatura, $parroquiaMunicipio, $parroquiaFamilias, $parroquiaMax;
     public $tabMunicipio = 'active', $tabParroquia, $verMunicipio;
 
@@ -69,7 +69,8 @@ class TerritorioComponent extends Component
     {
         $this->resetErrorBag();
         $this->reset([
-            'viewMunicipio', 'municipio_id', 'municipioNombre', 'municipioAbreviatura', 'keywordMunicipios', 'municipioFamilias'
+            'viewMunicipio', 'municipio_id', 'municipioNombre', 'municipioAbreviatura', 'keywordMunicipios',
+            'municipioFamilias', 'municipioParroquias', 'municipioEstatus'
         ]);
         $this->tabActive('municipio');
     }
@@ -129,8 +130,15 @@ class TerritorioComponent extends Component
             $this->municipioNombre = $municipio->nombre;
             $this->municipioAbreviatura = $municipio->mini;
             $this->municipioFamilias = $municipio->familias;
+            $this->municipioParroquias = $municipio->parroquias;
+            if ($municipio->estatus){
+                $this->municipioEstatus = "Activo";
+            }else{
+                $this->municipioEstatus = "Inactivo";
+            }
         }else{
             $this->dispatch('cerrarModal', selector: 'municipio_btn_cerrar');
+            $this->dispatch('cerrarModal', selector: 'btn_modal_show_minicipio');
         }
     }
 
@@ -170,6 +178,8 @@ class TerritorioComponent extends Component
     #[On('confirmedMunicipio')]
     public function confirmedMunicipio()
     {
+        $municipio = Municipio::find($this->municipio_id);
+
         // Example code inside confirmed callback
         $validar = false;
 
@@ -186,12 +196,11 @@ class TerritorioComponent extends Component
             ]);
 
         } else {
-
-            $municipio = Municipio::find($this->municipio_id);
             if ($municipio){
                 $nombre = $municipio->mini;
                 $municipio->delete();
-                $this->alert('success',$nombre. ' Eliminado.');
+                $this->dispatch('cerrarModal', selector: 'btn_modal_show_minicipio');
+                $this->alert('success',$nombre. ' ELIMINADO.');
             }
             $this->limpiarMunicipios();
         }
