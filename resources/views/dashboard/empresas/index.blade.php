@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('plugins.Ekkolightbox', true)
+@section('plugins.Lightbox', true)
 
 @section('title', 'Empresas')
 

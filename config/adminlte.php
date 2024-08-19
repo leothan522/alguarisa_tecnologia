@@ -583,7 +583,7 @@ return [
                 ],
             ],
         ],
-        'Ekkolightbox' => [
+        'Lightbox' => [
             'active' => false,
             'files' => [
                 [
