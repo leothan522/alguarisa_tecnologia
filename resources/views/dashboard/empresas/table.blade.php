@@ -13,6 +13,9 @@
         </h3>
 
         <div class="card-tools">
+            <button type="button" class="btn btn-tool" wire:click="actualizar">
+                <i class="fas fa-sync-alt"></i>
+            </button>
             <button type="button" class="btn btn-tool" wire:click="setLimit" @if($rows > $tiendas->count()) disabled @endif>
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
@@ -38,24 +41,25 @@
             @if($tiendas->isNotEmpty())
                 @foreach($tiendas as $tienda)
                     <li class=" @if($tienda->id == $empresas_id) text-warning @endif " >
-                    <!-- todo text -->
-                    <span class="text"
-                          @if(comprobarPermisos('empresas.estatus') || comprobarAccesoEmpresa($tienda->permisos, auth()->id()))
-                              style="cursor: pointer"
-                              wire:click="estatusTienda({{ $tienda->id }})"
-                          @endif
-                          >
-                            <i class="fas fa-power-off @if(estatusTienda($tienda->id, true)) text-success @else text-danger @endif"></i>
-                    </span>
-                    <!-- Emphasis label -->
-                    <small class="badge {{--badge-danger--}}">
-                        @if($tienda->default) <i class="fas fa-certificate text-muted text-xs"></i> @endif
-                        {{ mb_strtoupper($tienda->nombre) }}
-                    </small>
-                    <!-- General tools such as edit or delete-->
-                    <div class="tools text-primary" wire:click="show({{ $tienda->id }})">
-                        <i class="fas fa-eye"></i>
-                    </div>
+                        <!-- todo text -->
+                        <span class="text" @if(comprobarPermisos('empresas.estatus') || comprobarAccesoEmpresa($tienda->permisos, auth()->id())) style="cursor: pointer"  wire:click="estatusTienda({{ $tienda->id }})" @endif >
+                                <i class="fas fa-power-off @if(estatusTienda($tienda->id, true)) text-success @else text-danger @endif"></i>
+                        </span>
+                        <!-- Emphasis label -->
+                        <small class="badge d-none d-md-inline-block text-truncate" wire:click="show({{ $tienda->id }})" style="max-width: 250px; cursor: pointer;">
+                            @if($tienda->default) <i class="fas fa-certificate text-muted text-xs"></i> @endif
+                            {{ mb_strtoupper($tienda->nombre) }}
+                        </small>
+
+                        <small class="badge d-md-none text-truncate" style="max-width: 200px;" wire:click="show({{ $tienda->id }})" data-toggle="modal" data-target="#modal-default">
+                            @if($tienda->default) <i class="fas fa-certificate text-muted text-xs"></i> @endif
+                            {{ mb_strtoupper($tienda->nombre) }}
+                        </small>
+
+                        <!-- General tools such as edit or delete-->
+                        <div class="tools text-primary" wire:click="show({{ $tienda->id }})">
+                            <i class="fas fa-eye"></i>
+                        </div>
                     </li>
                 @endforeach
             @else
@@ -74,7 +78,7 @@
 
     </div>
 
-    <div class="overlay-wrapper" wire:loading wire:target="setLimit, save, convertirDefault, destroy, confirmed">
+    <div class="overlay-wrapper" wire:loading wire:target="setLimit, save, convertirDefault, destroy, confirmed, actualizar">
         <div class="overlay">
             <div class="spinner-border text-navy" role="status">
                 <span class="sr-only">Loading...</span>

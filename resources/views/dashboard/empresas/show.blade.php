@@ -1,4 +1,4 @@
-<div class="row col-md-12" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="row justify-content-center" xmlns:wire="http://www.w3.org/1999/xhtml">
 
     <div class="col-md-6">
 

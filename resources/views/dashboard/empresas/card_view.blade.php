@@ -1,4 +1,4 @@
-<div class="card {{--card-outline--}} card-navy" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="card card-navy d-none d-sm-block" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="card-header">
         <h3 class="card-title">
             {{ $title }}
@@ -55,7 +55,7 @@
     @endif
 
     <div class="overlay-wrapper" wire:loading wire:target="limpiar, create, show, save, edit, convertirDefault,
-                destroy, verHorario, botonHorario, diasActivos, storeHoras">
+                destroy, verHorario, botonHorario, diasActivos, storeHoras, actualizar">
         <div class="overlay">
             <div class="spinner-border text-navy" role="status">
                 <span class="sr-only">Loading...</span>

@@ -495,6 +495,11 @@ class EmpresasComponent extends Component
         $this->img_borrar_principal = $this->img_principal;
     }
 
+    public function actualizar()
+    {
+        //
+    }
+
 
 
 }
