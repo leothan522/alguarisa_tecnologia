@@ -5,32 +5,27 @@
         <div class="card card-outline card-navy">
 
             <div class="card-body box-profile">
-                <h1 class="profile-username text-center text-bold">
-                    {{ mb_strtoupper($nombre) }}
+                <h1 class="profile-username text-center text-bold text-uppercase">
+                    {{ $nombre }}
                 </h1>
                 <ul class="list-group list-group-unbordered mt-3">
                     <li class="list-group-item">
                         <b>RIF</b> <a class="float-right text-uppercase">{{ $rif }}</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Jefe</b> <a
-                                class="float-right text-uppercase">{{ $jefe }}</a>
+                        <b>Jefe</b> <a class="float-right text-uppercase">{{ $jefe }}</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Moneda Base</b> <a
-                                class="float-right text-uppercase">{{ $moneda }}</a>
+                        <b>Moneda Base</b> <a class="float-right text-uppercase">{{ $moneda }}</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Telefonos</b> <a
-                                class="float-right text-uppercase">{{ $telefonos }}</a>
+                        <b>Teléfonos</b> <a class="float-right text-uppercase">{{ $telefonos }}</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Email</b> <a
-                                class="float-right">{{ mb_strtolower($email) }}</a>
+                        <b>Email</b> <a class="float-right text-lowercase">{{ $email }}</a>
                     </li>
                     <li class="list-group-item">
-                        <b>Dirección</b> <a
-                                class="float-right">{{ mb_strtoupper($direccion) }}</a>
+                        <b>Dirección</b> <a class="float-right text-uppercase">{{ $direccion }}</a>
                     </li>
                     @if(auth()->user()->role == 100)
                         <li class="list-group-item">
@@ -48,16 +43,6 @@
             </div>
 
         </div>
-
-        {{--@if($verDefault)
-            <ul class="list-group text-sm">
-                <li class="list-group-item bg-warning text-bold">
-                    Tienda Default
-                    <span class="float-right text-bold"><i class="fas fa-certificate text-muted text-xs"></i></span>
-                </li>
-            </ul>
-        @endif--}}
-
 
     </div>
 
@@ -80,8 +65,13 @@
 
                         <div class="row col-12 justify-content-center mb-3 mt-3">
                             <div class="col-8">
-                                <img class="img-thumbnail" src="{{ verImagen($verImagen, false, true) }}"
-                                     {{--width="101" height="100"--}}  alt="Logo Tienda"/>
+                                @if($verImagen)
+                                    <a href="{{ verImagen($verImagen, false, true) }}" data-toggle="lightbox" data-title="{{ mb_strtoupper($nombre) }}">
+                                        <img class="img-thumbnail" src="{{ verImagen($verMini, false, true) }}" {{--width="101" height="100"--}}  alt="Logo Tienda"/>
+                                    </a>
+                                @else
+                                    <img class="img-thumbnail" src="{{ verImagen($verMini, false, true) }}" {{--width="101" height="100"--}}  alt="Logo Tienda"/>
+                                @endif
                             </div>
                         </div>
 

@@ -1,5 +1,7 @@
 @extends('adminlte::page')
 
+@section('plugins.Ekkolightbox', true)
+
 @section('title', 'Empresas')
 
 @section('content_header')
@@ -46,6 +48,20 @@
         {
             $('#customFileLang').click();
         }
+
+        Livewire.on('cerrarModal', () => {
+            $('#btn_modal_default').click();
+        });
+
+        /* Ekko Lightbox */
+        $(function () {
+            $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+                event.preventDefault();
+                $(this).ekkoLightbox({
+                    alwaysShowClose: true
+                });
+            });
+        })
 
         console.log('Hi!');
     </script>
