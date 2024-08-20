@@ -1,5 +1,6 @@
 @extends('adminlte::page')
 
+@section('plugins.Lightbox', true)
 @section('plugins.Select2', true)
 
 @section('title', 'Bienes')
@@ -277,6 +278,16 @@
 
         Livewire.on('cerrarModalPropiedades', ({ selector }) => {
             $('#' + selector).click();
+        });
+
+        /* Ekko Lightbox */
+        $(function () {
+            $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+                event.preventDefault();
+                $(this).ekkoLightbox({
+                    alwaysShowClose: true
+                });
+            });
         });
 
         console.log('Hi!');

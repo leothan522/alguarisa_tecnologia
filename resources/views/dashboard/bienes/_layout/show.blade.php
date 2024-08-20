@@ -57,12 +57,22 @@
 
                         <div class="row col-12 justify-content-center mb-3 mt-3">
                             <div class="col-5">
-                                <img class="img-thumbnail" src="{{ verImagen($imagenFrontal, false, true) }}"
-                                     {{--width="101" height="100"--}}  alt="Imagen Frontal"/>
+                                @if($imagenFrontal)
+                                    <a href="{{ verImagen($imagenFrontal, false, true) }}" data-toggle="lightbox" data-title="@if($serial) Serial: [{{ $serial }}] @else Ver Imagen @endif " data-gallery="example-gallery" @if($identificador) data-footer="Identificador: [{{ $identificador }}]"  @endif >
+                                        <img class="img-thumbnail" src="{{ verImagen($miniFrontal, false, true) }}" {{--width="101" height="100"--}}  alt="Imagen Frontal"/>
+                                    </a>
+                                @else
+                                    <img class="img-thumbnail" src="{{ verImagen($miniFrontal, false, true) }}" {{--width="101" height="100"--}}  alt="Imagen Frontal"/>
+                                @endif
                             </div>
                             <div class="col-5">
-                                <img class="img-thumbnail" src="{{ verImagen($imagenPosterior, false, true) }}"
-                                     {{--width="101" height="100"--}}  alt="Imagen Posterior"/>
+                                @if($imagenPosterior)
+                                    <a href="{{ verImagen($imagenPosterior, false, true) }}" data-toggle="lightbox" data-title="@if($serial) Serial: [{{ $serial }}] @else Ver Imagen @endif " data-gallery="example-gallery" @if($identificador) data-footer="Identificador: [{{ $identificador }}]"  @endif >
+                                        <img class="img-thumbnail" src="{{ verImagen($miniPosterior, false, true) }}" {{--width="101" height="100"--}}  alt="Imagen Posterior"/>
+                                    </a>
+                                @else
+                                    <img class="img-thumbnail" src="{{ verImagen($miniPosterior, false, true) }}" {{--width="101" height="100"--}}  alt="Imagen Posterior"/>
+                                @endif
                             </div>
                         </div>
 

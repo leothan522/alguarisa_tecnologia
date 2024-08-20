@@ -61,7 +61,7 @@
                     alwaysShowClose: true
                 });
             });
-        })
+        });
 
         console.log('Hi!');
     </script>

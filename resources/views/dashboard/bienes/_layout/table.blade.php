@@ -51,7 +51,7 @@
                             {{ $bien->codigo }}
                     </span>--}}
                     <!-- Emphasis label -->
-                    <small class="text text-uppercase {{--badge-danger--}}">
+                    <small class="text text-uppercase" wire:click="show({{ $bien->id }})" style="cursor: pointer;">
                         {{ $bien->tipo->nombre }}
                         {{ $bien->marca->nombre }}
                         {{ $bien->modelo->nombre }}

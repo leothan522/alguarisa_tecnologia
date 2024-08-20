@@ -27,7 +27,7 @@ class BienesComponent extends Component
     public $view = true, $form = false, $ver = false, $nuevo = false, $editar = false, $cancelar = false, $footer = false, $keyword;
     public $tipos_id, $marcas_id, $modelos_id, $colores_id, $serial, $identificador, $condiciones_id, $adicional;
     public $bienes_id, $verTipo, $verMarca, $verModelo, $verColor, $verCondicion;
-    public $imagenes = false, $imagenFrontal, $imagenPosterior;
+    public $imagenes = false, $imagenFrontal, $imagenPosterior, $miniFrontal, $miniPosterior;
     public $busqueda;
 
     public function mount()
@@ -92,7 +92,7 @@ class BienesComponent extends Component
             'view', 'form', 'ver', 'nuevo', 'editar', 'cancelar', 'footer',
             'tipos_id', 'marcas_id', 'modelos_id', 'colores_id', 'serial', 'identificador', 'condiciones_id', 'adicional',
             'verTipo', 'verMarca', 'verModelo', 'verColor', 'verCondicion',
-            'imagenes', 'imagenFrontal', 'imagenPosterior'
+            'imagenes', 'imagenFrontal', 'imagenPosterior', 'miniFrontal', 'miniPosterior'
         ]);
         $this->resetErrorBag();
     }
@@ -135,12 +135,14 @@ class BienesComponent extends Component
 
             $imagen = Imagen::where('bienes_id', $id)->where('nombre', 'frontal')->first();
             if ($imagen){
-                $this->imagenFrontal = $imagen->mini;
+                $this->imagenFrontal = $imagen->imagen;
+                $this->miniFrontal = $imagen->mini;
             }
 
             $imagen = Imagen::where('bienes_id', $id)->where('nombre', 'posterior')->first();
             if ($imagen){
-                $this->imagenPosterior = $imagen->mini;
+                $this->imagenPosterior = $imagen->imagen;
+                $this->miniPosterior = $imagen->mini;
             }
         }
 
