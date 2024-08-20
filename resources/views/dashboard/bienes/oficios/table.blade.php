@@ -47,7 +47,7 @@
         <ul class="todo-list" data-widget="todo-list">
             @if($listarOficios->isNotEmpty())
                 @foreach($listarOficios as $oficio)
-                    <li class=" @if($oficio->id == $oficios_id) text-warning @endif ">
+                    <li class=" @if($oficio->id == $oficios_id) text-warning @endif " wire:click="show({{ $oficio->id }})" style="cursor:pointer;">
                         <!-- todo text -->
                         <span class="text text-uppercase">
                             {{ $oficio->numero }}
@@ -58,7 +58,7 @@
                             Equipos: {{ formatoMillares($oficio->equipos, 0) }}
                         </small>
                         <!-- General tools such as edit or delete-->
-                        <div class="tools text-primary" wire:click="show({{ $oficio->id }})">
+                        <div class="tools text-primary">
                             <i class="fas fa-eye"></i>
                         </div>
                     </li>

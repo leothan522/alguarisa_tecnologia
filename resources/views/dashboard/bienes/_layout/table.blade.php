@@ -6,7 +6,7 @@
                 @if($keyword)
                     Búsqueda { <b class="text-warning">{{ $keyword }}</b> }
                 @else
-                    { <b class="text-warning">Busqueda Avanzada</b> }
+                    Búsqueda Avanzada { <b class="text-warning">{{ $totalBusqueda }}</b> }
                 @endif
 
                 <button class="btn btn-tool text-warning" wire:click="limpiarBuscar" onclick="verSpinnerOculto()">
@@ -52,9 +52,9 @@
                     </span>--}}
                     <!-- Emphasis label -->
                     <small class="text text-uppercase" wire:click="show({{ $bien->id }})" style="cursor: pointer;">
-                        {{ $bien->tipo->nombre }}
-                        {{ $bien->marca->nombre }}
-                        {{ $bien->modelo->nombre }}
+                        {{ $bien->verTipo }}
+                        {{ $bien->verMarca }}
+                        {{ $bien->verModelo }}
                         @if(!is_null($bien->serial))
                             , Serial: {{ $bien->serial }}
                         @endif

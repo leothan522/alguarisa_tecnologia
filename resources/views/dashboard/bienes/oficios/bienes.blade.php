@@ -58,6 +58,10 @@
                             <div class="tools text-danger" wire:click="btnQuitarEquipo({{ $key }})">
                                 <i class="fas fa-trash-alt"></i>
                             </div>
+                        @else
+                            <div class="tools text-primary" onclick="verBien({{ $equipo['id'] }})">
+                                <i class="fas fa-eye"></i>
+                            </div>
                         @endif
                     </li>
                 @endforeach

@@ -97,7 +97,7 @@
             Livewire.dispatch('limpiarUbicaciones');
         }
 
-        function select_2_tablas(id, data, event, modal)
+        function select_2_tablas(id, data, event, modal, btn = false)
         {
             let html = '<div class="input-group-prepend">' +
                 '<span class="input-group-text">' +
@@ -112,7 +112,7 @@
                 theme: 'bootstrap4',
                 data: data,
                 placeholder: 'Seleccione',
-                /*allowClear: true*/
+                allowClear: btn
             });
             $('#'  + id).val(null).trigger('change');
             $('#'  + id).on('change', function() {
@@ -237,7 +237,7 @@
         }
 
         Livewire.on('busquedaSelectTipos', ({ data }) => {
-            select_2_tablas('select_busqueda_tipo', data, 'getBusquedaSelectTipos', 'busqueda-avanzada');
+            select_2_tablas('select_busqueda_tipo', data, 'getBusquedaSelectTipos', 'busqueda-avanzada', true);
         });
 
         Livewire.on('setBusquedaSelectTipos', ({ id }) => {
@@ -245,7 +245,7 @@
         });
 
         Livewire.on('busquedaSelectMarcas', ({ data }) => {
-            select_2_tablas('select_busqueda_marca', data, 'getBusquedaSelectMarcas', 'busqueda-avanzada');
+            select_2_tablas('select_busqueda_marca', data, 'getBusquedaSelectMarcas', 'busqueda-avanzada', true);
         });
 
         Livewire.on('setBusquedaSelectMarcas', ({ id }) => {
@@ -253,7 +253,7 @@
         });
 
         Livewire.on('busquedaSelectColor', ({ data }) => {
-            select_2_tablas('select_busqueda_color', data, 'getBusquedaSelectColor', 'busqueda-avanzada');
+            select_2_tablas('select_busqueda_color', data, 'getBusquedaSelectColor', 'busqueda-avanzada', true);
         });
 
         Livewire.on('setBusquedaSelectColor', ({ id }) => {
@@ -261,7 +261,7 @@
         });
 
         Livewire.on('busquedaSelectCondicion', ({ data }) => {
-            select_2_tablas('select_busqueda_condicion', data, 'getBusquedaSelectCondicion', 'busqueda-avanzada');
+            select_2_tablas('select_busqueda_condicion', data, 'getBusquedaSelectCondicion', 'busqueda-avanzada', true);
         });
 
         Livewire.on('setBusquedaSelectCondicion', ({ id }) => {
@@ -269,7 +269,7 @@
         });
 
         Livewire.on('busquedaSelectModelo', ({ data }) => {
-            select_2_tablas('select_busqueda_modelo', data, 'getBusquedaSelectModelo', 'busqueda-avanzada');
+            select_2_tablas('select_busqueda_modelo', data, 'getBusquedaSelectModelo', 'busqueda-avanzada', true);
         });
 
         Livewire.on('setBusquedaSelectModelo', ({ id }) => {
@@ -279,6 +279,12 @@
         Livewire.on('cerrarModalPropiedades', ({ selector }) => {
             $('#' + selector).click();
         });
+
+        function verBien(id) {
+            verSpinnerOculto();
+            $('#btn_cerrar_model_oficios').click();
+            Livewire.dispatch('showBien', { id: id });
+        }
 
         /* Ekko Lightbox */
         $(function () {

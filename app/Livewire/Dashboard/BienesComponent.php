@@ -12,6 +12,8 @@ use App\Models\Modelo;
 use App\Models\Oficio;
 use App\Models\Parametro;
 use App\Models\Tipo;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\On;
@@ -28,7 +30,7 @@ class BienesComponent extends Component
     public $tipos_id, $marcas_id, $modelos_id, $colores_id, $serial, $identificador, $condiciones_id, $adicional;
     public $bienes_id, $verTipo, $verMarca, $verModelo, $verColor, $verCondicion;
     public $imagenes = false, $imagenFrontal, $imagenPosterior, $miniFrontal, $miniPosterior;
-    public $busqueda;
+    public $busqueda, $totalBusqueda;
 
     public function mount()
     {
@@ -55,6 +57,11 @@ class BienesComponent extends Component
                 ->orderBy('created_at', 'DESC')
                 ->limit($this->rows)
                 ->get();
+            $bienes->each(function ($bien) {
+                $bien->verTipo = $bien->tipo->nombre;
+                $bien->verMarca = $bien->marca->nombre;
+                $bien->verModelo = $bien->modelo->nombre;
+            });
         }else{
             $tipo = $this->busqueda['tipo'];
             $marca = $this->busqueda['marca'];
@@ -64,15 +71,62 @@ class BienesComponent extends Component
             $serial = $this->busqueda['serial'];
             $identidicador = $this->busqueda['identificador'];
 
-            $bienes = Bien::orWhere('tipos_id', $tipo)
-                ->orWhere('marcas_id', $marca)
-                ->orWhere('modelos_id', $modelo)
-                ->orWhere('colores_id', $color)
-                ->orWhere('condiciones_id', $condicion)
+            $bienes = DB::table('bienes')
+                ->when($tipo, function (Builder $query, string $tipo) {
+                    $query->where('tipos_id', $tipo);
+                })
+                ->when($marca, function (Builder $query, string $marca) {
+                    $query->where('marcas_id', $marca);
+                })
+                ->when($modelo, function (Builder $query, string $modelo) {
+                    $query->where('modelos_id', $modelo);
+                })
+                ->when($color, function (Builder $query, string $color) {
+                    $query->where('colores_id', $color);
+                })
+                ->when($condicion, function (Builder $query, string $condicion) {
+                    $query->where('condiciones_id', $condicion);
+                })
+                ->when($condicion, function (Builder $query, string $condicion) {
+                    $query->where('condiciones_id', $condicion);
+                })
                 ->orderBy('created_at', 'DESC')
                 ->limit($this->rows)
                 ->get();
+
+            $bienes->each(function ($bien) {
+                $tipo = Tipo::find($bien->tipos_id);
+                $bien->verTipo = $tipo->nombre;
+                $marca = Marca::find($bien->marcas_id);
+                $bien->verMarca = $marca->nombre;
+                $modelo = Modelo::find($bien->modelos_id);
+                $bien->verModelo = $modelo->nombre;
+            });
+
+            $this->totalBusqueda = DB::table('bienes')
+                ->when($tipo, function (Builder $query, string $tipo) {
+                    $query->where('tipos_id', $tipo);
+                })
+                ->when($marca, function (Builder $query, string $marca) {
+                    $query->where('marcas_id', $marca);
+                })
+                ->when($modelo, function (Builder $query, string $modelo) {
+                    $query->where('modelos_id', $modelo);
+                })
+                ->when($color, function (Builder $query, string $color) {
+                    $query->where('colores_id', $color);
+                })
+                ->when($condicion, function (Builder $query, string $condicion) {
+                    $query->where('condiciones_id', $condicion);
+                })
+                ->when($condicion, function (Builder $query, string $condicion) {
+                    $query->where('condiciones_id', $condicion);
+                })
+                ->count();
         }
+
+
+
         return $bienes;
     }
 
@@ -108,6 +162,7 @@ class BienesComponent extends Component
         $this->initSelects();
     }
 
+    #[On('showBien')]
     public function show($id)
     {
         $this->limpiar();
@@ -371,13 +426,13 @@ class BienesComponent extends Component
     #[On('buscar')]
     public function buscar($keyword)
     {
-        $this->reset('busqueda');
+        $this->reset(['busqueda', 'totalBusqueda']);
         $this->keyword = $keyword;
     }
 
     public function limpiarBuscar()
     {
-        $this->reset('keyword', 'busqueda');
+        $this->reset(['keyword', 'busqueda', 'totalBusqueda']);
         $this->btnCancelar();
     }
 
