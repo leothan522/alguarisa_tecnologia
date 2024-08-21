@@ -1,5 +1,7 @@
 @extends('layouts.adminlte')
 
+@section('plugins.Lightbox', true)
+
 @section('title')
     TECNOLOGÍA | CONSULTA DE BIENES
 @endsection
@@ -19,35 +21,35 @@
 
             {{--<p class="text-muted text-center">Identificador: JHBJHBSAJHBCJABAJ</p>--}}
 
-            <ul class="list-group list-group-unbordered mb-3">
+            <ul class="list-group mb-3">
                 @if(!empty($bien->identificador))
-                    <li class="list-group-item">
-                        <b>IDENTIFICADOR</b> <a class="float-right">{{ strtoupper(verUtf8($bien->identificador)) }}</a>
+                    <li class="list-group-item list-group-item-dark">
+                        <span>Identificador</span> <span class="float-right text-bold">{{ strtoupper(verUtf8($bien->identificador)) }}</>
                     </li>
                 @endif
                 @if(!empty($bien->serial))
-                    <li class="list-group-item">
-                        <b>SERIAL</b> <a class="float-right">{{ strtoupper(verUtf8($bien->serial)) }}</a>
+                    <li class="list-group-item list-group-item-dark">
+                        <span>Serial</span> <span class="float-right text-bold">{{ strtoupper(verUtf8($bien->serial)) }}</span>
                     </li>
                 @endif
-                <li class="list-group-item">
-                    <b>TIPO</b> <a class="float-right">{{ strtoupper(verUtf8($bien->tipo->nombre)) }}</a>
+                <li class="list-group-item list-group-item-dark">
+                    <span>Tipo</span> <span class="float-right text-bold">{{ strtoupper(verUtf8($bien->tipo->nombre)) }}</span>
                 </li>
-                <li class="list-group-item">
-                    <b>MARCA</b> <a class="float-right">{{ strtoupper(verUtf8($bien->marca->nombre)) }}</a>
+                <li class="list-group-item list-group-item-dark">
+                    <span>Marca</span> <span class="float-right text-bold">{{ strtoupper(verUtf8($bien->marca->nombre)) }}</span>
                 </li>
-                <li class="list-group-item">
-                    <b>MODELO</b> <a class="float-right">{{ strtoupper(verUtf8($bien->modelo->nombre)) }}</a>
+                <li class="list-group-item list-group-item-dark">
+                    <span>Modelo</span> <span class="float-right text-bold">{{ strtoupper(verUtf8($bien->modelo->nombre)) }}</span>
                 </li>
-                <li class="list-group-item">
-                    <b>COLOR</b> <a class="float-right">{{ strtoupper(verUtf8($bien->color->nombre)) }}</a>
+                <li class="list-group-item list-group-item-dark">
+                    <span>Color</span> <span class="float-right text-bold">{{ strtoupper(verUtf8($bien->color->nombre)) }}</span>
                 </li>
-                <li class="list-group-item">
-                    <b>CONDICIÓN</b> <a class="float-right">{{ strtoupper(verUtf8($bien->condicion->nombre)) }}</a>
+                <li class="list-group-item list-group-item-dark">
+                    <span>Condición</span> <span class="float-right text-bold">{{ strtoupper(verUtf8($bien->condicion->nombre)) }}</span>
                 </li>
                 @if($bien->adicional)
-                    <li class="list-group-item">
-                        <b>INFORMACIÓN ADICIONAL</b> <a class="float-right">{{ strtoupper(verUtf8($bien->adicional)) }}</a>
+                    <li class="list-group-item list-group-item-dark">
+                        <span>Información Adicional</span> <span class="float-right text-bold">{{ strtoupper(verUtf8($bien->adicional)) }}</span>
                     </li>
                 @endif
 
@@ -56,7 +58,24 @@
             <div class="row justify-content-center attachment-block p-3">
                 <div class="col-md-8 mb-3 mt-3">
                     <div class="text-center" style="cursor: pointer;">
-                        <img class="img-thumbnail" src="{{ asset(verImagen($imagen->mini ?? null)) }}" alt="Imagen del Bien"/>
+                        @php($ver = true)
+                        @if($imagenFrontal)
+                            <a href="{{ verImagen($imagenFrontal->imagen, false, true) }}" data-toggle="lightbox" data-gallery="example-gallery" data-title="Imagen Frontal">
+                                <img class="img-thumbnail" src="{{ asset(verImagen($imagenFrontal->mini ?? null)) }}" alt="Imagen Frontal"/>
+                            </a>
+                        @else
+                            @if($imagenPosterior)
+                                @php($ver = false)
+                                <a href="{{ verImagen($imagenPosterior->imagen, false, true) }}" data-toggle="lightbox" data-gallery="example-gallery" data-title="Imagen Posterior">
+                                    <img class="img-thumbnail" src="{{ asset(verImagen($imagenPosterior->mini ?? null)) }}" alt="Imagen Posterior"/>
+                                </a>
+                            @else
+                                <img class="img-thumbnail" src="{{ asset(verImagen(null, false, true)) }}" alt="Imagen del Bien"/>
+                            @endif
+                        @endif
+                        @if($imagenPosterior && $ver)
+                            <a href="{{ verImagen($imagenPosterior->imagen, false, true) }}" data-toggle="lightbox" data-gallery="example-gallery" data-title="Imagen Posterior"></a>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -92,9 +111,11 @@
 
 @section('css')
     {{--<link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">--}}
+    <link rel="stylesheet" href="{{ asset('vendor/ekko-lightbox/ekko-lightbox.css') }}">
 @endsection
 
 @section('js')
+    <script src="{{ asset('vendor/ekko-lightbox/ekko-lightbox.js') }}"></script>
     <script>
 
         function verSpinnerOculto() {
@@ -109,6 +130,16 @@
         function btnUbicacion(id) {
             Livewire.dispatch('getBienesUbicaciones', { bienID: id });
         }
+
+        /* Ekko Lightbox */
+        $(function () {
+            $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+                event.preventDefault();
+                $(this).ekkoLightbox({
+                    alwaysShowClose: true
+                });
+            });
+        });
 
 
     </script>

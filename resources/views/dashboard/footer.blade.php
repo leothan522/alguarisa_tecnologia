@@ -3,7 +3,7 @@
         DV.
         <a href="https://t.me/Leothan" target="_blank">Ing. Yonathan Castillo</a>.
     </span>
-    <b>Version</b> 1.0
+    <b>Version</b> 2.0
 </div>
 <strong class="d-none d-sm-block">&copy; 2023 Dirección de Tecnología y Sistemas.
     <a href="#" class="d-none d-lg-inline-block">Alimentos del Guárico S.A. (Alguarisa).</a>

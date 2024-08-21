@@ -54,10 +54,12 @@ class BienesController extends Controller
         if (!$bien){
             return redirect()->route('web.index');
         }
-        $imagen = Imagen::where('bienes_id', $id)->where('nombre', 'frontal')->first();
+        $imagenFrontal = Imagen::where('bienes_id', $id)->where('nombre', 'frontal')->first();
+        $imagenPosterior = Imagen::where('bienes_id', $id)->where('nombre', 'posterior')->first();
         return view('dashboard.bienes.etiquetas.web_etiqueta')
             ->with('bien', $bien)
-            ->with('imagen', $imagen);
+            ->with('imagenFrontal', $imagenFrontal)
+            ->with('imagenPosterior', $imagenPosterior);
     }
 
 }

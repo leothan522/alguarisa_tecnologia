@@ -8,27 +8,27 @@
                 {{--<h1 class="profile-username text-center text-bold">
                     {{ mb_strtoupper($nombre) }}
                 </h1>--}}
-                <ul class="list-group list-group-unbordered {{--mt-3--}}">
-                    <li class="list-group-item">
-                        <b>Tipo</b> <span class="text-purple text-bold float-right text-uppercase">{{ $verTipo }}</span>
+                <ul class="list-group {{--list-group-unbordered--}} {{--mt-3--}}">
+                    <li class="list-group-item list-group-item-dark">
+                        <span>Tipo</span> <span class="text-bold float-right text-uppercase">{{ $verTipo }}</span>
                     </li>
-                    <li class="list-group-item">
-                        <b>Marca</b> <span class="text-purple text-bold float-right text-uppercase">{{ $verMarca }}</span>
+                    <li class="list-group-item list-group-item-dark">
+                        <span>Marca</span> <span class="text-bold float-right text-uppercase">{{ $verMarca }}</span>
                     </li>
-                    <li class="list-group-item">
-                        <b>Modelo</b> <span class="text-purple text-bold float-right text-uppercase">{{ $verModelo }}</span>
+                    <li class="list-group-item list-group-item-dark">
+                        <span>Modelo</span> <span class="text-bold float-right text-uppercase">{{ $verModelo }}</span>
                     </li>
-                    <li class="list-group-item">
-                        <b>Color</b> <span class="text-purple text-bold float-right text-uppercase">{{ $verColor }}</span>
+                    <li class="list-group-item list-group-item-dark">
+                        <span>Color</span> <span class="text-bold float-right text-uppercase">{{ $verColor }}</span>
                     </li>
-                    <li class="list-group-item">
-                        <b>Serial</b> <span class="text-purple text-bold float-right text-uppercase">@if($serial) [{{ $serial }}] @else -  @endif</span>
+                    <li class="list-group-item list-group-item-dark">
+                        <span>Serial</span> <span class="float-right">@if($serial)[<span class="text-uppercase text-bold">{{ $serial }}</span>] @else -  @endif</span>
                     </li>
-                    <li class="list-group-item">
-                        <b>Identificador</b> <span class="text-purple text-bold float-right text-uppercase">@if($identificador) [{{ $identificador }}] @else -  @endif</span>
+                    <li class="list-group-item list-group-item-dark">
+                        <span>Identificador</span> <span class="text-bold float-right text-uppercase">@if($identificador) [{{ $identificador }}] @else -  @endif</span>
                     </li>
-                    <li class="list-group-item">
-                        <b>Condición</b> <span class="text-purple text-bold float-right text-uppercase">{{ $verCondicion }}</span>
+                    <li class="list-group-item list-group-item-dark">
+                        <span>Condición</span> <span class="text-bold float-right text-uppercase">{{ $verCondicion }}</span>
                     </li>
                 </ul>
 
@@ -58,7 +58,7 @@
                         <div class="row col-12 justify-content-center mb-3 mt-3">
                             <div class="col-5">
                                 @if($imagenFrontal)
-                                    <a href="{{ verImagen($imagenFrontal, false, true) }}" data-toggle="lightbox" data-title="@if($serial) Serial: [{{ $serial }}] @else Ver Imagen @endif " data-gallery="example-gallery" @if($identificador) data-footer="Identificador: [{{ $identificador }}]"  @endif >
+                                    <a href="{{ verImagen($imagenFrontal, false, true) }}" data-toggle="lightbox" data-gallery="example-gallery" data-title="Imagen Frontal">
                                         <img class="img-thumbnail" src="{{ verImagen($miniFrontal, false, true) }}" {{--width="101" height="100"--}}  alt="Imagen Frontal"/>
                                     </a>
                                 @else
@@ -67,7 +67,7 @@
                             </div>
                             <div class="col-5">
                                 @if($imagenPosterior)
-                                    <a href="{{ verImagen($imagenPosterior, false, true) }}" data-toggle="lightbox" data-title="@if($serial) Serial: [{{ $serial }}] @else Ver Imagen @endif " data-gallery="example-gallery" @if($identificador) data-footer="Identificador: [{{ $identificador }}]"  @endif >
+                                    <a href="{{ verImagen($imagenPosterior, false, true) }}" data-toggle="lightbox" data-gallery="example-gallery" data-title="Imagen Posterior">
                                         <img class="img-thumbnail" src="{{ verImagen($miniPosterior, false, true) }}" {{--width="101" height="100"--}}  alt="Imagen Posterior"/>
                                     </a>
                                 @else
@@ -80,9 +80,9 @@
                 </div>
 
                 @if(!empty($adicional))
-                    <ul class="list-group list-group-unbordered mt-3">
-                        <li class="list-group-item">
-                            <b>Información Adicional</b> <br> <a class="text-uppercase">{{ $adicional }}</a>
+                    <ul class="list-group {{--list-group-unbordered--}} mt-3">
+                        <li class="list-group-item list-group-item-dark">
+                            <span>Información Adicional</span> <br> <span class="text-bold text-uppercase">{{ $adicional }}</span>
                         </li>
                     </ul>
                 @endif

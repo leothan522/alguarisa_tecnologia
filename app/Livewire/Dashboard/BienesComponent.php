@@ -29,7 +29,7 @@ class BienesComponent extends Component
     public $view = true, $form = false, $ver = false, $nuevo = false, $editar = false, $cancelar = false, $footer = false, $keyword;
     public $tipos_id, $marcas_id, $modelos_id, $colores_id, $serial, $identificador, $condiciones_id, $adicional;
     public $bienes_id, $verTipo, $verMarca, $verModelo, $verColor, $verCondicion;
-    public $imagenes = false, $imagenFrontal, $imagenPosterior, $miniFrontal, $miniPosterior;
+    public $imagenes = false, $imagenFrontal, $imagenPosterior, $miniFrontal, $miniPosterior, $imagenTitle, $imagenFooter;
     public $busqueda, $totalBusqueda;
 
     public function mount()
@@ -192,6 +192,11 @@ class BienesComponent extends Component
             if ($imagen){
                 $this->imagenFrontal = $imagen->imagen;
                 $this->miniFrontal = $imagen->mini;
+                if (!empty($this->serial)){
+                    $this->imagenTitle = "Serial: [".$this->serial."]";
+                }else{
+                    $this->imagenTitle = "Ver Imagen";
+                }
             }
 
             $imagen = Imagen::where('bienes_id', $id)->where('nombre', 'posterior')->first();
