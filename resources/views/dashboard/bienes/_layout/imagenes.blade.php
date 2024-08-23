@@ -32,7 +32,7 @@
                         </div>
 
                         <div class="row justify-content-center mb-3 mt-3">
-                            <div class="col-sm-10 col-md-8">
+                            <div class="col-sm-9 col-md-8">
                                 <img class="img-thumbnail" style="cursor: pointer;"
                                 @if ($frontalPhoto)
                                     src="{{ $frontalPhoto->temporaryUrl() }}"
@@ -103,7 +103,7 @@
                         </div>
 
                         <div class="row justify-content-center mb-3 mt-3">
-                            <div class="col-sm-10 col-md-8">
+                            <div class="col-sm-9 col-md-8">
                                 <img class="img-thumbnail" style="cursor: pointer;"
                                 @if ($posteriorPhoto)
                                     src="{{ $posteriorPhoto->temporaryUrl() }}"
