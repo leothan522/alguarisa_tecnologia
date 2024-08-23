@@ -27,6 +27,7 @@ class ImagenesComponent extends Component
     #[On('showImagenes')]
     public function showImagenes($id)
     {
+        $this->resetErrorBag();
         $this->reset([
             'frontalPhoto', 'posteriorPhoto', 'imagenFrontal', 'imagenPosterior',
             'borrarImgFrontal', 'borrarImgPosterior', 'guardar'
@@ -149,10 +150,10 @@ class ImagenesComponent extends Component
     public function updatedFrontalPhoto()
     {
         $rules = [
-            'frontalPhoto' => 'image|max:1024', // 1MB Max
+            'frontalPhoto' => 'image|max:2024', // 1MB Max
         ];
         $messages = [
-            'frontalPhoto.max' => 'la imagen Frontal no debe ser mayor que 1024 kilobytes.'
+            'frontalPhoto.max' => 'la imagen Frontal no debe ser mayor que 2024 kilobytes.'
         ];
         $this->validate($rules, $messages);
         $this->borrarImgFrontal = true;
@@ -162,10 +163,10 @@ class ImagenesComponent extends Component
     public function updatedPosteriorPhoto()
     {
         $rules = [
-            'posteriorPhoto' => 'image|max:1024' // 1MB Max
+            'posteriorPhoto' => 'image|max:2024' // 1MB Max
         ];
         $messages = [
-            'posteriorPhoto.max' => 'la imagen Posterior no debe ser mayor que 1024 kilobytes.'
+            'posteriorPhoto.max' => 'la imagen Posterior no debe ser mayor que 2024 kilobytes.'
         ];
         $this->validate($rules, $messages);
         $this->borrarImgPosterior = true;
