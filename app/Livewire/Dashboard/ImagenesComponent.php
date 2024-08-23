@@ -51,8 +51,8 @@ class ImagenesComponent extends Component
             'posteriorPhoto' => 'nullable|image|max:2024' // 2MB Max
         ];
         $messages = [
-            'frontalPhoto.max' => 'la imagen Frontal no debe ser mayor que 2024 kilobytes.',
-            'posteriorPhoto.max' => 'la imagen Posterior no debe ser mayor que 2024 kilobytes.'
+            'frontalPhoto.max' => 'la imagen Frontal no debe ser mayor que 2MB.',
+            'posteriorPhoto.max' => 'la imagen Posterior no debe ser mayor que 2MB.'
         ];
         $this->validate($rules, $messages);
 
@@ -153,7 +153,7 @@ class ImagenesComponent extends Component
             'frontalPhoto' => 'image|max:2024', // 1MB Max
         ];
         $messages = [
-            'frontalPhoto.max' => 'la imagen Frontal no debe ser mayor que 2024 kilobytes.'
+            'frontalPhoto.max' => 'la imagen Frontal no debe ser mayor que 2MB.'
         ];
         $this->validate($rules, $messages);
         $this->borrarImgFrontal = true;
@@ -166,7 +166,7 @@ class ImagenesComponent extends Component
             'posteriorPhoto' => 'image|max:2024' // 1MB Max
         ];
         $messages = [
-            'posteriorPhoto.max' => 'la imagen Posterior no debe ser mayor que 2024 kilobytes.'
+            'posteriorPhoto.max' => 'la imagen Posterior no debe ser mayor que 2MB.'
         ];
         $this->validate($rules, $messages);
         $this->borrarImgPosterior = true;
