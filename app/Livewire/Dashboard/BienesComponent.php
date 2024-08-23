@@ -124,9 +124,6 @@ class BienesComponent extends Component
                 })
                 ->count();
         }
-
-
-
         return $bienes;
     }
 
@@ -208,7 +205,7 @@ class BienesComponent extends Component
 
     }
 
-    public function rules()
+    public function rules(): array
     {
         return [
             'serial'       =>  [
@@ -217,14 +214,16 @@ class BienesComponent extends Component
                 Rule::requiredIf(empty($this->identificador)),
                 'max:50',
                 Rule::unique('bienes', 'serial')
-                    ->ignore($this->bienes_id)],
+                    ->ignore($this->bienes_id)
+            ],
             'identificador' =>  [
                 'nullable',
                 'alpha_dash:ascii',
                 Rule::requiredIf(empty($this->serial)),
                 'max:50',
                 Rule::unique('bienes', 'identificador')
-                    ->ignore($this->bienes_id)],
+                    ->ignore($this->bienes_id)
+            ],
             'tipos_id'      => 'required',
             'marcas_id'      => 'required',
             'modelos_id'      => 'required',
@@ -242,8 +241,10 @@ class BienesComponent extends Component
 
         $this->serial = str_replace('_-_', '/', $this->serial);
 
+        $this->validate(['serial'   =>  Rule::unique('bienes', 'serial')->ignore($this->bienes_id)]);
+
         if ($this->serial == '_'){
-            $serial = nextCodigo('sin_serial', null, 'S/S-');
+            $serial = $this->getSerial();
         }else{
             if (!empty($this->serial)){
                 $serial = $this->serial;
@@ -282,17 +283,7 @@ class BienesComponent extends Component
             $bien->save();
 
             if ($this->serial == '_'){
-                $parametro = Parametro::where('nombre', 'sin_serial')->first();
-                if ($parametro){
-                    $num = $parametro->tabla_id + 1;
-                    $parametro->tabla_id = $num;
-                }else{
-                    $parametro = new Parametro();
-                    $parametro->nombre = 'sin_serial';
-                    $parametro->tabla_id = 2;
-                    $parametro->valor = 'S/S-';
-                }
-                $parametro->save();
+                $this->setSerial();
             }
 
             $this->serial = $serial;
@@ -671,6 +662,34 @@ class BienesComponent extends Component
     public function cerrarModalPropiedades($selector)
     {
         //JS
+    }
+
+    protected function getSerial(): string
+    {
+        $parametro = Parametro::where('nombre', 'sin_serial')->first();
+        if ($parametro){
+            $numero = $parametro->tabla_id;
+            $formato = $parametro->valor;
+        }else{
+            $numero = 1;
+            $formato = 'S/S-';
+        }
+        return $formato . cerosIzquierda($numero, numSizeCodigo());
+    }
+
+    protected function setSerial()
+    {
+        $parametro = Parametro::where('nombre', 'sin_serial')->first();
+        if ($parametro){
+            $num = $parametro->tabla_id + 1;
+            $parametro->tabla_id = $num;
+        }else{
+            $parametro = new Parametro();
+            $parametro->nombre = 'sin_serial';
+            $parametro->tabla_id = 2;
+            $parametro->valor = 'S/S-';
+        }
+        $parametro->save();
     }
 
 }
