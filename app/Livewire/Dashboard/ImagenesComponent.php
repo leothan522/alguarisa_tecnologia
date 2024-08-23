@@ -46,12 +46,12 @@ class ImagenesComponent extends Component
     public function saveImagenes()
     {
         $rules = [
-            'frontalPhoto' => 'nullable|image|max:1024', // 1MB Max
-            'posteriorPhoto' => 'nullable|image|max:1024' // 1MB Max
+            'frontalPhoto' => 'nullable|image|max:2024', // 2MB Max
+            'posteriorPhoto' => 'nullable|image|max:2024' // 2MB Max
         ];
         $messages = [
-            'frontalPhoto.max' => 'la imagen Frontal no debe ser mayor que 1024 kilobytes.',
-            'posteriorPhoto.max' => 'la imagen Posterior no debe ser mayor que 1024 kilobytes.'
+            'frontalPhoto.max' => 'la imagen Frontal no debe ser mayor que 2024 kilobytes.',
+            'posteriorPhoto.max' => 'la imagen Posterior no debe ser mayor que 2024 kilobytes.'
         ];
         $this->validate($rules, $messages);
 

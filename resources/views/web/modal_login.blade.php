@@ -4,6 +4,7 @@
 </button>--}}
 
 <!-- Modal -->
+
 <div wire:ignore.self class="modal fade" id="modal_login" data-backdrop="static" data-keyboard="false" tabindex="-1"
      aria-labelledby="staticBackdropLabel" aria-hidden="true" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="modal-dialog modal-dialog-centered">
@@ -20,12 +21,11 @@
                     <div class="row justify-content-center">
 
                         @error('login_validacion')
-                        <div class="col-md-12">
-                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <div class="col-12">
+                            <div class="alert alert-warning alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
                                 {{ $message }}
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
                             </div>
                         </div>
                         @enderror
@@ -73,24 +73,25 @@
                 </div>
                 <div class="modal-footer">
                     <div class="col-12 p-0">
-                        <a href="{{ route('register') }}" class="btn btn-link" onclick="verCargando()">
-                            <span class="d-none d-lg-inline-flex">Registrarse</span>
-                            <i class="fas fa-user-plus d-lg-none"></i>
-                        </a>
+
                         <button class="btn btn-primary float-right" type="button" wire:loading disabled>
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                             CARGANDO...
                         </button>
 
-                        <button type="submit" class="btn btn-primary float-right" wire:loading.remove>INICIAR SESIÓN
+                        <button type="submit" class="btn btn-primary float-right" wire:loading.remove>
+                            INICIAR SESIÓN
                         </button>
 
-                        <button type="button" class="btn btn-secondary float-right mr-2" data-dismiss="modal"
-                                wire:loading.remove id="btn_modal_login_cerrar">Cerrar
+                        <button type="button" class="btn btn-default float-right mr-2" data-dismiss="modal" wire:loading.remove id="btn_modal_login_cerrar">
+                            Cerrar
                         </button>
+
                     </div>
                 </div>
+                {!! verSpinner()  !!}
             </form>
         </div>
     </div>
 </div>
+
