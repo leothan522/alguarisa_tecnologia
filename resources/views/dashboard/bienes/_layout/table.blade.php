@@ -21,6 +21,10 @@
             <button type="button" class="btn btn-tool" wire:click="btnCancelar" onclick="verSpinnerOculto()">
                 <i class="fas fa-sync-alt"></i>
             </button>
+            <button type="button" class="btn btn-tool d-sm-none" data-toggle="modal" data-target="#modal-default"
+                    wire:click="create" @if(!comprobarPermisos('bienes.create')) disabled @endif>
+                <i class="fas fa-file"></i> Nuevo
+            </button>
             <button type="button" class="btn btn-tool" wire:click="setLimit" @if($rows > $listarBienes->count()) disabled @endif >
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
@@ -52,16 +56,28 @@
                     </span>--}}
                     <!-- Emphasis label -->
                     <small class="text text-uppercase" wire:click="show({{ $bien->id }})" style="cursor: pointer;">
-                        {{ $bien->verTipo }}
-                        {{ $bien->verMarca }}
-                        {{ $bien->verModelo }}
-                        @if(!is_null($bien->serial))
-                            , Serial: {{ $bien->serial }}
-                        @endif
-                        @if(!is_null($bien->identificador))
-                           , Identificador: {{ $bien->identificador }}
-                        @endif
-
+                        <span class="d-none d-md-inline-block">
+                            {{ $bien->verTipo }}
+                            {{ $bien->verMarca }}
+                            {{ $bien->verModelo }}
+                            @if(!is_null($bien->serial))
+                                , Serial: {{ $bien->serial }}
+                            @endif
+                            @if(!is_null($bien->identificador))
+                               , Identificador: {{ $bien->identificador }}
+                            @endif
+                        </span>
+                        <span class="d-inline-block d-md-none" data-toggle="modal" data-target="#modal-default">
+                            {{ $bien->verTipo }}
+                            {{ $bien->verMarca }}
+                            {{ $bien->verModelo }}
+                            @if(!is_null($bien->serial))
+                                , Serial: {{ $bien->serial }}
+                            @endif
+                            @if(!is_null($bien->identificador))
+                                , Identificador: {{ $bien->identificador }}
+                            @endif
+                        </span>
                     </small>
                     <!-- General tools such as edit or delete-->
                     <div class="tools text-primary" wire:click="show({{ $bien->id }})">
@@ -83,6 +99,19 @@
         </ul>
         <!-- /.TO DO List -->
 
+    </div>
+
+    <div class="card-footer d-sm-none">
+        <div class="row justify-content-between">
+            <button class="btn bg-gradient-primary btn-sm" data-toggle="modal" data-target="#modal-busqueda-avanzada"  onclick="busquedaAvanzada()">
+                <i class="fas fa-search"></i>
+                Busqueda Avanzada
+            </button>
+            <button class="btn bg-gradient-primary btn-sm" data-toggle="modal" data-target="#modal-oficios">
+                <i class="fas fa-file-invoice"></i>
+                Oficios Entregados
+            </button>
+        </div>
     </div>
 
     <div class="overlay-wrapper" wire:loading wire:target="setLimit, save, destroy, confirmed">

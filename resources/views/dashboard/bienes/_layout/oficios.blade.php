@@ -1,5 +1,5 @@
 <div wire:ignore.self class="modal fade" id="modal-sm-bien-oficios" xmlns:wire="http://www.w3.org/1999/xhtml">
-    <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
 
 
@@ -47,14 +47,14 @@
                             @endforeach
                             @if($i == 0)
                                 <tr>
-                                    <td colspan="2" class="text-center text-danger">
+                                    <td colspan="3" class="text-center text-danger">
                                         Sin Oficio Vinculado.
                                     </td>
                                 </tr>
                             @endif
                         @else
                             <tr>
-                                <td colspan="2" class="text-center text-danger">
+                                <td colspan="3" class="text-center text-danger">
                                     Sin Oficio Vinculado.
                                 </td>
                             </tr>

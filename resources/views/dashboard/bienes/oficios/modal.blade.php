@@ -2,14 +2,14 @@
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="row col-md-12">
+                <div class="row">
 
                     <div class="col-md-6">
                         <h4 class="modal-title">
                             Oficios Entregados
                         </h4>
                     </div>
-                    <div class="col-md-5 justify-content-end">
+                    <div class="col-md-6 justify-content-end">
                         <form wire:submit="buscar">
                             <div class="input-group close">
                                 <input type="search" class="form-control" placeholder="Buscar" wire:model="keyword" required>
@@ -21,10 +21,11 @@
                             </div>
                         </form>
                     </div>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+
                 </div>
+                <button type="button" class="float-right close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
 
             </div>
             <div class="modal-body">
@@ -41,9 +42,14 @@
 
             {!! verSpinner() !!}
 
-            <div class="modal-footer @if($keyword && $view) justify-content-between @else justify-content-end @endif ">
+            <div class="modal-footer @if(($keyword && $view)) justify-content-between @else justify-content-end @endif ">
                 @if($keyword && $view)
                     <span>Resultados [<b class="text-warning">{{ $total }}</b>]</span>
+                @endif
+                @if($cancelar)
+                    <button type="button" class="btn btn-default btn-sm d-md-none" wire:click="btnCancelar">
+                        <i class="fas fa-ban"></i> Cancelar
+                    </button>
                 @endif
                 <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="btn_cerrar_model_oficios">{{ __('Close') }}</button>
             </div>

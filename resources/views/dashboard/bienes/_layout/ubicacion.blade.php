@@ -1,5 +1,5 @@
 <div wire:ignore.self class="modal fade" id="modal-sm-bien-ubicacion" xmlns:wire="http://www.w3.org/1999/xhtml">
-    <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
 
 
@@ -64,7 +64,7 @@
                 </div>
 
                 @if(!$web)
-                    <form wire:submit="save" class="p-0 @if(!comprobarPermisos('bienes.edit')) d-none @endif ">
+                    <form wire:submit="save" class=" @if(!comprobarPermisos('bienes.edit')) d-none @endif ">
                         <table class="table table-sm">
                             <tbody>
                             <tr>

@@ -19,7 +19,7 @@
                         @endif
                         Oficios
                     </h5>
-                    <div class="card-tools">
+                    <div class="card-tools text-center">
                         {{--<span class="btn-tool"><i class="fas fa-book"></i></span>--}}
                         @if($editar)
                             <button type="button" class="btn btn-tool" wire:click="destroy"
@@ -40,7 +40,7 @@
                             </button>
                         @endif
                         @if($cancelar)
-                            <button type="button" class="btn btn-tool" wire:click="btnCancelar">
+                            <button type="button" class="btn btn-tool d-none d-md-inline" wire:click="btnCancelar">
                                 <i class="fas fa-ban"></i> Cancelar
                             </button>
                         @endif
@@ -160,11 +160,9 @@
     </div>
 
     <div class="row justify-content-end @if($ver) d-none @endif ">
-        <div class="col-md-4">
-            <button type="submit"
-                    class="btn btn-block @if($nuevo) btn-success @else btn-primary @endif float-right mr-1">
-                <i class="fas fa-save"></i> Guardar @if(!$nuevo)
-                    Cambios
+        <div class="col-md-4 m-1">
+            <button type="submit" class="btn btn-block @if($nuevo) btn-success @else btn-primary @endif float-right">
+                <i class="fas fa-save"></i> Guardar @if(!$nuevo)Cambios
                 @endif
             </button>
         </div>

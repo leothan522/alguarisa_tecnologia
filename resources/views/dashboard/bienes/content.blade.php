@@ -6,3 +6,6 @@
         @include('dashboard.bienes._layout.card')
     </div>
 </div>
+<div>
+    @include('dashboard.bienes._layout.modal')
+</div>

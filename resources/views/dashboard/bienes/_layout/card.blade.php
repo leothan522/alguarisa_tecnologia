@@ -1,5 +1,4 @@
-<div class="card card-navy" style="height: inherit; width: inherit; transition: all 0.15s ease 0s;"
-     xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="card card-navy d-none d-sm-block" xmlns:wire="http://www.w3.org/1999/xhtml">
 
     <div class="card-header">
         <h3 class="card-title">
@@ -20,17 +19,18 @@
         <div class="card-tools">
             {{--<button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i>
             </button>--}}
+
             @if(!$nuevo)
                 <button class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('bienes.create')) disabled @endif id="btn_create_bien" >
                     <i class="fas fa-file"></i> Nuevo
                 </button>
             @endif
+
             @if($editar)
                 <button class="btn btn-tool" wire:click="edit" @if(!comprobarPermisos('bienes.edit')) disabled @endif >
                     <i class="fas fa-edit"></i>
                     Editar
                 </button>
-                {{--<a href="--}}{{--{{ route('etiquetas.print', $articulos_id) }}--}}{{--#" target="_blank" class="btn btn-tool"><i class="fas fa-print"></i> Imprimir Etiqueta</a>--}}
             @endif
 
             @if($cancelar)

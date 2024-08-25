@@ -11,7 +11,7 @@
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark"><i class="fas fa-boxes"></i> Bienes</h1>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-6 d-none d-md-block">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-busqueda-avanzada">
                         <button class="btn bg-gradient-primary btn-sm" onclick="busquedaAvanzada()">
@@ -24,6 +24,30 @@
                             <i class="fas fa-file-invoice"></i>
                             Oficios Entregados
                         </button>
+                    </li>
+                </ol>
+            </div>
+            <div class="col-sm-6 d-md-none">
+                <ol class="breadcrumb float-sm-right">
+                    {{--<li class="breadcrumb-item"><a href="#">Home</a></li>--}}
+                    <li class="breadcrumb-item active">Tablas</li>
+                    <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-tipos" onclick="verTipos()">
+                        <span class="btn-link">Tipos</span>
+                    </li>
+                    <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-marcas" onclick="verMarcas()">
+                        <span class="btn-link">Marcas</span>
+                    </li>
+                    <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-modelos" onclick="verModelos()">
+                        <span class="btn-link">Modelos</span>
+                    </li>
+                    <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-colores" onclick="verColores()">
+                        <span class="btn-link">Colores</span>
+                    </li>
+                    <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-condiciones" onclick="verCondiciones()">
+                        <span class="btn-link">Colores</span>
+                    </li>
+                    <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-ubicaciones" onclick="verUbicaciones()">
+                        <span class="btn-link">Ubicaciones</span>
                     </li>
                 </ol>
             </div>
@@ -161,42 +185,52 @@
 
         Livewire.on('selectTipos', ({ data }) => {
             select_2('select_bienes_tipo', data, 'getselectTipos');
+            select_2_tablas('select_bienes_tipo_modal', data, 'getselectTipos', 'default');
         });
 
         Livewire.on('setSelectTipos', ({ id }) => {
             $('#select_bienes_tipo').val(id).trigger('change');
+            $('#select_bienes_tipo_modal').val(id).trigger('change');
         });
 
         Livewire.on('selectMarcas', ({ data }) => {
             select_2('select_bienes_marca', data, 'getselectMarcas');
+            select_2_tablas('select_bienes_marca_modal', data, 'getselectMarcas', 'default')
         });
 
         Livewire.on('setSelectMarcas', ({ id }) => {
             $('#select_bienes_marca').val(id).trigger('change');
+            $('#select_bienes_marca_modal').val(id).trigger('change');
         });
 
         Livewire.on('selectColores', ({ data }) => {
             select_2('select_bienes_color', data, 'getselectColores');
+            select_2_tablas('select_bienes_color_modal', data, 'getselectColores', 'default');
         });
 
         Livewire.on('setSelectColores', ({ id }) => {
             $('#select_bienes_color').val(id).trigger('change');
+            $('#select_bienes_color_modal').val(id).trigger('change');
         });
 
         Livewire.on('selectCondiciones', ({ data }) => {
             select_2('select_bienes_condicion', data, 'getselectCondiciones');
+            select_2_tablas('select_bienes_condicion_modal', data, 'getselectCondiciones', 'default');
         });
 
         Livewire.on('setSelectCondiciones', ({ id }) => {
             $('#select_bienes_condicion').val(id).trigger('change');
+            $('#select_bienes_condicion_modal').val(id).trigger('change');
         });
 
         Livewire.on('selectModelos', ({ data }) => {
             select_2('select_bienes_modelo', data, 'getselectModelos');
+            select_2_tablas('select_bienes_modelo_modal', data, 'getselectModelos', 'default');
         });
 
         Livewire.on('setSelectModelos', ({ id }) => {
             $('#select_bienes_modelo').val(id).trigger('change');
+            $('#select_bienes_modelo_modal').val(id).trigger('change');
         });
 
         function clickImgFrontal()
@@ -280,6 +314,10 @@
             $('#' + selector).click();
         });
 
+        function cerrarModal() {
+            $('#btn_modal_default').click();
+        }
+
         function verBien(id) {
             verSpinnerOculto();
             $('#btn_cerrar_model_oficios').click();
@@ -295,6 +333,17 @@
                 });
             });
         });
+
+        function buscar(){
+            let input = $("#navbarSearch");
+            let keyword  = input.val();
+            if (keyword.length > 0){
+                input.blur();
+                verSpinnerOculto();
+                Livewire.dispatch('buscar', { keyword: keyword });
+            }
+            return false;
+        }
 
         console.log('Hi!');
     </script>
