@@ -2,12 +2,12 @@
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
-                Búsqueda { <b class="text-warning">{{ $keyword }}</b> }
-                <button class="btn btn-tool text-warning" wire:click="limpiarMarcas">
+                Búsqueda { <b class="text-warning">{{ $keyword }}</b> } [ <b class="text-warning">{{ $totalBusqueda }}</b> ]
+                <button class="btn btn-tool text-warning" wire:click="cerrarBusqueda">
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Marcas [ <b class="text-warning">{{ $rowsMarcas }}</b> ]
+                Registradas [ <b class="text-warning">{{ $rowsMarcas }}</b> ]
             @endif
         </h3>
 
@@ -15,7 +15,10 @@
             <button type="button" class="btn btn-tool" wire:click="limpiarMarcas">
                 <i class="fas fa-sync-alt"></i>
             </button>
-            <button type="button" class="btn btn-tool" wire:click="setLimit" @if($rows > $rowsMarcas) disabled @endif >
+            <button type="button" class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('marcas.create')) disabled @endif>
+                <i class="fas fa-file"></i> Nuevo
+            </button>
+            <button type="button" class="btn btn-tool" wire:click="setLimit" @if(($rows > $rowsMarcas) || ($keyword && $rows > $totalBusqueda)) disabled @endif >
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
         </div>
@@ -32,7 +35,7 @@
             @if($listarMarcas->isNotEmpty())
                 @foreach($listarMarcas as $marca)
                     <tr>
-                        <td class="text-uppercase">{{ $marca->nombre }}</td>
+                        <td class="text-uppercase text-truncate" style="max-width: 150px;">{{ $marca->nombre }}</td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit({{ $marca->id }})" class="btn btn-primary btn-sm"

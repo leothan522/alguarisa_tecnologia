@@ -2,12 +2,12 @@
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
-                Resultados de la Busqueda { <b class="text-warning">{{ $keyword }}</b> }
-                <button class="btn btn-tool text-warning" wire:click="limpiarColores">
+                Búsqueda { <b class="text-warning">{{ $keyword }}</b> } [ <b class="text-warning">{{ $totalBusqueda }}</b> ]
+                <button class="btn btn-tool text-warning" wire:click="cerrarBusqueda">
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Colores Registrados [ <b class="text-warning">{{ $rowsColores }}</b> ]
+                Registrados [ <b class="text-warning">{{ $rowsColores }}</b> ]
             @endif
         </h3>
 
@@ -15,7 +15,10 @@
             <button type="button" class="btn btn-tool" wire:click="limpiarColores">
                 <i class="fas fa-sync-alt"></i>
             </button>
-            <button type="button" class="btn btn-tool" wire:click="setLimit" @if($rows > $rowsColores) disabled @endif >
+            <button type="button" class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('colores.create')) disabled @endif>
+                <i class="fas fa-file"></i> Nuevo
+            </button>
+            <button type="button" class="btn btn-tool" wire:click="setLimit" @if(($rows > $rowsColores) || ($keyword && $rows > $totalBusqueda)) disabled @endif >
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
         </div>
@@ -32,7 +35,7 @@
             @if($listarColores->isNotEmpty())
                 @foreach($listarColores as $color)
                     <tr>
-                        <td class="text-uppercase">{{ $color->nombre }}</td>
+                        <td class="text-uppercase text-truncate" style="max-width: 150px;">{{ $color->nombre }}</td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit({{ $color->id }})" class="btn btn-primary btn-sm"

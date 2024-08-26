@@ -15,6 +15,7 @@ class ColoresComponent extends Component
 
     public $rows = 0;
     public $colores_id, $nombre, $keyword;
+    public $form = false, $table = true;
 
     public function mount()
     {
@@ -28,10 +29,15 @@ class ColoresComponent extends Component
             ->limit($this->rows)
             ->get()
         ;
+
+        $total = Color::buscar($this->keyword)->count();
+
         $rowsColores = Color::count();
+
         return view('livewire.dashboard.colores-component')
             ->with('listarColores', $colores)
-            ->with('rowsColores', $rowsColores);
+            ->with('rowsColores', $rowsColores)
+            ->with('totalBusqueda', $total);
     }
 
     public function setLimit()
@@ -44,9 +50,15 @@ class ColoresComponent extends Component
     public function limpiarColores()
     {
         $this->reset([
-            'colores_id', 'nombre', 'keyword'
+            'colores_id', 'nombre', 'form', 'table'
         ]);
         $this->resetErrorBag();
+    }
+
+    public function create()
+    {
+        $this->form = true;
+        $this->table = false;
     }
 
     public function save()
@@ -88,6 +100,8 @@ class ColoresComponent extends Component
         if ($color){
             $this->colores_id = $color->id;
             $this->nombre = $color->nombre;
+            $this->form = true;
+            $this->table = false;
         }
     }
 
@@ -142,6 +156,13 @@ class ColoresComponent extends Component
 
     public function buscar()
     {
-        //
+        $this->limpiarColores();
     }
+
+    public function cerrarBusqueda()
+    {
+        $this->reset(['keyword']);
+        $this->limpiarColores();
+    }
+
 }

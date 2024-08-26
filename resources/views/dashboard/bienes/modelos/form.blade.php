@@ -8,12 +8,11 @@
             <h3 class="card-title">Crear</h3>
         @endif
         <div class="card-tools">
-            <button class="btn btn-tool" wire:click="limpiarModelos">
-                @if($errors->all() || $modelos_id)
-                    <i class="fas fa-ban"></i> Cancelar
-                @else
-                    <i class="fas fa-file"></i>
-                @endif
+            <button type="button" class="btn btn-tool d-none d-md-inline" wire:click="limpiarModelos">
+                <i class="fas fa-ban"></i> Cancelar
+            </button>
+            <button type="button" class="btn btn-tool d-md-none" wire:click="btnCancelar('true')">
+                <i class="fas fa-ban"></i> Cancelar
             </button>
         </div>
     </div>

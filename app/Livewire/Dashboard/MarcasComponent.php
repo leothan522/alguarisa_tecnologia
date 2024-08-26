@@ -17,6 +17,7 @@ class MarcasComponent extends Component
 
     public $rows = 0;
     public $marcas_id, $nombre, $keyword;
+    public $form = false, $table = true;
 
     public function mount()
     {
@@ -30,10 +31,15 @@ class MarcasComponent extends Component
             ->limit($this->rows)
             ->get()
         ;
+
+        $total = Marca::buscar($this->keyword)->count();
+
         $rowsMarcas = Marca::count();
+
         return view('livewire.dashboard.marcas-component')
             ->with('listarMarcas', $marcas)
-            ->with('rowsMarcas', $rowsMarcas);
+            ->with('rowsMarcas', $rowsMarcas)
+            ->with('totalBusqueda', $total);
     }
 
     public function setLimit()
@@ -46,9 +52,15 @@ class MarcasComponent extends Component
     public function limpiarMarcas()
     {
         $this->reset([
-            'marcas_id', 'nombre', 'keyword'
+            'marcas_id', 'nombre', 'form', 'table'
         ]);
         $this->resetErrorBag();
+    }
+
+    public function create()
+    {
+        $this->form = true;
+        $this->table = false;
     }
 
     public function save()
@@ -86,10 +98,13 @@ class MarcasComponent extends Component
 
     public function edit($id)
     {
+        $this->limpiarMarcas();
         $marca = Marca::find($id);
         if ($marca){
             $this->marcas_id = $marca->id;
             $this->nombre = $marca->nombre;
+            $this->form = true;
+            $this->table = false;
         }
     }
 
@@ -145,7 +160,13 @@ class MarcasComponent extends Component
 
     public function buscar()
     {
-        //
+        $this->limpiarMarcas();
+    }
+
+    public function cerrarBusqueda()
+    {
+        $this->reset(['keyword']);
+        $this->limpiarMarcas();
     }
 
 }

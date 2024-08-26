@@ -100,12 +100,12 @@
                         </button>
                     @endif
 
-                    <a href="{{ route('etiquetas.print', $bienes_id ?? 0) }}" target="_blank"
+                    {{--<a href="{{ route('etiquetas.print', $bienes_id ?? 0) }}" target="_blank"
                        class="btn btn-default btn-sm">
                         <i class="fas fa-print"></i> Etiqueta
-                    </a>
+                    </a>--}}
 
-                    <button type="button" class="btn btn-default btn-sm" wire:click="destroy"
+                    <button type="button" class="btn btn-default btn-sm mt-1" wire:click="destroy"
                             @if(!comprobarPermisos('bienes.destroy')) disabled @endif>
                         <i class="fas fa-trash-alt"></i> Eliminar
                     </button>

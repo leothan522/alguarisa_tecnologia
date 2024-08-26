@@ -2,12 +2,12 @@
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
-                Búsqueda { <b class="text-warning">{{ $keyword }}</b> }
-                <button class="btn btn-tool text-warning" wire:click="limpiarUbicaciones">
+                Búsqueda { <b class="text-warning">{{ $keyword }}</b> } [ <b class="text-warning">{{ $totalBusqueda }}</b> ]
+                <button class="btn btn-tool text-warning" wire:click="cerrarBusqueda">
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Ubicaciones [ <b class="text-warning">{{ $rowsUbicaciones }}</b> ]
+                Registradas [ <b class="text-warning">{{ $rowsUbicaciones }}</b> ]
             @endif
         </h3>
 
@@ -15,7 +15,10 @@
             <button type="button" class="btn btn-tool" wire:click="limpiarUbicaciones">
                 <i class="fas fa-sync-alt"></i>
             </button>
-            <button type="button" class="btn btn-tool" wire:click="setLimit" @if($rows > $rowsUbicaciones) disabled @endif >
+            <button type="button" class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('ubicaciones.create')) disabled @endif>
+                <i class="fas fa-file"></i> Nuevo
+            </button>
+            <button type="button" class="btn btn-tool" wire:click="setLimit" @if(($rows > $rowsUbicaciones) || ($keyword && $rows > $totalBusqueda)) disabled @endif >
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
         </div>
@@ -32,7 +35,7 @@
             @if($listarUbicaciones->isNotEmpty())
                 @foreach($listarUbicaciones as $ubicacion)
                     <tr>
-                        <td class="text-uppercase">{{ $ubicacion->nombre }}</td>
+                        <td class="text-uppercase text-truncate" style="max-width: 150px;">{{ $ubicacion->nombre }}</td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit({{ $ubicacion->id }})" class="btn btn-primary btn-sm"

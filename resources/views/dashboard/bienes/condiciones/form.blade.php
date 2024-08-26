@@ -9,11 +9,7 @@
         @endif
         <div class="card-tools">
             <button class="btn btn-tool" wire:click="limpiarCondiciones">
-                @if($errors->all() || $condiciones_id)
-                    <i class="fas fa-ban"></i> Cancelar
-                @else
-                    <i class="fas fa-file"></i>
-                @endif
+                <i class="fas fa-ban"></i> Cancelar
             </button>
         </div>
     </div>

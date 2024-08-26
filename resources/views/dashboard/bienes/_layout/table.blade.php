@@ -4,9 +4,9 @@
         <h3 class="card-title">
             @if($keyword || !empty($busqueda))
                 @if($keyword)
-                    Búsqueda { <b class="text-warning">{{ $keyword }}</b> }
+                    Búsqueda { <b class="text-warning">{{ $keyword }}</b> } [ <b class="text-warning">{{ $totalBusqueda }}</b> ]
                 @else
-                    Búsqueda Avanzada { <b class="text-warning">{{ $totalBusqueda }}</b> }
+                    Búsqueda Avanzada [ <b class="text-warning">{{ $totalBusqueda }}</b> ]
                 @endif
 
                 <button class="btn btn-tool text-warning" wire:click="limpiarBuscar" onclick="verSpinnerOculto()">

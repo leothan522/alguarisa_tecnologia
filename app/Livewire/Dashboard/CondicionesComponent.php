@@ -15,6 +15,7 @@ class CondicionesComponent extends Component
 
     public $rows = 0;
     public $condiciones_id, $nombre, $keyword;
+    public $form = false, $table = true;
 
     public function mount()
     {
@@ -28,10 +29,15 @@ class CondicionesComponent extends Component
             ->limit($this->rows)
             ->get()
         ;
+
+        $total = Condicion::buscar($this->keyword)->count();
+
         $rowsCondiciones = Condicion::count();
+
         return view('livewire.dashboard.condiciones-component')
             ->with('listarCondiciones', $condiciones)
-            ->with('rowsCondiciones', $rowsCondiciones);
+            ->with('rowsCondiciones', $rowsCondiciones)
+            ->with('totalBusqueda', $total);
     }
 
     public function setLimit()
@@ -44,9 +50,15 @@ class CondicionesComponent extends Component
     public function limpiarCondiciones()
     {
         $this->reset([
-            'condiciones_id', 'nombre', 'keyword'
+            'condiciones_id', 'nombre', 'form', 'table'
         ]);
         $this->resetErrorBag();
+    }
+
+    public function create()
+    {
+        $this->form = true;
+        $this->table = false;
     }
 
     public function save()
@@ -88,6 +100,8 @@ class CondicionesComponent extends Component
         if ($condicion){
             $this->condiciones_id = $condicion->id;
             $this->nombre = $condicion->nombre;
+            $this->form = true;
+            $this->table = false;
         }
     }
 
@@ -142,7 +156,13 @@ class CondicionesComponent extends Component
 
     public function buscar()
     {
-        //
+        $this->limpiarCondiciones();
+    }
+
+    public function cerrarBusqueda()
+    {
+        $this->reset(['keyword']);
+        $this->limpiarCondiciones();
     }
 
 }

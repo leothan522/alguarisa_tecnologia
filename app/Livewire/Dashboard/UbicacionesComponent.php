@@ -15,6 +15,7 @@ class UbicacionesComponent extends Component
 
     public $rows = 0;
     public $ubicaciones_id, $nombre, $keyword;
+    public $form = false, $table = true;
 
     public function mount()
     {
@@ -28,10 +29,15 @@ class UbicacionesComponent extends Component
             ->limit($this->rows)
             ->get()
         ;
+
+        $total = Ubicacion::buscar($this->keyword)->count();
+
         $rowsUbicaciones = Ubicacion::count();
+
         return view('livewire.dashboard.ubicaciones-component')
             ->with('listarUbicaciones', $ubicaciones)
-            ->with('rowsUbicaciones', $rowsUbicaciones);
+            ->with('rowsUbicaciones', $rowsUbicaciones)
+            ->with('totalBusqueda', $total);
     }
 
     public function setLimit()
@@ -44,9 +50,15 @@ class UbicacionesComponent extends Component
     public function limpiarUbicaciones()
     {
         $this->reset([
-            'ubicaciones_id', 'nombre', 'keyword'
+            'ubicaciones_id', 'nombre', 'form', 'table'
         ]);
         $this->resetErrorBag();
+    }
+
+    public function create()
+    {
+        $this->form = true;
+        $this->table = false;
     }
 
     public function save()
@@ -88,6 +100,8 @@ class UbicacionesComponent extends Component
         if ($ubicacion){
             $this->ubicaciones_id = $ubicacion->id;
             $this->nombre = $ubicacion->nombre;
+            $this->form = true;
+            $this->table = false;
         }
     }
 
@@ -133,7 +147,6 @@ class UbicacionesComponent extends Component
             if ($ubicacion){
                 $ubicacion->delete();
                 $this->alert('success', 'Condición Eliminada.');
-                //$this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
             }
         }
 
@@ -142,7 +155,13 @@ class UbicacionesComponent extends Component
 
     public function buscar()
     {
-        //
+        $this->limpiarUbicaciones();
+    }
+
+    public function cerrarBusqueda()
+    {
+        $this->reset(['keyword']);
+        $this->limpiarUbicaciones();
     }
 
 }

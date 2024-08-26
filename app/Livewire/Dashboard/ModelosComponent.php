@@ -19,6 +19,7 @@ class ModelosComponent extends Component
 
     public $rows = 0;
     public $modelos_id, $tipos_id, $marcas_id, $nombre, $keyword;
+    public $form = false, $table = true, $show = false, $verTipo, $verMarca;
 
     public function mount()
     {
@@ -32,10 +33,15 @@ class ModelosComponent extends Component
             ->limit($this->rows)
             ->get()
         ;
+        $total = Modelo::buscar($this->keyword)
+            ->orderBy('created_at', 'DESC')
+            ->count();
+
         $rowsModelos = Modelo::count();
         return view('livewire.dashboard.modelos-component')
             ->with('listarModelos', $modelos)
-            ->with('rowsModelos', $rowsModelos);
+            ->with('rowsModelos', $rowsModelos)
+            ->with('totalBusqueda', $total);
     }
 
     public function setLimit()
@@ -48,7 +54,7 @@ class ModelosComponent extends Component
     public function limpiarModelos()
     {
         $this->reset([
-            'modelos_id', 'tipos_id', 'marcas_id', 'nombre', 'keyword'
+            'modelos_id', 'tipos_id', 'marcas_id', 'nombre', 'form', 'table', 'show', 'verTipo', 'verMarca'
         ]);
         $this->resetErrorBag();
 
@@ -59,6 +65,12 @@ class ModelosComponent extends Component
         $marcas = Marca::orderBy('nombre', 'ASC')->get();
         $data = dataSelect2($marcas, 'nombre');
         $this->dispatch('modeloSelectMarcas', data: $data);
+    }
+
+    public function create()
+    {
+        $this->form = true;
+        $this->table = false;
     }
 
     public function save()
@@ -104,8 +116,26 @@ class ModelosComponent extends Component
         $this->limpiarModelos();
     }
 
+    public function verModel($id)
+    {
+        $this->limpiarModelos();
+        $modelos = Modelo::find($id);
+        if ($modelos){
+            $this->modelos_id = $modelos->id;
+            $this->nombre = $modelos->nombre;
+            $this->tipos_id = $modelos->tipos_id;
+            $this->marcas_id = $modelos->marcas_id;
+            $this->verMarca = $modelos->marca->nombre;
+            $this->verTipo = $modelos->tipo->nombre;
+            $this->form = false;
+            $this->table = false;
+            $this->show = true;
+        }
+    }
+
     public function edit($id)
     {
+        $this->limpiarModelos();
         $modelos = Modelo::find($id);
         if ($modelos){
             $this->modelos_id = $modelos->id;
@@ -114,6 +144,8 @@ class ModelosComponent extends Component
             $this->marcas_id = $modelos->marcas_id;
             $this->dispatch('setModeloSelectTipos', id: $this->tipos_id);
             $this->dispatch('setModeloSelectMarcas', id: $this->marcas_id);
+            $this->table = false;
+            $this->form = true;
         }
     }
 
@@ -168,7 +200,22 @@ class ModelosComponent extends Component
 
     public function buscar()
     {
-        //
+        $this->limpiarModelos();
+    }
+
+    public function cerrarBusqueda()
+    {
+        $this->reset(['keyword']);
+        $this->limpiarModelos();
+    }
+
+    public function btnCancelar($show = false)
+    {
+        if (!$show){
+            $this->limpiarModelos();
+        }else{
+            $this->verModel($this->modelos_id);
+        }
     }
 
     #[On('modeloSelectTipos')]

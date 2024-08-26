@@ -44,7 +44,7 @@
                         <span class="btn-link">Colores</span>
                     </li>
                     <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-condiciones" onclick="verCondiciones()">
-                        <span class="btn-link">Colores</span>
+                        <span class="btn-link">Condiciones</span>
                     </li>
                     <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-ubicaciones" onclick="verUbicaciones()">
                         <span class="btn-link">Ubicaciones</span>

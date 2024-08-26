@@ -9,7 +9,6 @@ use App\Models\Equipo;
 use App\Models\Imagen;
 use App\Models\Marca;
 use App\Models\Modelo;
-use App\Models\Oficio;
 use App\Models\Parametro;
 use App\Models\Tipo;
 use Illuminate\Database\Query\Builder;
@@ -17,9 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\On;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
-use Livewire\WithFileUploads;
 
 class BienesComponent extends Component
 {
@@ -62,6 +59,7 @@ class BienesComponent extends Component
                 $bien->verMarca = $bien->marca->nombre;
                 $bien->verModelo = $bien->modelo->nombre;
             });
+            $this->totalBusqueda = Bien::buscar($this->keyword)->count();
         }else{
             $tipo = $this->busqueda['tipo'];
             $marca = $this->busqueda['marca'];

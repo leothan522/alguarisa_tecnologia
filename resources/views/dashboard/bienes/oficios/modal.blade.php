@@ -9,6 +9,7 @@
                             Oficios Entregados
                         </h4>
                     </div>
+
                     <div class="col-md-6 justify-content-end">
                         <form wire:submit="buscar">
                             <div class="input-group close">
@@ -23,6 +24,7 @@
                     </div>
 
                 </div>
+
                 <button type="button" class="float-right close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

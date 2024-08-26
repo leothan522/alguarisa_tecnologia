@@ -16,6 +16,7 @@ class TiposComponent extends Component
 
     public $rows = 0;
     public $tipos_id, $nombre, $keyword;
+    public $form = false, $table = true;
 
     public function mount()
     {
@@ -29,10 +30,15 @@ class TiposComponent extends Component
             ->limit($this->rows)
             ->get()
         ;
+
+        $total = Tipo::buscar($this->keyword)->count();
+
         $rowsTipos = Tipo::count();
+
         return view('livewire.dashboard.tipos-component')
             ->with('listarTipos', $tipos)
-            ->with('rowsTipos', $rowsTipos);
+            ->with('rowsTipos', $rowsTipos)
+            ->with('totalBusqueda', $total);
     }
 
     public function setLimit()
@@ -45,9 +51,15 @@ class TiposComponent extends Component
     public function limpiarTipos()
     {
         $this->reset([
-            'tipos_id', 'nombre', 'keyword'
+            'tipos_id', 'nombre', 'form', 'table'
         ]);
         $this->resetErrorBag();
+    }
+
+    public function create()
+    {
+        $this->form = true;
+        $this->table = false;
     }
 
     public function save()
@@ -85,10 +97,13 @@ class TiposComponent extends Component
 
     public function edit($id)
     {
+        $this->limpiarTipos();
         $tipo = Tipo::find($id);
         if ($tipo){
             $this->tipos_id = $tipo->id;
             $this->nombre = $tipo->nombre;
+            $this->form = true;
+            $this->table = false;
         }
     }
 
@@ -144,7 +159,13 @@ class TiposComponent extends Component
 
     public function buscar()
     {
-        //
+        $this->limpiarTipos();
+    }
+
+    public function cerrarBusqueda()
+    {
+        $this->reset(['keyword']);
+        $this->limpiarTipos();
     }
 
 }

@@ -2,14 +2,15 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="row col-md-12">
+                <div class="row col-md-10">
 
                     <div class="col-md-6">
                         <h4 class="modal-title">
                             Condiciones
                         </h4>
                     </div>
-                    <div class="col-md-5 justify-content-end">
+
+                    <div class="col-md-6 justify-content-end">
                         <form wire:submit="buscar">
                             <div class="input-group close">
                                 <input type="search" class="form-control" placeholder="Buscar" wire:model="keyword" required>
@@ -21,19 +22,21 @@
                             </div>
                         </form>
                     </div>
-                    <button type="button" wire:click="limpiarCondiciones" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+
                 </div>
+
+                <button type="button" wire:click="limpiarCondiciones" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
 
             </div>
             <div class="modal-body">
 
-                <div class="row">
-                    <div class="col-md-4">
+                <div class="row justify-content-center">
+                    <div class="col-md-6 @if(!$form) d-none @endif ">
                         @include('dashboard.bienes.condiciones.form')
                     </div>
-                    <div class="col-md-8">
+                    <div class="col-12 @if(!$table) d-none @endif ">
                         @include('dashboard.bienes.condiciones.table')
                     </div>
                 </div>
