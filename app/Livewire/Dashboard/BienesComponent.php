@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Bien;
+use App\Models\BienUbicacion;
 use App\Models\Color;
 use App\Models\Condicion;
 use App\Models\Equipo;
@@ -25,7 +26,7 @@ class BienesComponent extends Component
     public $rows = 0, $numero = 14, $tableStyle = false;
     public $view = true, $form = false, $ver = false, $nuevo = false, $editar = false, $cancelar = false, $footer = false, $keyword;
     public $tipos_id, $marcas_id, $modelos_id, $colores_id, $serial, $identificador, $condiciones_id, $adicional;
-    public $bienes_id, $verTipo, $verMarca, $verModelo, $verColor, $verCondicion;
+    public $bienes_id, $verTipo, $verMarca, $verModelo, $verColor, $verCondicion, $verUbicacion;
     public $imagenes = false, $imagenFrontal, $imagenPosterior, $miniFrontal, $miniPosterior, $imagenTitle, $imagenFooter;
     public $busqueda, $totalBusqueda;
 
@@ -140,7 +141,7 @@ class BienesComponent extends Component
         $this->reset([
             'view', 'form', 'ver', 'nuevo', 'editar', 'cancelar', 'footer',
             'tipos_id', 'marcas_id', 'modelos_id', 'colores_id', 'serial', 'identificador', 'condiciones_id', 'adicional',
-            'verTipo', 'verMarca', 'verModelo', 'verColor', 'verCondicion',
+            'verTipo', 'verMarca', 'verModelo', 'verColor', 'verCondicion', 'verUbicacion',
             'imagenes', 'imagenFrontal', 'imagenPosterior', 'miniFrontal', 'miniPosterior'
         ]);
         $this->resetErrorBag();
@@ -199,6 +200,12 @@ class BienesComponent extends Component
                 $this->imagenPosterior = $imagen->imagen;
                 $this->miniPosterior = $imagen->mini;
             }
+
+            $ubicaciones = BienUbicacion::where('bienes_id', $this->bienes_id)->orderBy('created_at', 'DESC')->first();
+            if ($ubicaciones){
+                $this->verUbicacion = $ubicaciones->ubicacion->nombre;
+            }
+
         }
 
     }

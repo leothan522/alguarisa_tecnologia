@@ -6,6 +6,7 @@
         <th>Marca</th>
         <th>Modelo</th>
         <th>Color</th>
+        <th>Condición</th>
         <th>Serial</th>
         <th>Identicador</th>
         <th>Imagen Frontal</th>
@@ -22,19 +23,20 @@
     @foreach($bienes as $bien)
         <tr>
             <td>{{ $bien->id}}</td>
-            <td>{{ $bien->tipo->nombre }}</td>
-            <td>{{ $bien->marca->nombre }}</td>
-            <td>{{ $bien->modelo->nombre }}</td>
-            <td>{{ $bien->color->nombre }}</td>
+            <td>{{ mb_strtoupper($bien->tipo->nombre) }}</td>
+            <td>{{ mb_strtoupper($bien->marca->nombre) }}</td>
+            <td>{{ mb_strtoupper($bien->modelo->nombre) }}</td>
+            <td>{{ mb_strtoupper($bien->color->nombre) }}</td>
+            <td>{{ mb_strtoupper($bien->condicion->nombre) }}</td>
             <td>
                 @if($bien->serial)
-                    [{{ $bien->serial }}]
+                    [{{ mb_strtoupper($bien->serial) }}]
                 @endif
             </td>
-            <td>{{ $bien->identificador }}</td>
+            <td>{{ mb_strtoupper($bien->identificador) }}</td>
             <td>{{ $bien->frontal }}</td>
             <td>{{ $bien->posterior }}</td>
-            <td>{{ $bien->ubicacion }}</td>
+            <td>{{ mb_strtoupper($bien->ubicacion) }}</td>
             <td>
                 @if($bien->oficios)
                     @foreach($bien->oficios as $oficio)
@@ -42,7 +44,7 @@
                     @endforeach
                 @endif
             </td>
-            <td>{{ $bien->adicional }}</td>
+            <td>{{ mb_strtoupper($bien->adicional) }}</td>
             @if(auth()->user()->role == 100)
                 <td>{!! $bien->auditoria !!}</td>
             @endif
