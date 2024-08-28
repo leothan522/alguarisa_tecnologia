@@ -27,6 +27,9 @@
                     <li class="list-group-item list-group-item-dark">
                         <span>Identificador</span> <span class="text-bold float-right text-uppercase">@if($identificador) [{{ $identificador }}] @else -  @endif</span>
                     </li>
+                    <li class="list-group-item list-group-item-dark">
+                        <span>Condición</span> <span class="text-bold float-right text-uppercase">{{ $verCondicion }}</span>
+                    </li>
                     @if($verUbicacion)
                         <li class="list-group-item list-group-item-dark">
                             <span>Ubicación</span> <span class="text-bold float-right text-uppercase">{{ $verUbicacion }}</span>
