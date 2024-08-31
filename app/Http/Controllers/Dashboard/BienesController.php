@@ -24,7 +24,7 @@ class BienesController extends Controller
 
     public function printEtiqueta($id)
     {
-        $bien = Bien::find($id);
+        $bien = Bien::where('id', $id)->orWhere('token', $id)->first();
         if (!$bien){
             return redirect()->route('web.index');
         }
@@ -50,12 +50,12 @@ class BienesController extends Controller
 
     public function webEtiqueta($id)
     {
-        $bien = Bien::where('id', $id)->first();
+        $bien = Bien::where('id', $id)->orWhere('token', $id)->first();
         if (!$bien){
             return redirect()->route('web.index');
         }
-        $imagenFrontal = Imagen::where('bienes_id', $id)->where('nombre', 'frontal')->first();
-        $imagenPosterior = Imagen::where('bienes_id', $id)->where('nombre', 'posterior')->first();
+        $imagenFrontal = Imagen::where('bienes_id', $bien->id)->where('nombre', 'frontal')->first();
+        $imagenPosterior = Imagen::where('bienes_id', $bien->id)->where('nombre', 'posterior')->first();
         return view('dashboard.bienes.etiquetas.web_etiqueta')
             ->with('bien', $bien)
             ->with('imagenFrontal', $imagenFrontal)

@@ -26,7 +26,7 @@ class BienesComponent extends Component
     public $rows = 0, $numero = 14, $tableStyle = false;
     public $view = true, $form = false, $ver = false, $nuevo = false, $editar = false, $cancelar = false, $footer = false, $keyword;
     public $tipos_id, $marcas_id, $modelos_id, $colores_id, $serial, $identificador, $condiciones_id, $adicional;
-    public $bienes_id, $verTipo, $verMarca, $verModelo, $verColor, $verCondicion, $verUbicacion;
+    public $bienes_id, $verTipo, $verMarca, $verModelo, $verColor, $verCondicion, $verUbicacion, $verToken;
     public $imagenes = false, $imagenFrontal, $imagenPosterior, $miniFrontal, $miniPosterior, $imagenTitle, $imagenFooter;
     public $busqueda, $totalBusqueda;
 
@@ -141,7 +141,7 @@ class BienesComponent extends Component
         $this->reset([
             'view', 'form', 'ver', 'nuevo', 'editar', 'cancelar', 'footer',
             'tipos_id', 'marcas_id', 'modelos_id', 'colores_id', 'serial', 'identificador', 'condiciones_id', 'adicional',
-            'verTipo', 'verMarca', 'verModelo', 'verColor', 'verCondicion', 'verUbicacion',
+            'verTipo', 'verMarca', 'verModelo', 'verColor', 'verCondicion', 'verUbicacion', 'verToken',
             'imagenes', 'imagenFrontal', 'imagenPosterior', 'miniFrontal', 'miniPosterior'
         ]);
         $this->resetErrorBag();
@@ -179,6 +179,11 @@ class BienesComponent extends Component
             $this->condiciones_id = $bien->condiciones_id;
             $this->verCondicion = $bien->condicion->nombre;
             $this->adicional = $bien->adicional;
+            if (is_null($bien->token)){
+                $this->verToken = $this->bienes_id;
+            }else{
+                $this->verToken = $bien->token;
+            }
             $this->view = false;
             $this->ver = true;
             $this->editar = true;
@@ -269,9 +274,15 @@ class BienesComponent extends Component
             }else{
                 $auditoria = $bien->auditoria.", [ 'accion' => 'edit', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
             }
+            if (is_null($bien->token)){
+                $token = generarStringAleatorio();
+            }else{
+                $token = $bien->token;
+            }
         }else{
             $bien = new Bien();
             $auditoria = "[ 'accion' => 'create', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+            $token = generarStringAleatorio();
         }
 
         if ($bien){
@@ -284,6 +295,7 @@ class BienesComponent extends Component
             $bien->identificador = $this->identificador;
             $bien->condiciones_id = $this->condiciones_id;
             $bien->adicional = $this->adicional;
+            $bien->token = $token;
             $bien->auditoria = $auditoria;
             $bien->save();
 

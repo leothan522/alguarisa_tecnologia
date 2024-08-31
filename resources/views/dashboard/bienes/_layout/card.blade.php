@@ -83,7 +83,7 @@
             <i class="fas fa-images"></i> Cambiar Imagenes
         </button>
 
-        <a href="{{ route('etiquetas.print', $bienes_id ?? 0) }}" target="_blank" class="btn btn-default btn-sm">
+        <a href="{{ route('etiquetas.print', $verToken ?? 0) }}" target="_blank" class="btn btn-default btn-sm">
             <i class="fas fa-print"></i> Imprimir Etiqueta
         </a>
 
