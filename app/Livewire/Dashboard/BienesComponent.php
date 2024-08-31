@@ -89,6 +89,7 @@ class BienesComponent extends Component
                 ->when($condicion, function (Builder $query, string $condicion) {
                     $query->where('condiciones_id', $condicion);
                 })
+                ->whereNull('deleted_at')
                 ->orderBy('created_at', 'DESC')
                 ->limit($this->rows)
                 ->get();
@@ -121,6 +122,7 @@ class BienesComponent extends Component
                 ->when($condicion, function (Builder $query, string $condicion) {
                     $query->where('condiciones_id', $condicion);
                 })
+                ->whereNull('deleted_at')
                 ->count();
         }
         return $bienes;
