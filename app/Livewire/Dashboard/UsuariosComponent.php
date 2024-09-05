@@ -37,7 +37,7 @@ class UsuariosComponent extends Component
         $roles = Parametro::where('tabla_id', '-1')->get();
 
         $users = User::buscar($this->keyword)
-            ->orderBy('created_at', 'ASC')
+            ->orderBy('created_at', 'DESC')
             ->limit($this->rows)
             ->get();
 
