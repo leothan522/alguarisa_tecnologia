@@ -5,11 +5,15 @@
         <ul>
             <li class="text-wrap">
                 numRowsPaginate
-                [null|numero]
+                [null|Int]
             </li>
             <li class="text-wrap">
                 size_codigo
-                [tamaño|null]
+                [Int|null]
+            </li>
+            <li class="text-wrap">
+                sin_serial
+                [Int|String]
             </li>
             {{--<li>iva</li>
             <li>telefono_soporte</li>

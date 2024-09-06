@@ -27,21 +27,23 @@
                             @php($i = 0)
                             @foreach($listarEquipos as $equipo)
                                 @if($equipo->ver)
-                                <tr>
-                                    <td class="text-uppercase">
-                                        {{ $equipo->oficio->numero }}
-                                    </td>
-                                    <td class="text-right text-uppercase">
-                                        {{ verFecha($equipo->oficio->fecha) }}
-                                    </td>
-                                    <td class="text-right">
-                                        @if(!$web)
-                                            <button class="btn btn-sm text-primary m-0" wire:click="verOficio({{ $equipo->oficios_id }})" onclick="verOficio()">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        @endif
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td class="text-uppercase">
+                                            {{ $equipo->oficio->numero }}
+                                        </td>
+                                        <td class="text-right text-uppercase">
+                                            {{ getFecha($equipo->oficio->fecha) }}
+                                        </td>
+                                        <td class="text-right">
+                                            @if(!$web)
+                                                <button class="btn btn-sm text-primary m-0"
+                                                        wire:click="verOficio({{ $equipo->oficios_id }})"
+                                                        onclick="verOficio()">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            @endif
+                                        </td>
+                                    </tr>
                                     @php($i++)
                                 @endif
                             @endforeach
@@ -69,7 +71,9 @@
             </div>
 
             <div class="modal-footer card-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="btn_modal_vinculados_cerrar">Cerrar</button>
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal"
+                        id="btn_modal_vinculados_cerrar">Cerrar
+                </button>
             </div>
 
             {!! verSpinner() !!}
