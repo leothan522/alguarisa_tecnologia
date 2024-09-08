@@ -235,7 +235,7 @@ class TerritorioComponent extends Component
     {
         $this->resetErrorBag();
         $this->reset([
-            'viewParroquia', 'parroquia_id', 'parroquiaNombre', 'parroquiaAbreviatura', 'parroquiaMunicipio', 'parroquiaFamilias', 'parroquiaMax', 'verMunicipio', 'parroquiaEstatus', 'parroquiaRowquid'
+            'viewParroquia', 'parroquia_id', 'parroquiaNombre', 'parroquiaAbreviatura', 'parroquiaMunicipio', 'parroquiaFamilias', 'parroquiaMax', 'parroquiaEstatus', 'parroquiaRowquid'
         ]);
         $rows = Municipio::orderBy('nombre', 'ASC')->get();
         $municipios = getDataSelect2($rows, 'nombre');
