@@ -9,13 +9,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Municipio extends Model
 {
     use HasFactory;
+
     protected $table = "municipios";
     protected $fillable = [
-      'nombre',
-      'mini',
-      'parroquias',
-      'familias',
-      'estatus'
+        'nombre',
+        'mini',
+        'parroquias',
+        'familias',
+        'estatus',
+        'rowquid'
     ];
 
     public function parroquia(): HasMany
@@ -26,8 +28,7 @@ class Municipio extends Model
     public function scopeBuscar($query, $keyword)
     {
         return $query->where('nombre', 'LIKE', "%$keyword%")
-            ->orWhere('mini', 'LIKE', "%$keyword%")
-            ;
+            ->orWhere('mini', 'LIKE', "%$keyword%");
     }
 
 }
