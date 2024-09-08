@@ -25,7 +25,8 @@ class Empresa extends Model
         'detail',
         'cart',
         'banner',
-        'permisos'
+        'permisos',
+        'rowquid'
     ];
 
     public function scopeBuscar($query, $keyword)
