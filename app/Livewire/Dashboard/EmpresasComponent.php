@@ -24,6 +24,7 @@ class EmpresasComponent extends Component
     public $empresa_default, $verDefault, $verImagen, $img_borrar_principal, $img_principal, $verMini;
     public $rif, $nombre, $jefe, $moneda, $telefonos, $email, $direccion, $photo, $default = 0, $permisos;
     public $horario, $horario_id, $lunes, $martes, $miercoles, $jueves, $viernes, $sabado, $domingo, $apertura, $cierre;
+    public $srcImagen, $saveImagen = false;
 
     #[Locked]
     public $empresas_id, $rowquid;
@@ -79,8 +80,9 @@ class EmpresasComponent extends Component
         $this->reset([
             'view', 'title', 'btn_cancelar', 'footer', 'empresas_id', 'verDefault', 'verImagen', 'nuevo',
             'rif', 'nombre', 'jefe', 'moneda', 'telefonos', 'email', 'direccion', 'photo', 'permisos', 'img_borrar_principal',
-            'verMini', 'rowquid'
+            'verMini', 'rowquid', 'srcImagen', 'saveImagen'
         ]);
+        $this->resetErrorBag();
     }
 
     public function create()
@@ -91,6 +93,7 @@ class EmpresasComponent extends Component
         $this->view = "form";
         $this->footer = false;
         $this->nuevo = false;
+        $this->reset('srcImagen');
 
     }
 
@@ -102,6 +105,9 @@ class EmpresasComponent extends Component
         if ($this->img_principal){
             $this->img_borrar_principal = $this->img_principal;
         }
+
+        $this->srcImagen = crearImagenTemporal($this->photo, 'empresas');
+        $this->saveImagen = true;
     }
 
     public function rules()
@@ -114,7 +120,6 @@ class EmpresasComponent extends Component
             'telefonos' =>  'required',
             'email'     =>  'required|email',
             'direccion' =>  'required',
-            'photo'     =>  'image|max:1024|nullable'
         ];
     }
 
@@ -159,7 +164,7 @@ class EmpresasComponent extends Component
             $empresa->email = $this->email;
             $empresa->direccion = $this->direccion;
 
-            if ($this->photo){
+            if ($this->photo && $this->saveImagen){
                 $ruta = $this->photo->store('public/empresas');
                 $empresa->imagen = str_replace('public/', 'storage/', $ruta);
                 //miniaturas
@@ -167,9 +172,8 @@ class EmpresasComponent extends Component
                 $path_data = "storage/empresas/size_".$nombre[1];
                 $miniatura = crearMiniaturas($empresa->imagen, $path_data);
                 $empresa->mini = $miniatura['mini'];
-                /*$empresa->detail = $miniatura['detail'];
-                $empresa->cart = $miniatura['cart'];
-                $empresa->banner = $miniatura['banner'];*/
+                //borramos la imagen temporal
+                borrarImagenes($this->srcImagen, 'empresas');
                 //borramos imagenes anteriones si existen
                 if ($this->img_borrar_principal){
                     borrarImagenes($imagen, 'empresas');
@@ -178,9 +182,6 @@ class EmpresasComponent extends Component
                 if ($this->img_borrar_principal){
                     $empresa->imagen = null;
                     $empresa->mini = null;
-                    $empresa->detail = null;
-                    $empresa->cart = null;
-                    $empresa->banner = null;
                     borrarImagenes($this->img_borrar_principal, 'empresas');
                 }
             }
@@ -216,6 +217,7 @@ class EmpresasComponent extends Component
             $this->verMini = $empresa->mini;
             $this->img_principal = $empresa->imagen;
             $this->rowquid = $empresa->rowquid;
+            $this->srcImagen = $this->verMini;
             $this->view = "show";
         }else{
             Sleep::for(500)->millisecond();
@@ -479,9 +481,14 @@ class EmpresasComponent extends Component
 
     public function btnBorrarImagen()
     {
-        $this->verImagen = null;
-        $this->reset('photo');
-        $this->img_borrar_principal = $this->img_principal;
+        if ($this->saveImagen){
+            $this->reset(['saveImagen', 'img_borrar_principal']);
+            borrarImagenes($this->srcImagen, 'empresas');
+            $this->srcImagen = $this->verMini;
+        }else{
+            $this->reset(['verImagen', 'srcImagen']);
+            $this->img_borrar_principal = $this->img_principal;
+        }
     }
 
     public function actualizar()

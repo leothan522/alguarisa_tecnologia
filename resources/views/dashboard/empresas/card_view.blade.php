@@ -56,7 +56,7 @@
     @endif
 
     <div class="overlay-wrapper" wire:loading wire:target="limpiar, create, show, save, edit, convertirDefault,
-                destroy, btnHorario, setHorario, {{--diasActivos,--}} storeHoras, actualizar, btnCancelar">
+                destroy, btnHorario, setHorario, {{--diasActivos,--}} storeHoras, actualizar, btnCancelar, btnBorrarImagen">
         <div class="overlay">
             <div class="spinner-border text-navy" role="status">
                 <span class="sr-only">Loading...</span>

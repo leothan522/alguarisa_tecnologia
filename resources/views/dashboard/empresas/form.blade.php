@@ -152,7 +152,14 @@
             <div class="card-body">
 
 
-                <div class="row justify-content-center attachment-block p-3">
+                <div class="row justify-content-center attachment-block p-3"
+                     x-data="{ uploading: false, progress: 0 }"
+                     x-on:livewire-upload-start="uploading = true"
+                     x-on:livewire-upload-finish="uploading = false; progress = 0"
+                     x-on:livewire-upload-cancel="uploading = false"
+                     x-on:livewire-upload-error="uploading = false"
+                     x-on:livewire-upload-progress="progress = $event.detail.progress"
+                >
 
                     <div class="d-none">
                         <div class="input-group mb-3">
@@ -169,10 +176,7 @@
 
                     <div class="col-md-6 mt-3 mb-3">
                         <div class="text-center" style="cursor:pointer;">
-                            <img class="img-thumbnail"
-                                 @if ($photo) src="{{ $photo->temporaryUrl() }}"
-                                 @else src="{{ asset(verImagen($verImagen)) }}" @endif
-                                 {{--width="101" height="100"--}}  alt="Logo Tienda" onclick="imgEmpresa()"/>
+                            <img class="img-thumbnail" src="{{ asset(verImagen($srcImagen)) }}" alt="Logo Empesa" onclick="imgEmpresa()" {{--width="101" height="100"--}}   />
                             @if($verImagen)
                                 <button type="button" class="btn badge text-danger position-absolute float-right"
                                         wire:click="btnBorrarImagen">
@@ -190,7 +194,20 @@
                         @enderror
                     </div>
 
+                    <div class="col-10">
+                        <!-- Progress Bar -->
+                        <div x-show="uploading">
+                            {{--<progress max="100" x-bind:value="progress"></progress>--}}
+                            <div class="progress rounded">
+                                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" x-bind:style="`width: ${progress}%`" x-bind:aria-valuenow="progress" aria-valuemin="0" aria-valuemax="100">
+                                    <span x-text="`${progress}%`"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
+
 
             </div>
         </div>
