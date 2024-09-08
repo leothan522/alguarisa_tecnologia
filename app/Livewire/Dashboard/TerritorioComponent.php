@@ -150,6 +150,7 @@ class TerritorioComponent extends Component
             $this->municipioAbreviatura = $municipio->mini;
             $this->municipioFamilias = $municipio->familias;
             $this->municipioParroquias = $municipio->parroquias;
+            $this->municipioRowquid = $municipio->rowquid;
             if ($municipio->estatus) {
                 $this->municipioEstatus = "Activo";
             } else {
@@ -385,7 +386,7 @@ class TerritorioComponent extends Component
             $this->parroquiaFamilias = $parroquia->familias;
             $this->parroquiaMunicipio = $parroquia->municipio->rowquid;
             $this->verMunicipio = $parroquia->municipio->nombre;
-
+            $this->parroquiaRowquid = $parroquia->rowquid;
             if ($parroquia->estatus) {
                 $this->parroquiaEstatus = "Activo";
             } else {

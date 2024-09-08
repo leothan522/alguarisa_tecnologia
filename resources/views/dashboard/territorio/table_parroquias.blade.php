@@ -86,7 +86,7 @@
                             <div class="d-md-none">
                                 <button class="btn btn-primary btn-sm" data-toggle="modal"
                                         data-target="#modal-show-parroquias"
-                                        wire:click="editParroquia('{{ $parroquia->id }}')">
+                                        wire:click="editParroquia('{{ $parroquia->rowquid }}')">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
