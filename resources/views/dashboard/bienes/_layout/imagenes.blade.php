@@ -11,7 +11,7 @@
 
         <div class="card-body">
 
-            <form wire:submit="saveImagenes" xmlns:wire="http://www.w3.org/1999/xhtml">
+            <form wire:submit="saveImagenes">
 
                 <div class="row justify-content-between p-2">
 
@@ -33,13 +33,7 @@
 
                         <div class="row justify-content-center mb-3 mt-3">
                             <div class="col-8">
-                                <img class="img-thumbnail" style="cursor: pointer;"
-                                @if ($frontalPhoto)
-                                    src="{{ $frontalPhoto->temporaryUrl() }}"
-                                     @else
-                                         src="{{ asset(verImagen($verImgFrontal)) }}"
-                                     @endif
-                                     {{--width="101" height="100"--}}  alt="Imagen Frontal del Bien" onclick="clickImgFrontal()" />
+                                <img class="img-thumbnail" style="cursor: pointer;" src="{{ asset(verImagen($frontalSrcImagen)) }}" alt="Imagen Frontal" onclick="clickImgFrontal()" {{--width="101" height="100"--}} />
                                 @if($verImgFrontal)
                                     <button type="button" class="btn badge text-danger position-absolute float-right"
                                             wire:click="btnBorrarImagen('frontal')" >
@@ -61,7 +55,7 @@
                                     </div>
                                 </div>
                                 @error('frontalPhoto')
-                                    <span class="text-sm text-bold text-danger text-center">
+                                    <span class="text-sm text-bold text-danger text-center" style="cursor: pointer" wire:click="limpiar('frontal')">
                                         <i class="icon fas fa-exclamation-triangle"></i>
                                          {{ $message }}
                                     </span>
@@ -104,13 +98,7 @@
 
                         <div class="row justify-content-center mb-3 mt-3">
                             <div class="col-8">
-                                <img class="img-thumbnail" style="cursor: pointer;"
-                                @if ($posteriorPhoto)
-                                    src="{{ $posteriorPhoto->temporaryUrl() }}"
-                                     @else
-                                         src="{{ asset(verImagen($verImgPosterior)) }}"
-                                     @endif
-                                     {{--width="101" height="100"--}}  alt="Imagen Posterior del Bien" onclick="clickImgPosterior()" />
+                                <img class="img-thumbnail" style="cursor: pointer;" src="{{ asset(verImagen($posteriorSrcImagen)) }}" alt="Imagen Posterior" onclick="clickImgPosterior()" {{--width="101" height="100"--}} />
                                 @if($verImgPosterior)
                                     <button type="button" class="btn badge text-danger position-absolute float-right"
                                             wire:click="btnBorrarImagen('posterior')" >
@@ -132,7 +120,7 @@
                                     </div>
                                 </div>
                                 @error('posteriorPhoto')
-                                    <span class="text-sm text-bold text-danger text-center">
+                                    <span class="text-sm text-bold text-danger text-center" style="cursor: pointer" wire:click="limpiar('posterior')">
                                         <i class="icon fas fa-exclamation-triangle"></i>
                                          {{ $message }}
                                     </span>

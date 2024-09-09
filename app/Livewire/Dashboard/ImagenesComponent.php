@@ -18,6 +18,7 @@ class ImagenesComponent extends Component
         $idImgPosterior, $verImgPosterior, $imagenPosterior, $borrarImgPosterior = false;
     //#[Validate('image|max:1024')] // 1MB Max
     public $frontalPhoto, $posteriorPhoto;
+    public $frontalSrcImagen, $frontalSaveImagen = false, $posteriorSrcImagen, $posteriorSaveImagen = false;
 
     public function render()
     {
@@ -30,31 +31,42 @@ class ImagenesComponent extends Component
         $this->resetErrorBag();
         $this->reset([
             'frontalPhoto', 'posteriorPhoto', 'imagenFrontal', 'imagenPosterior',
-            'borrarImgFrontal', 'borrarImgPosterior', 'guardar'
+            'borrarImgFrontal', 'borrarImgPosterior', 'guardar',
+            'frontalSrcImagen', 'frontalSaveImagen', 'posteriorSrcImagen', 'posteriorSaveImagen'
         ]);
 
         $this->bienes_id = $id;
         $frontal = $this->dataImagen($this->bienes_id, 'frontal');
         $this->idImgFrontal = $frontal['id'];
         $this->verImgFrontal = $frontal['imagen'];
+        $this->frontalSrcImagen = $frontal['imagen'];
         $this->imagenFrontal = $frontal['borrar'];
         $posterior = $this->dataImagen($this->bienes_id, 'posterior');
         $this->idImgPosterior = $posterior['id'];
         $this->verImgPosterior = $posterior['imagen'];
+        $this->posteriorSrcImagen = $posterior['imagen'];
         $this->imagenPosterior = $posterior['borrar'];
+    }
+
+    public function rules()
+    {
+        return [
+            'frontalPhoto' => 'nullable|image|max:2024', // 2MB Max
+            'posteriorPhoto' => 'nullable|image|max:2024' // 2MB Max
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'frontalPhoto.max' => 'la imagen Frontal no debe ser mayor que 2MB.',
+            'posteriorPhoto.max' => 'la imagen Posterior no debe ser mayor que 2MB.'
+        ];
     }
 
     public function saveImagenes()
     {
-        $rules = [
-            'frontalPhoto' => 'nullable|image|max:2024', // 2MB Max
-            'posteriorPhoto' => 'nullable|image|max:2024' // 2MB Max
-        ];
-        $messages = [
-            'frontalPhoto.max' => 'la imagen Frontal no debe ser mayor que 2MB.',
-            'posteriorPhoto.max' => 'la imagen Posterior no debe ser mayor que 2MB.'
-        ];
-        $this->validate($rules, $messages);
+        $this->validate();
 
         $alert = false;
         $path = "bienes"; //bien_id_".$this->bienes_id;
@@ -62,6 +74,7 @@ class ImagenesComponent extends Component
         if ($this->frontalPhoto){
             $this->procesarImagen($this->idImgFrontal, $this->frontalPhoto, $path, 'frontal');
             $alert = true;
+            borrarImagenes($this->frontalSrcImagen, 'imagenes/bienes');
         }else{
             if ($this->idImgFrontal && $this->borrarImgFrontal){
                 $imagen = Imagen::find($this->idImgFrontal);
@@ -77,6 +90,7 @@ class ImagenesComponent extends Component
         if ($this->posteriorPhoto){
             $this->procesarImagen($this->idImgPosterior, $this->posteriorPhoto, $path, 'posterior');
             $alert = true;
+            borrarImagenes($this->posteriorSrcImagen, 'imagenes/bienes');
         }else{
             if ($this->idImgPosterior && $this->borrarImgPosterior){
                 $imagen = Imagen::find($this->idImgPosterior);
@@ -94,6 +108,7 @@ class ImagenesComponent extends Component
             $this->alert('success', 'Datos Guardados.');
         }
         $this->guardar = false;
+
     }
 
     public function procesarImagen($id, $photo, $path, $name)
@@ -138,39 +153,64 @@ class ImagenesComponent extends Component
     public function btnBorrarImagen($nombre)
     {
         if ($nombre == 'frontal'){
-            $this->verImgFrontal = null;
-            $this->borrarImgFrontal = true;
+            if ($this->frontalSaveImagen){
+                $this->reset(['frontalSaveImagen', 'borrarImgFrontal']);
+                borrarImagenes($this->frontalSrcImagen, 'imagenes/bienes');
+                $this->frontalSrcImagen = $this->verImgFrontal;
+            }else{
+                $this->reset(['frontalSrcImagen', 'verImgFrontal']);
+                $this->borrarImgFrontal = true;
+            }
+            /*$this->verImgFrontal = null;
+            $this->borrarImgFrontal = true;*/
+            $this->reset('frontalPhoto');
         }else{
-            $this->verImgPosterior = null;
-            $this->borrarImgPosterior = true;
+            if ($this->posteriorSaveImagen){
+                $this->reset(['posteriorSaveImagen', 'borrarImgPosterior']);
+                borrarImagenes($this->posteriorSrcImagen, 'imagenes/bienes');
+                $this->posteriorSrcImagen = $this->verImgPosterior;
+            }else{
+                $this->reset(['posteriorSrcImagen', 'verImgPosterior']);
+                $this->borrarImgPosterior = true;
+            }
+            /*$this->verImgPosterior = null;
+            $this->borrarImgPosterior = true;*/
+            $this->reset('posteriorPhoto');
         }
-        $this->guardar = true;
+        if ($this->borrarImgFrontal || $this->borrarImgPosterior){
+            $this->guardar = true;
+        }
     }
+
+
 
     public function updatedFrontalPhoto()
     {
-        $rules = [
-            'frontalPhoto' => 'image|max:2024', // 1MB Max
-        ];
-        $messages = [
-            'frontalPhoto.max' => 'la imagen Frontal no debe ser mayor que 2MB.'
-        ];
-        $this->validate($rules, $messages);
+        $this->validate();
         $this->borrarImgFrontal = true;
         $this->guardar = true;
+        $this->frontalSrcImagen = crearImagenTemporal($this->frontalPhoto, 'imagenes/bienes');
+        $this->frontalSaveImagen = true;
     }
 
     public function updatedPosteriorPhoto()
     {
-        $rules = [
-            'posteriorPhoto' => 'image|max:2024' // 1MB Max
-        ];
-        $messages = [
-            'posteriorPhoto.max' => 'la imagen Posterior no debe ser mayor que 2MB.'
-        ];
-        $this->validate($rules, $messages);
+        $this->validate();
         $this->borrarImgPosterior = true;
         $this->guardar = true;
+        $this->posteriorSrcImagen = crearImagenTemporal($this->posteriorPhoto, 'imagenes/bienes');
+        $this->posteriorSaveImagen = true;
+    }
+
+    public function limpiar($photo)
+    {
+        if ($photo == "frontal"){
+            $this->reset('frontalPhoto');
+            $this->resetErrorBag('frontalPhoto');
+        }else{
+            $this->reset('posteriorPhoto');
+            $this->resetErrorBag('posteriorPhoto');
+        }
     }
 
 }
