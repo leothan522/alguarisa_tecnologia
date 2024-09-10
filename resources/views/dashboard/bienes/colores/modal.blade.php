@@ -1,4 +1,4 @@
-<div wire:ignore.self class="modal fade" id="modal-colores" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div wire:ignore.self class="modal fade" id="modal-colores">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -43,11 +43,11 @@
 
             </div>
 
-            {!! verSpinner() !!}
-
             <div class="modal-footer justify-content-end">
                 <button type="button" wire:click="limpiarColores" class="btn btn-default btn-sm" data-dismiss="modal">{{ __('Close') }}</button>
             </div>
+
+            {!! verSpinner() !!}
 
         </div>
     </div>

@@ -6,6 +6,7 @@ use App\Models\Bien;
 use App\Models\Color;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -14,8 +15,11 @@ class ColoresComponent extends Component
     use LivewireAlert;
 
     public $rows = 0;
-    public $colores_id, $nombre, $keyword;
+    public $nombre, $keyword;
     public $form = false, $table = true;
+
+    #[Locked]
+    public $colores_id, $rowquid;
 
     public function mount()
     {
@@ -50,7 +54,7 @@ class ColoresComponent extends Component
     public function limpiarColores()
     {
         $this->reset([
-            'colores_id', 'nombre', 'form', 'table'
+            'colores_id', 'nombre', 'form', 'table', 'rowquid'
         ]);
         $this->resetErrorBag();
     }
@@ -78,6 +82,11 @@ class ColoresComponent extends Component
             //nuevo
             $color = new Color();
             $message = "Color Creado.";
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Color::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $color->rowquid = $rowquid;
         }else{
             //editar
             $color = Color::find($this->colores_id);
@@ -94,9 +103,9 @@ class ColoresComponent extends Component
         $this->limpiarColores();
     }
 
-    public function edit($id)
+    public function edit($rowquid)
     {
-        $color = Color::find($id);
+        $color = $this->getColor($rowquid);
         if ($color){
             $this->colores_id = $color->id;
             $this->nombre = $color->nombre;
@@ -105,9 +114,9 @@ class ColoresComponent extends Component
         }
     }
 
-    public function destroy($id)
+    public function destroy($rowquid)
     {
-        $this->colores_id = $id;
+        $this->rowquid = $rowquid;
         $this->confirm('¿Estas seguro?', [
             'toast' => false,
             'position' => 'center',
@@ -122,12 +131,16 @@ class ColoresComponent extends Component
     #[On('confirmedColores')]
     public function confirmedColores()
     {
-        $color = Color::find($this->colores_id);
+        $id = null;
+        $color = $this->getColor($this->rowquid);
+        if ($color){
+            $id = $color->id;
+        }
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
 
-        $bienes = Bien::where('colores_id', $this->colores_id)->first();
+        $bienes = Bien::where('colores_id', $id)->first();
 
         if ($bienes){
             $vinculado = true;
@@ -163,6 +176,11 @@ class ColoresComponent extends Component
     {
         $this->reset(['keyword']);
         $this->limpiarColores();
+    }
+
+    protected function getColor($rowquid): ?Color
+    {
+        return Color::where('rowquid', $rowquid)->first();
     }
 
 }
