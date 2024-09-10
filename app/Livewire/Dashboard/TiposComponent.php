@@ -7,6 +7,7 @@ use App\Models\Modelo;
 use App\Models\Tipo;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -15,8 +16,11 @@ class TiposComponent extends Component
     use LivewireAlert;
 
     public $rows = 0;
-    public $tipos_id, $nombre, $keyword;
+    public $nombre, $keyword;
     public $form = false, $table = true;
+
+    #[Locked]
+    public $tipos_id, $rowquid;
 
     public function mount()
     {
@@ -51,7 +55,7 @@ class TiposComponent extends Component
     public function limpiarTipos()
     {
         $this->reset([
-            'tipos_id', 'nombre', 'form', 'table'
+            'tipos_id', 'nombre', 'form', 'table', 'rowquid'
         ]);
         $this->resetErrorBag();
     }
@@ -79,6 +83,11 @@ class TiposComponent extends Component
             //nuevo
             $tipo = new Tipo();
             $message = "Tipo Creado.";
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Tipo::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $tipo->rowquid = $rowquid;
         }else{
             //editar
             $tipo = Tipo::find($this->tipos_id);
@@ -95,10 +104,10 @@ class TiposComponent extends Component
         $this->limpiarTipos();
     }
 
-    public function edit($id)
+    public function edit($rowquid)
     {
         $this->limpiarTipos();
-        $tipo = Tipo::find($id);
+        $tipo = $this->getTipo($rowquid);
         if ($tipo){
             $this->tipos_id = $tipo->id;
             $this->nombre = $tipo->nombre;
@@ -107,9 +116,9 @@ class TiposComponent extends Component
         }
     }
 
-    public function destroy($id)
+    public function destroy($rowquid)
     {
-        $this->tipos_id = $id;
+        $this->rowquid = $rowquid;
         $this->confirm('¿Estas seguro?', [
             'toast' => false,
             'position' => 'center',
@@ -124,13 +133,17 @@ class TiposComponent extends Component
     #[On('confirmedTipos')]
     public function confirmedTipos()
     {
-        $tipo = Tipo::find($this->tipos_id);
+        $id = null;
+        $tipo = $this->getTipo($this->rowquid);
+        if ($tipo){
+            $id = $tipo->id;
+        }
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
 
-        $modelos = Modelo::where('tipos_id', $this->tipos_id)->first();
-        $bienes = Bien::where('tipos_id', $this->tipos_id)->first();
+        $modelos = Modelo::where('tipos_id', $id)->first();
+        $bienes = Bien::where('tipos_id', $id)->first();
 
         if ($modelos || $bienes){
             $vinculado = true;
@@ -166,6 +179,11 @@ class TiposComponent extends Component
     {
         $this->reset(['keyword']);
         $this->limpiarTipos();
+    }
+
+    protected function getTipo($rowquid): ?Tipo
+    {
+        return Tipo::where('rowquid', $rowquid)->first();
     }
 
 }

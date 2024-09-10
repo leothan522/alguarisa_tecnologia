@@ -10,7 +10,7 @@ class Tipo extends Model
 {
     use HasFactory;
     protected $table = "tipos";
-    protected $fillable = ['nombre'];
+    protected $fillable = ['nombre', 'rowquid'];
 
     public function modelos(): HasMany
     {
