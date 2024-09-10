@@ -23,8 +23,8 @@ class Bien extends Model
         'identificador',
         'condiciones_id',
         'adicional',
-        'token',
         'auditoria',
+        'rowquid'
     ];
 
     public function tipo(): BelongsTo

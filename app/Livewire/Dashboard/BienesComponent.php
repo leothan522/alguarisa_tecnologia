@@ -16,6 +16,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -26,9 +27,12 @@ class BienesComponent extends Component
     public $rows = 0, $numero = 14, $tableStyle = false;
     public $view = true, $form = false, $ver = false, $nuevo = false, $editar = false, $cancelar = false, $footer = false, $keyword;
     public $tipos_id, $marcas_id, $modelos_id, $colores_id, $serial, $identificador, $condiciones_id, $adicional;
-    public $bienes_id, $verTipo, $verMarca, $verModelo, $verColor, $verCondicion, $verUbicacion, $verToken;
+    public $verTipo, $verMarca, $verModelo, $verColor, $verCondicion, $verUbicacion;
     public $imagenes = false, $imagenFrontal, $imagenPosterior, $miniFrontal, $miniPosterior, $imagenTitle, $imagenFooter;
     public $busqueda, $totalBusqueda;
+
+    #[Locked]
+    public $bienes_id, $rowquid;
 
     public function mount()
     {
@@ -37,7 +41,7 @@ class BienesComponent extends Component
 
     public function render()
     {
-        $bienes = $this->getBienes();
+        $bienes = $this->listarBienes();
         $rowsBienes = Bien::count();
 
         if ($rowsBienes > $this->numero) {
@@ -48,7 +52,17 @@ class BienesComponent extends Component
             ->with('total', $rowsBienes);
     }
 
-    public function getBienes()
+    public function setLimit()
+    {
+        if (numRowsPaginate() < $this->numero) {
+            $rows = $this->numero;
+        } else {
+            $rows = numRowsPaginate();
+        }
+        $this->rows = $this->rows + $rows;
+    }
+
+    public function listarBienes()
     {
         if (empty($this->busqueda)){
             $bienes = Bien::buscar($this->keyword)
@@ -128,23 +142,13 @@ class BienesComponent extends Component
         return $bienes;
     }
 
-    public function setLimit()
-    {
-        if (numRowsPaginate() < $this->numero) {
-            $rows = $this->numero;
-        } else {
-            $rows = numRowsPaginate();
-        }
-        $this->rows = $this->rows + $rows;
-    }
-
     public function limpiar()
     {
         $this->reset([
             'view', 'form', 'ver', 'nuevo', 'editar', 'cancelar', 'footer',
             'tipos_id', 'marcas_id', 'modelos_id', 'colores_id', 'serial', 'identificador', 'condiciones_id', 'adicional',
-            'verTipo', 'verMarca', 'verModelo', 'verColor', 'verCondicion', 'verUbicacion', 'verToken',
-            'imagenes', 'imagenFrontal', 'imagenPosterior', 'miniFrontal', 'miniPosterior'
+            'verTipo', 'verMarca', 'verModelo', 'verColor', 'verCondicion', 'verUbicacion',
+            'imagenes', 'imagenFrontal', 'imagenPosterior', 'miniFrontal', 'miniPosterior', 'rowquid'
         ]);
         $this->resetErrorBag();
     }
@@ -161,11 +165,11 @@ class BienesComponent extends Component
     }
 
     #[On('showBien')]
-    public function show($id)
+    public function show($rowquid)
     {
         $this->limpiar();
         $this->reset(['bienes_id']);
-        $bien = Bien::find($id);
+        $bien = $this->getBien($rowquid);
         if ($bien){
             $this->bienes_id = $bien->id;
             $this->tipos_id = $bien->tipos_id;
@@ -181,28 +185,20 @@ class BienesComponent extends Component
             $this->condiciones_id = $bien->condiciones_id;
             $this->verCondicion = $bien->condicion->nombre;
             $this->adicional = $bien->adicional;
-            if (is_null($bien->token)){
-                $this->verToken = $this->bienes_id;
-            }else{
-                $this->verToken = $bien->token;
-            }
+            $this->rowquid = $bien->rowquid;
+
             $this->view = false;
             $this->ver = true;
             $this->editar = true;
             $this->footer = true;
 
-            $imagen = Imagen::where('bienes_id', $id)->where('nombre', 'frontal')->first();
+            $imagen = Imagen::where('bienes_id', $this->bienes_id)->where('nombre', 'frontal')->first();
             if ($imagen){
                 $this->imagenFrontal = $imagen->imagen;
                 $this->miniFrontal = $imagen->mini;
-                if (!empty($this->serial)){
-                    $this->imagenTitle = "Serial: [".$this->serial."]";
-                }else{
-                    $this->imagenTitle = "Ver Imagen";
-                }
             }
 
-            $imagen = Imagen::where('bienes_id', $id)->where('nombre', 'posterior')->first();
+            $imagen = Imagen::where('bienes_id', $this->bienes_id)->where('nombre', 'posterior')->first();
             if ($imagen){
                 $this->imagenPosterior = $imagen->imagen;
                 $this->miniPosterior = $imagen->mini;
@@ -276,15 +272,14 @@ class BienesComponent extends Component
             }else{
                 $auditoria = $bien->auditoria.", [ 'accion' => 'edit', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
             }
-            if (is_null($bien->token)){
-                $token = generarStringAleatorio();
-            }else{
-                $token = $bien->token;
-            }
         }else{
             $bien = new Bien();
             $auditoria = "[ 'accion' => 'create', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
-            $token = generarStringAleatorio();
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Bien::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $bien->rowquid = $rowquid;
         }
 
         if ($bien){
@@ -297,7 +292,6 @@ class BienesComponent extends Component
             $bien->identificador = $this->identificador;
             $bien->condiciones_id = $this->condiciones_id;
             $bien->adicional = $this->adicional;
-            $bien->token = $token;
             $bien->auditoria = $auditoria;
             $bien->save();
 
@@ -306,7 +300,7 @@ class BienesComponent extends Component
             }
 
             $this->serial = $serial;
-            $this->show($bien->id);
+            $this->show($bien->rowquid);
             $this->reset('keyword');
             $this->alert('success', 'Datos Guardados. ');
 
@@ -393,8 +387,8 @@ class BienesComponent extends Component
 
     public function btnCancelar()
     {
-        if ($this->bienes_id){
-            $this->show($this->bienes_id);
+        if ($this->rowquid){
+            $this->show($this->rowquid);
         }else{
             $this->limpiar();
         }
@@ -696,7 +690,7 @@ class BienesComponent extends Component
         return $formato . cerosIzquierda($numero, numSizeCodigo());
     }
 
-    protected function setSerial()
+    protected function setSerial(): void
     {
         $parametro = Parametro::where('nombre', 'sin_serial')->first();
         if ($parametro){
@@ -707,8 +701,18 @@ class BienesComponent extends Component
             $parametro->nombre = 'sin_serial';
             $parametro->tabla_id = 2;
             $parametro->valor = 'S/S-';
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Parametro::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $parametro->rowquid = $rowquid;
         }
         $parametro->save();
+    }
+
+    protected function getBien($rowquid): ?Bien
+    {
+        return Bien::where('rowquid', $rowquid)->first();
     }
 
 }

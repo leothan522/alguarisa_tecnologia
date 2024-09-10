@@ -1,6 +1,6 @@
-<form wire:submit="save" xmlns:wire="http://www.w3.org/1999/xhtml">
+<form wire:submit="save">
 
-<div class="row">
+    <div class="row">
 
         <div class="col-md-6">
 
@@ -181,13 +181,17 @@
             </div>
 
         </div>
-</div>
+    </div>
 
-<div class="row justify-content-end">
+    <div class="row justify-content-end">
         <div class="col-md-4">
             <button type="submit" class="btn btn-block @if($nuevo) btn-success @else btn-primary @endif float-right mr-1"
-                    {{--@if(!comprobarPermisos('bienes.create')) disabled @endif--}} >
-                <i class="fas fa-save"></i> Guardar @if(!$nuevo) Cambios @endif
+                {{--@if(!comprobarPermisos('bienes.create')) disabled @endif--}} >
+                <i class="fas fa-save"></i>
+                Guardar
+                @if(!$nuevo)
+                    Cambios
+                @endif
             </button>
         </div>
     </div>

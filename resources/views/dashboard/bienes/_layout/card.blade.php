@@ -21,7 +21,7 @@
             </button>--}}
 
             @if(!$nuevo)
-                <button class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('bienes.create')) disabled @endif id="btn_create_bien" >
+                <button class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('bienes.create')) disabled @endif id="btn_create_bien">
                     <i class="fas fa-file"></i> Nuevo
                 </button>
             @endif
@@ -83,7 +83,7 @@
             <i class="fas fa-images"></i> Cambiar Imagenes
         </button>
 
-        <a href="{{ route('etiquetas.print', $verToken ?? 0) }}" target="_blank" class="btn btn-default btn-sm">
+        <a href="{{ route('etiquetas.print', $rowquid ?? 0) }}" target="_blank" class="btn btn-default btn-sm">
             <i class="fas fa-print"></i> Imprimir Etiqueta
         </a>
 
@@ -97,7 +97,8 @@
 
     {{--{!! verSpinner() !!}--}}
 
-    <div class="overlay-wrapper" wire:loading wire:target="create, show, save, edit, destroy, confirmed, btnCancelar, btnImagenes">
+    <div class="overlay-wrapper" wire:loading
+         wire:target="create, show, save, edit, destroy, confirmed, btnCancelar, btnImagenes">
         <div class="overlay">
             <div class="spinner-border text-navy" role="status">
                 <span class="sr-only">Loading...</span>

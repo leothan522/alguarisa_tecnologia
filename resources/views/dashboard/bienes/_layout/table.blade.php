@@ -1,4 +1,4 @@
-<div class="card card-navy" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="card card-navy">
 
     <div class="card-header">
         <h3 class="card-title">
@@ -25,7 +25,8 @@
                     wire:click="create" @if(!comprobarPermisos('bienes.create')) disabled @endif>
                 <i class="fas fa-file"></i> Nuevo
             </button>
-            <button type="button" class="btn btn-tool" wire:click="setLimit" @if($rows > $listarBienes->count()) disabled @endif >
+            <button type="button" class="btn btn-tool" wire:click="setLimit"
+                    @if($rows > $listarBienes->count()) disabled @endif >
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
         </div>
@@ -49,40 +50,40 @@
         <ul class="todo-list" data-widget="todo-list">
             @if($listarBienes->isNotEmpty())
                 @foreach($listarBienes as $bien)
-                    <li class=" @if($bien->id == $bienes_id) text-warning @endif " >
-                    <!-- todo text -->
-                    {{--<span class="text">
-                            {{ $bien->codigo }}
-                    </span>--}}
-                    <!-- Emphasis label -->
-                    <small class="text text-uppercase" wire:click="show({{ $bien->id }})" style="cursor: pointer;">
-                        <span class="d-none d-md-inline-block">
-                            {{ $bien->verTipo }}
-                            {{ $bien->verMarca }}
-                            {{ $bien->verModelo }}
-                            @if(!is_null($bien->serial))
-                                , Serial: {{ $bien->serial }}
-                            @endif
-                            @if(!is_null($bien->identificador))
-                               , Identificador: {{ $bien->identificador }}
-                            @endif
-                        </span>
-                        <span class="d-inline-block d-md-none" data-toggle="modal" data-target="#modal-default">
-                            {{ $bien->verTipo }}
-                            {{ $bien->verMarca }}
-                            {{ $bien->verModelo }}
-                            @if(!is_null($bien->serial))
-                                , Serial: {{ $bien->serial }}
-                            @endif
-                            @if(!is_null($bien->identificador))
-                                , Identificador: {{ $bien->identificador }}
-                            @endif
-                        </span>
-                    </small>
-                    <!-- General tools such as edit or delete-->
-                    <div class="tools text-primary" wire:click="show({{ $bien->id }})">
-                        <i class="fas fa-eye"></i>
-                    </div>
+                    <li class=" @if($bien->rowquid == $rowquid) text-warning @endif ">
+                        <!-- todo text -->
+                        {{--<span class="text">
+                                {{ $bien->codigo }}
+                        </span>--}}
+                        <!-- Emphasis label -->
+                        <small class="text text-uppercase" wire:click="show('{{ $bien->rowquid }}')" style="cursor: pointer;">
+                            <span class="d-none d-md-inline-block">
+                                {{ $bien->verTipo }}
+                                {{ $bien->verMarca }}
+                                {{ $bien->verModelo }}
+                                @if(!is_null($bien->serial))
+                                    , Serial: {{ $bien->serial }}
+                                @endif
+                                @if(!is_null($bien->identificador))
+                                    , Identificador: {{ $bien->identificador }}
+                                @endif
+                            </span>
+                            <span class="d-inline-block d-md-none" data-toggle="modal" data-target="#modal-default">
+                                {{ $bien->verTipo }}
+                                {{ $bien->verMarca }}
+                                {{ $bien->verModelo }}
+                                @if(!is_null($bien->serial))
+                                    , Serial: {{ $bien->serial }}
+                                @endif
+                                @if(!is_null($bien->identificador))
+                                    , Identificador: {{ $bien->identificador }}
+                                @endif
+                            </span>
+                        </small>
+                        <!-- General tools such as edit or delete-->
+                        <div class="tools text-primary" wire:click="show('{{ $bien->rowquid }}')">
+                            <i class="fas fa-eye"></i>
+                        </div>
                     </li>
                 @endforeach
             @else
@@ -103,7 +104,7 @@
 
     <div class="card-footer d-sm-none">
         <div class="row justify-content-between">
-            <button class="btn bg-gradient-primary btn-sm" data-toggle="modal" data-target="#modal-busqueda-avanzada"  onclick="busquedaAvanzada()">
+            <button class="btn bg-gradient-primary btn-sm" data-toggle="modal" data-target="#modal-busqueda-avanzada" onclick="busquedaAvanzada()">
                 <i class="fas fa-search"></i>
                 Busqueda Avanzada
             </button>
