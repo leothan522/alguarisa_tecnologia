@@ -1,5 +1,4 @@
-<div class="card card-navy" style="height: inherit; width: inherit; transition: all 0.15s ease 0s;"
-     xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="card card-navy">
 
     <div class="card-header">
         @if($ubicaciones_id)
@@ -37,14 +36,16 @@
 
             <div class="form-group mt-3">
                 <button type="submit" class="btn btn-block @if($ubicaciones_id) btn-primary @else btn-success @endif"
-                @if(!comprobarPermisos('ubicaciones.create') || ($ubicaciones_id && !comprobarPermisos('ubicaciones.edit'))) disabled @endif >
-                    <i class="fas fa-save"></i> Guardar @if($ubicaciones_id) Cambios @endif
+                        @if(!comprobarPermisos('ubicaciones.create') || ($ubicaciones_id && !comprobarPermisos('ubicaciones.edit'))) disabled @endif >
+                    <i class="fas fa-save"></i>
+                    Guardar
+                    @if($ubicaciones_id)
+                        Cambios
+                    @endif
                 </button>
             </div>
 
         </form>
-
-
 
 
     </div>

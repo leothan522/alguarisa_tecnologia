@@ -6,6 +6,7 @@ use App\Models\BienUbicacion;
 use App\Models\Ubicacion;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -14,8 +15,11 @@ class UbicacionesComponent extends Component
     use LivewireAlert;
 
     public $rows = 0;
-    public $ubicaciones_id, $nombre, $keyword;
+    public $nombre, $keyword;
     public $form = false, $table = true;
+
+    #[Locked]
+    public $ubicaciones_id, $rowquid;
 
     public function mount()
     {
@@ -50,7 +54,7 @@ class UbicacionesComponent extends Component
     public function limpiarUbicaciones()
     {
         $this->reset([
-            'ubicaciones_id', 'nombre', 'form', 'table'
+            'ubicaciones_id', 'nombre', 'form', 'table', 'rowquid'
         ]);
         $this->resetErrorBag();
     }
@@ -78,6 +82,11 @@ class UbicacionesComponent extends Component
             //nuevo
             $ubicacion = new Ubicacion();
             $message = "Ubicación Creada.";
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Ubicacion::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $ubicacion->rowquid = $rowquid;
         }else{
             //editar
             $ubicacion = Ubicacion::find($this->ubicaciones_id);
@@ -94,9 +103,9 @@ class UbicacionesComponent extends Component
         $this->limpiarUbicaciones();
     }
 
-    public function edit($id)
+    public function edit($rowquid)
     {
-        $ubicacion = Ubicacion::find($id);
+        $ubicacion = $this->getUbicacion($rowquid);
         if ($ubicacion){
             $this->ubicaciones_id = $ubicacion->id;
             $this->nombre = $ubicacion->nombre;
@@ -105,9 +114,9 @@ class UbicacionesComponent extends Component
         }
     }
 
-    public function destroy($id)
+    public function destroy($rowquid)
     {
-        $this->ubicaciones_id = $id;
+        $this->rowquid = $rowquid;
         $this->confirm('¿Estas seguro?', [
             'toast' => false,
             'position' => 'center',
@@ -122,12 +131,16 @@ class UbicacionesComponent extends Component
     #[On('confirmedUbicacion')]
     public function confirmedUbicacion()
     {
-        $ubicacion = Ubicacion::find($this->ubicaciones_id);
+        $id = null;
+        $ubicacion = $this->getUbicacion($this->rowquid);
+        if ($ubicacion){
+            $id = $ubicacion->id;
+        }
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
 
-        $bienes = BienUbicacion::where('ubicaciones_id', $this->ubicaciones_id)->first();
+        $bienes = BienUbicacion::where('ubicaciones_id', $id)->first();
 
         if ($bienes){
             $vinculado = true;
@@ -162,6 +175,11 @@ class UbicacionesComponent extends Component
     {
         $this->reset(['keyword']);
         $this->limpiarUbicaciones();
+    }
+
+    protected function getUbicacion($rowquid): ?Ubicacion
+    {
+        return Ubicacion::where('rowquid', $rowquid)->first();
     }
 
 }

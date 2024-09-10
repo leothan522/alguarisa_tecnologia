@@ -1,5 +1,5 @@
-<div wire:ignore.self class="modal fade" id="modal-ubicaciones" xmlns:wire="http://www.w3.org/1999/xhtml">
-    <div class="modal-dialog modal-lg">
+<div wire:ignore.self class="modal fade" id="modal-ubicaciones">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="row col-md-10">
@@ -25,7 +25,8 @@
 
                 </div>
 
-                <button type="button" wire:click="limpiarUbicaciones" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" wire:click="limpiarUbicaciones" class="close" data-dismiss="modal"
+                        aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
 
@@ -43,11 +44,11 @@
 
             </div>
 
-            {!! verSpinner() !!}
-
             <div class="modal-footer justify-content-end">
                 <button type="button" wire:click="limpiarUbicaciones" class="btn btn-default btn-sm" data-dismiss="modal">{{ __('Close') }}</button>
             </div>
+
+            {!! verSpinner() !!}
 
         </div>
     </div>

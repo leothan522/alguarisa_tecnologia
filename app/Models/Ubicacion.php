@@ -10,7 +10,7 @@ class Ubicacion extends Model
 {
     use HasFactory;
     protected $table = "ubicaciones";
-    protected $fillable = ['nombre'];
+    protected $fillable = ['nombre', 'rowquid'];
 
     public function bienes(): HasMany
     {
