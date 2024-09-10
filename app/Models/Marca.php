@@ -10,7 +10,7 @@ class Marca extends Model
 {
     use HasFactory;
     protected $table = "marcas";
-    protected $fillable = ['nombre'];
+    protected $fillable = ['nombre', 'rowquid'];
 
     public function modelos(): HasMany
     {

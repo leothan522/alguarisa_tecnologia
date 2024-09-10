@@ -1,4 +1,4 @@
-<div class="card card-navy" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="card card-navy">
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
@@ -15,10 +15,12 @@
             <button type="button" class="btn btn-tool" wire:click="limpiarMarcas">
                 <i class="fas fa-sync-alt"></i>
             </button>
-            <button type="button" class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('marcas.create')) disabled @endif>
+            <button type="button" class="btn btn-tool" wire:click="create"
+                    @if(!comprobarPermisos('marcas.create')) disabled @endif>
                 <i class="fas fa-file"></i> Nuevo
             </button>
-            <button type="button" class="btn btn-tool" wire:click="setLimit" @if(($rows > $rowsMarcas) || ($keyword && $rows > $totalBusqueda)) disabled @endif >
+            <button type="button" class="btn btn-tool" wire:click="setLimit"
+                    @if(($rows > $rowsMarcas) || ($keyword && $rows > $totalBusqueda)) disabled @endif >
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
         </div>
@@ -38,20 +40,20 @@
                         <td class="text-uppercase text-truncate" style="max-width: 150px;">{{ $marca->nombre }}</td>
                         <td class="justify-content-end">
                             <div class="btn-group">
-                                <button wire:click="edit({{ $marca->id }})" class="btn btn-primary btn-sm"
-                                @if(!comprobarPermisos('marcas.edit')) disabled @endif >
+                                <button wire:click="edit('{{ $marca->rowquid }}')" class="btn btn-primary btn-sm"
+                                        @if(!comprobarPermisos('marcas.edit')) disabled @endif >
                                     <i class="fas fa-edit"></i>
                                 </button>
 
-                                <button wire:click="destroy({{ $marca->id }})" class="btn btn-primary btn-sm"
-                                @if(!comprobarPermisos('marcas.destroy')) disabled @endif >
+                                <button wire:click="destroy('{{ $marca->rowquid }}')" class="btn btn-primary btn-sm"
+                                        @if(!comprobarPermisos('marcas.destroy')) disabled @endif >
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
                         </td>
                     </tr>
                 @endforeach
-                @else
+            @else
                 <tr class="text-center">
                     <td colspan="2">
                         @if($keyword)

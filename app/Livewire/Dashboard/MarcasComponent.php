@@ -8,6 +8,7 @@ use App\Models\Modelo;
 use App\Models\Tipo;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -16,8 +17,11 @@ class MarcasComponent extends Component
     use LivewireAlert;
 
     public $rows = 0;
-    public $marcas_id, $nombre, $keyword;
+    public $nombre, $keyword;
     public $form = false, $table = true;
+
+    #[Locked]
+    public $marcas_id, $rowquid;
 
     public function mount()
     {
@@ -52,7 +56,7 @@ class MarcasComponent extends Component
     public function limpiarMarcas()
     {
         $this->reset([
-            'marcas_id', 'nombre', 'form', 'table'
+            'marcas_id', 'nombre', 'form', 'table', 'rowquid'
         ]);
         $this->resetErrorBag();
     }
@@ -80,6 +84,11 @@ class MarcasComponent extends Component
             //nuevo
             $marca = new Marca();
             $message = "Marca Creada.";
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Marca::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $marca->rowquid = $rowquid;
         }else{
             //editar
             $marca = Marca::find($this->marcas_id);
@@ -96,10 +105,10 @@ class MarcasComponent extends Component
         $this->limpiarMarcas();
     }
 
-    public function edit($id)
+    public function edit($rowquid)
     {
         $this->limpiarMarcas();
-        $marca = Marca::find($id);
+        $marca = $this->getMarca($rowquid);
         if ($marca){
             $this->marcas_id = $marca->id;
             $this->nombre = $marca->nombre;
@@ -108,9 +117,9 @@ class MarcasComponent extends Component
         }
     }
 
-    public function destroy($id)
+    public function destroy($rowquid)
     {
-        $this->marcas_id = $id;
+        $this->rowquid = $rowquid;
         $this->confirm('¿Estas seguro?', [
             'toast' => false,
             'position' => 'center',
@@ -125,13 +134,17 @@ class MarcasComponent extends Component
     #[On('confirmedMarcas')]
     public function confirmedMarcas()
     {
-        $marca = Marca::find($this->marcas_id);
+        $id = null;
+        $marca = $this->getMarca($this->rowquid);
+        if ($marca){
+            $id = $marca->id;
+        }
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
 
-        $modelos = Modelo::where('marcas_id', $this->marcas_id)->first();
-        $bienes = Bien::where('marcas_id', $this->marcas_id)->first();
+        $modelos = Modelo::where('marcas_id', $id)->first();
+        $bienes = Bien::where('marcas_id', $id)->first();
 
         if ($modelos || $bienes){
             $vinculado = true;
@@ -167,6 +180,11 @@ class MarcasComponent extends Component
     {
         $this->reset(['keyword']);
         $this->limpiarMarcas();
+    }
+
+    protected function getMarca($rowquid): ?Marca
+    {
+        return Marca::where('rowquid', $rowquid)->first();
     }
 
 }
