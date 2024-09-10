@@ -10,7 +10,7 @@ class Condicion extends Model
 {
     use HasFactory;
     protected $table = "condiciones";
-    protected $fillable = ['nombre'];
+    protected $fillable = ['nombre', 'rowquid'];
 
     public function bienes(): HasMany
     {

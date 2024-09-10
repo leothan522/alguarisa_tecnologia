@@ -6,6 +6,7 @@ use App\Models\Bien;
 use App\Models\Condicion;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -14,8 +15,11 @@ class CondicionesComponent extends Component
     use LivewireAlert;
 
     public $rows = 0;
-    public $condiciones_id, $nombre, $keyword;
+    public $nombre, $keyword;
     public $form = false, $table = true;
+
+    #[Locked]
+    public $condiciones_id, $rowquid;
 
     public function mount()
     {
@@ -50,7 +54,7 @@ class CondicionesComponent extends Component
     public function limpiarCondiciones()
     {
         $this->reset([
-            'condiciones_id', 'nombre', 'form', 'table'
+            'condiciones_id', 'nombre', 'form', 'table', 'rowquid'
         ]);
         $this->resetErrorBag();
     }
@@ -78,6 +82,11 @@ class CondicionesComponent extends Component
             //nuevo
             $condicion = new Condicion();
             $message = "Condición Creada.";
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Condicion::where('rowquid', '=', $rowquid)->first();
+            }while($existe);
+            $condicion->rowquid = $rowquid;
         }else{
             //editar
             $condicion = Condicion::find($this->condiciones_id);
@@ -94,9 +103,9 @@ class CondicionesComponent extends Component
         $this->limpiarCondiciones();
     }
 
-    public function edit($id)
+    public function edit($rowquid)
     {
-        $condicion = Condicion::find($id);
+        $condicion = $this->getCondicion($rowquid);
         if ($condicion){
             $this->condiciones_id = $condicion->id;
             $this->nombre = $condicion->nombre;
@@ -105,9 +114,9 @@ class CondicionesComponent extends Component
         }
     }
 
-    public function destroy($id)
+    public function destroy($rowquid)
     {
-        $this->condiciones_id = $id;
+        $this->rowquid = $rowquid;
         $this->confirm('¿Estas seguro?', [
             'toast' => false,
             'position' => 'center',
@@ -122,12 +131,16 @@ class CondicionesComponent extends Component
     #[On('confirmedCondicion')]
     public function confirmedCondicion()
     {
-        $condicion = Condicion::find($this->condiciones_id);
+        $id = null;
+        $condicion = $this->getCondicion($this->rowquid);
+        if ($condicion){
+            $id = $condicion->id;
+        }
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
 
-        $bienes = Bien::where('condiciones_id', $this->condiciones_id)->first();
+        $bienes = Bien::where('condiciones_id', $id)->first();
 
         if ($bienes){
             $vinculado = true;
@@ -163,6 +176,11 @@ class CondicionesComponent extends Component
     {
         $this->reset(['keyword']);
         $this->limpiarCondiciones();
+    }
+
+    protected function getCondicion($rowquid): ?Condicion
+    {
+        return Condicion::where('rowquid', $rowquid)->first();
     }
 
 }
