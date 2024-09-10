@@ -1,4 +1,4 @@
-<div class="card card-navy" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="card card-navy">
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
@@ -15,10 +15,12 @@
             <button type="button" class="btn btn-tool" wire:click="limpiarModelos">
                 <i class="fas fa-sync-alt"></i>
             </button>
-            <button type="button" class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('modelos.create')) disabled @endif>
+            <button type="button" class="btn btn-tool" wire:click="create"
+                    @if(!comprobarPermisos('modelos.create')) disabled @endif>
                 <i class="fas fa-file"></i> Nuevo
             </button>
-            <button type="button" class="btn btn-tool" wire:click="setLimit" @if(($rows > $rowsModelos) || ($keyword && $rows > $totalBusqueda)) disabled @endif >
+            <button type="button" class="btn btn-tool" wire:click="setLimit"
+                    @if(($rows > $rowsModelos) || ($keyword && $rows > $totalBusqueda)) disabled @endif >
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
         </div>
@@ -38,17 +40,21 @@
                 @foreach($listarModelos as $modelo)
                     <tr>
                         <td class="text-uppercase text-truncate" style="max-width: 150px;">{{ $modelo->nombre }}</td>
-                        <td class="text-uppercase text-truncate d-none d-md-table-cell" style="max-width: 150px;">{{ $modelo->tipo->nombre }}</td>
-                        <td class="text-uppercase text-truncate d-none d-md-table-cell" style="max-width: 150px;">{{ $modelo->marca->nombre }}</td>
+                        <td class="text-uppercase text-truncate d-none d-md-table-cell"
+                            style="max-width: 150px;">{{ $modelo->tipo->nombre }}</td>
+                        <td class="text-uppercase text-truncate d-none d-md-table-cell"
+                            style="max-width: 150px;">{{ $modelo->marca->nombre }}</td>
                         <td class="justify-content-end">
                             <div class="d-none d-md-block">
                                 <div class="btn-group">
-                                    <button type="button" wire:click="edit({{ $modelo->id }})" class="btn btn-primary btn-sm"
+                                    <button type="button" wire:click="edit('{{ $modelo->rowquid }}')"
+                                            class="btn btn-primary btn-sm"
                                             @if(!comprobarPermisos('modelos.edit')) disabled @endif >
                                         <i class="fas fa-edit"></i>
                                     </button>
 
-                                    <button type="button" wire:click="destroy({{ $modelo->id }})" class="btn btn-primary btn-sm"
+                                    <button type="button" wire:click="destroy('{{ $modelo->rowquid }}')"
+                                            class="btn btn-primary btn-sm"
                                             @if(!comprobarPermisos('modelos.destroy')) disabled @endif >
                                         <i class="fas fa-trash-alt"></i>
                                     </button>
@@ -56,7 +62,7 @@
                             </div>
                             <div class="d-md-none">
                                 <div class="btn-group">
-                                    <button type="button" wire:click="verModel({{ $modelo->id }})" class="btn btn-primary btn-sm">
+                                    <button type="button" wire:click="verModel('{{ $modelo->rowquid }}')" class="btn btn-primary btn-sm">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </div>
@@ -64,7 +70,7 @@
                         </td>
                     </tr>
                 @endforeach
-                @else
+            @else
                 <tr class="text-center">
                     <td colspan="4">
                         @if($keyword)

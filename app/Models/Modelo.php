@@ -11,7 +11,7 @@ class Modelo extends Model
 {
     use HasFactory;
     protected $table = "modelos";
-    protected $fillable = ['nombre', 'tipos_id', 'marcas_id'];
+    protected $fillable = ['nombre', 'tipos_id', 'marcas_id', 'rowquid'];
 
     public function tipo(): BelongsTo
     {

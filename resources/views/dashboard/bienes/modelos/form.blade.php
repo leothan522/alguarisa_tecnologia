@@ -1,5 +1,4 @@
-<div class="card card-navy" style="height: inherit; width: inherit; transition: all 0.15s ease 0s;"
-     xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="card card-navy">
 
     <div class="card-header">
         @if($modelos_id)
@@ -70,14 +69,16 @@
 
             <div class="form-group mt-3">
                 <button type="submit" class="btn btn-block @if($modelos_id) btn-primary @else btn-success @endif"
-                @if(!comprobarPermisos('modelos.create') || ($modelos_id && !comprobarPermisos('modelos.edit'))) disabled @endif >
-                    <i class="fas fa-save"></i> Guardar @if($modelos_id) Cambios @endif
+                        @if(!comprobarPermisos('modelos.create') || ($modelos_id && !comprobarPermisos('modelos.edit'))) disabled @endif >
+                    <i class="fas fa-save"></i>
+                    Guardar
+                    @if($modelos_id)
+                        Cambios
+                    @endif
                 </button>
             </div>
 
         </form>
-
-
 
 
     </div>

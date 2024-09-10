@@ -1,4 +1,4 @@
-<div wire:ignore.self class="modal fade" id="modal-modelos" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div wire:ignore.self class="modal fade" id="modal-modelos">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -50,15 +50,16 @@
 
             <div class="modal-footer @if($show) justify-content-between @else justify-content-end @endif ">
                 @if($show)
-                    <button type="button" class="btn btn-danger btn-sm" wire:click="destroy({{ $modelos_id }})">
+                    <button type="button" class="btn btn-danger btn-sm" wire:click="destroy('{{ $rowquid }}')">
                         <i class="fas fa-trash-alt"></i>
                     </button>
 
-                    <button type="button" class="btn btn-primary btn-sm" wire:click="edit({{ $modelos_id }})">
+                    <button type="button" class="btn btn-primary btn-sm" wire:click="edit('{{ $rowquid }}')">
                         <i class="fas fa-edit"></i> Editar
                     </button>
                 @endif
-                <button type="button" wire:click="limpiarModelos" class="btn btn-default btn-sm" data-dismiss="modal">{{ __('Close') }}</button>
+                <button type="button" wire:click="limpiarModelos" class="btn btn-default btn-sm"
+                        data-dismiss="modal">{{ __('Close') }}</button>
             </div>
 
         </div>

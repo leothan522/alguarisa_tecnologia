@@ -10,6 +10,7 @@ use App\Models\Tipo;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -18,8 +19,11 @@ class ModelosComponent extends Component
     use LivewireAlert;
 
     public $rows = 0;
-    public $modelos_id, $tipos_id, $marcas_id, $nombre, $keyword;
+    public $tipos_id, $tipoRowquid, $marcas_id, $marcaRowquid, $nombre, $keyword;
     public $form = false, $table = true, $show = false, $verTipo, $verMarca;
+
+    #[Locked]
+    public $modelos_id, $rowquid;
 
     public function mount()
     {
@@ -59,11 +63,11 @@ class ModelosComponent extends Component
         $this->resetErrorBag();
 
         $tipos = Tipo::orderBy('nombre', 'ASC')->get();
-        $data = dataSelect2($tipos, 'nombre');
+        $data = getDataSelect2($tipos, 'nombre');
         $this->dispatch('modeloSelectTipos', data: $data);
 
         $marcas = Marca::orderBy('nombre', 'ASC')->get();
-        $data = dataSelect2($marcas, 'nombre');
+        $data = getDataSelect2($marcas, 'nombre');
         $this->dispatch('modeloSelectMarcas', data: $data);
     }
 
@@ -98,6 +102,11 @@ class ModelosComponent extends Component
             //nuevo
             $modelos = new Modelo();
             $message = "Modelo Creado.";
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Modelo::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $modelos->rowquid = $rowquid;
         }else{
             //editar
             $modelos = Modelo::find($this->modelos_id);
@@ -116,10 +125,10 @@ class ModelosComponent extends Component
         $this->limpiarModelos();
     }
 
-    public function verModel($id)
+    public function verModel($rowquid)
     {
         $this->limpiarModelos();
-        $modelos = Modelo::find($id);
+        $modelos = $this->getModelo($rowquid);
         if ($modelos){
             $this->modelos_id = $modelos->id;
             $this->nombre = $modelos->nombre;
@@ -127,31 +136,34 @@ class ModelosComponent extends Component
             $this->marcas_id = $modelos->marcas_id;
             $this->verMarca = $modelos->marca->nombre;
             $this->verTipo = $modelos->tipo->nombre;
+            $this->rowquid = $modelos->rowquid;
             $this->form = false;
             $this->table = false;
             $this->show = true;
         }
     }
 
-    public function edit($id)
+    public function edit($rowquid)
     {
         $this->limpiarModelos();
-        $modelos = Modelo::find($id);
+        $modelos = $this->getModelo($rowquid);
         if ($modelos){
             $this->modelos_id = $modelos->id;
             $this->nombre = $modelos->nombre;
             $this->tipos_id = $modelos->tipos_id;
+            $this->tipoRowquid = $modelos->tipo->rowquid;
             $this->marcas_id = $modelos->marcas_id;
-            $this->dispatch('setModeloSelectTipos', id: $this->tipos_id);
-            $this->dispatch('setModeloSelectMarcas', id: $this->marcas_id);
+            $this->marcaRowquid = $modelos->marca->rowquid;
+            $this->dispatch('setModeloSelectTipos', id: $this->tipoRowquid);
+            $this->dispatch('setModeloSelectMarcas', id: $this->marcaRowquid);
             $this->table = false;
             $this->form = true;
         }
     }
 
-    public function destroy($id)
+    public function destroy($rowquid)
     {
-        $this->modelos_id = $id;
+        $this->rowquid = $rowquid;
         $this->confirm('¿Estas seguro?', [
             'toast' => false,
             'position' => 'center',
@@ -166,12 +178,16 @@ class ModelosComponent extends Component
     #[On('confirmedModelos')]
     public function confirmedModelos()
     {
-        $modelos = Modelo::find($this->modelos_id);
+        $id = null;
+        $modelos = $this->getModelo($this->rowquid);
+        if ($modelos){
+            $id = $modelos->id;
+        }
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
 
-        $bienes = Bien::where('modelos_id', $this->modelos_id)->first();
+        $bienes = Bien::where('modelos_id', $id)->first();
 
         if ($bienes){
             $vinculado = true;
@@ -214,7 +230,7 @@ class ModelosComponent extends Component
         if (!$show){
             $this->limpiarModelos();
         }else{
-            $this->verModel($this->modelos_id);
+            $this->verModel($this->rowquid);
         }
     }
 
@@ -227,7 +243,10 @@ class ModelosComponent extends Component
     #[On('getModeloSelectTipos')]
     public function getModeloSelectTipos($id)
     {
-        $this->tipos_id = $id;
+        $tipo = $this->getTipo($id);
+        if ($tipo){
+            $this->tipos_id = $tipo->id;
+        }
     }
 
     #[On('setModeloSelectTipos')]
@@ -245,13 +264,31 @@ class ModelosComponent extends Component
     #[On('getModeloSelectMarcas')]
     public function getModeloSelectMarcas($id)
     {
-        $this->marcas_id = $id;
+        $marca = $this->getMarca($id);
+        if ($marca){
+            $this->marcas_id = $marca->id;
+        }
     }
 
     #[On('setModeloSelectMarcas')]
     public function setModeloSelectMarcas($id)
     {
         //JS
+    }
+
+    protected function getTipo($rowquid): ?Tipo
+    {
+        return Tipo::where('rowquid', $rowquid)->first();
+    }
+
+    protected function getMarca($rowquid): ?Marca
+    {
+        return Marca::where('rowquid', $rowquid)->first();
+    }
+
+    protected function getModelo($rowquid): ?Modelo
+    {
+        return Modelo::where('rowquid', $rowquid)->first();
     }
 
 }
