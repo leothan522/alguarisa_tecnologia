@@ -19,7 +19,8 @@ class Oficio extends Model
         'equipos',
         'adicional',
         'pdf',
-        'auditoria'
+        'auditoria',
+        'rowquid'
     ];
 
     public function equipos(): HasMany

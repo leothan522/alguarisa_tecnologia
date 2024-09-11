@@ -8,6 +8,7 @@ use App\Models\Oficio;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
+use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -17,10 +18,13 @@ class ModalOficiosComponent extends Component
 
     public $rows = 0, $numero = 14, $tableStyle = false;
     public $view = true, $form = false, $ver = false, $nuevo = false, $editar = false, $cancelar = false, $keyword;
-    public $oficios_id, $oficio, $fecha, $equipos = 0, $repetido = false;
+    public $oficio, $fecha, $equipos = 0, $repetido = false;
     public $serial;
     public $listarEquipos = [];
     public $adicional, $pdf;
+
+    #[Locked]
+    public $oficios_id, $rowquid;
 
     public function mount()
     {
@@ -60,7 +64,7 @@ class ModalOficiosComponent extends Component
             'oficios_id', 'oficio', 'fecha', 'equipos', 'repetido',
             'serial',
             'listarEquipos',
-            'adicional', 'pdf'
+            'adicional', 'pdf', 'rowquid'
         ]);
         $this->resetErrorBag();
     }
@@ -76,11 +80,11 @@ class ModalOficiosComponent extends Component
     }
 
     #[On('show')]
-    public function show($id)
+    public function show($rowquid)
     {
         $this->limpiar();
         $this->reset(['oficios_id']);
-        $oficio = Oficio::find($id);
+        $oficio = $this->getOficio($rowquid);
 
         if ($oficio){
             $this->oficios_id = $oficio->id;
@@ -89,6 +93,7 @@ class ModalOficiosComponent extends Component
             $this->equipos = $oficio->equipos;
             $this->adicional = $oficio->adicional;
             $this->pdf = $oficio->pdf;
+            $this->rowquid = $oficio->rowquid;
 
             $equipos = Equipo::where('oficios_id', $this->oficios_id)->get();
             foreach ($equipos as $equipo){
@@ -99,7 +104,8 @@ class ModalOficiosComponent extends Component
                     'marca' => $bien->marca->nombre,
                     'modelo' => $bien->modelo->nombre,
                     'serial' => $bien->serial,
-                    'identificador' => $bien->identificador
+                    'identificador' => $bien->identificador,
+                    'rowquid' => $bien->rowquid,
                 ];
             }
 
@@ -144,6 +150,11 @@ class ModalOficiosComponent extends Component
             $oficio = new Oficio();
             $borrar = false;
             $auditoria = "[ 'accion' => 'create', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Oficio::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $oficio->rowquid = $rowquid;
         }
 
         if ($oficio){
@@ -270,7 +281,8 @@ class ModalOficiosComponent extends Component
                     'marca' => $bien->marca->nombre,
                     'modelo' => $bien->modelo->nombre,
                     'serial' => $bien->serial,
-                    'identificador' => $bien->identificador
+                    'identificador' => $bien->identificador,
+                    'rowquid' => $bien->rowquid
                 ];
                 $this->equipos++;
                 $this->reset('serial');
@@ -301,7 +313,7 @@ class ModalOficiosComponent extends Component
     public function btnCancelar()
     {
         if ($this->oficios_id && !$this->ver){
-            $this->show($this->oficios_id);
+            $this->show($this->rowquid);
         }else{
             $this->limpiar();
         }
@@ -337,6 +349,11 @@ class ModalOficiosComponent extends Component
     public function clickNuevoBien()
     {
         //JS
+    }
+
+    protected function getOficio($rowquid): ?Oficio
+    {
+        return Oficio::where('rowquid', $rowquid)->first();
     }
 
 }

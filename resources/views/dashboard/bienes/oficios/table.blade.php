@@ -1,4 +1,4 @@
-<div class="card card-navy" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="card card-navy">
 
     <div class="card-header">
         <h3 class="card-title">
@@ -17,13 +17,11 @@
                 <i class="fas fa-sync-alt"></i> Actualizar
             </button>
 
-            <button type="button" class="btn btn-tool" wire:click="create"
-                    @if(!comprobarPermisos('oficios.create')) disabled @endif >
+            <button type="button" class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('oficios.create')) disabled @endif >
                 <i class="fas fa-file"></i> Nuevo
             </button>
 
-            <button type="button" class="btn btn-tool" wire:click="setLimit"
-                    @if($rows > $listarOficios->count()) disabled @endif >
+            <button type="button" class="btn btn-tool" wire:click="setLimit" @if($rows > $listarOficios->count()) disabled @endif >
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
         </div>
@@ -47,12 +45,12 @@
         <ul class="todo-list" data-widget="todo-list">
             @if($listarOficios->isNotEmpty())
                 @foreach($listarOficios as $oficio)
-                    <li class=" @if($oficio->id == $oficios_id) text-warning @endif "
-                        wire:click="show({{ $oficio->id }})" style="cursor:pointer;">
+                    <li class=" @if($oficio->rowquid == $rowquid) text-warning @endif "
+                        wire:click="show('{{ $oficio->rowquid }}')" style="cursor:pointer;">
                         <!-- todo text -->
                         <span class="text text-uppercase">
                             {{ $oficio->numero }}
-                    </span>
+                        </span>
                         <!-- Emphasis label -->
                         <small class="text text-uppercase {{--badge-danger--}}">
                             Fecha: {{ getFecha($oficio->fecha) }},

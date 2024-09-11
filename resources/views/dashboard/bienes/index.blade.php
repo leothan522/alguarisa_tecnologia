@@ -14,13 +14,13 @@
             <div class="col-sm-6 d-none d-md-block">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-busqueda-avanzada">
-                        <button class="btn bg-gradient-primary btn-sm" onclick="busquedaAvanzada()">
+                        <button type="button" class="btn bg-gradient-primary btn-sm" onclick="busquedaAvanzada()">
                             <i class="fas fa-search"></i>
                             Busqueda Avanzada
                         </button>
                     </li>
                     <li class="breadcrumb-item" data-toggle="modal" data-target="#modal-oficios">
-                        <button class="btn bg-gradient-primary btn-sm" id="btn_header_oficios">
+                        <button type="button" class="btn bg-gradient-primary btn-sm" id="btn_header_oficios">
                             <i class="fas fa-file-invoice"></i>
                             Oficios Entregados
                         </button>
@@ -247,10 +247,6 @@
             $('.cargar_bienes').removeClass('d-none');
         }
 
-        $('#btn_header_oficios').click(function (e) {
-            e.preventDefault();
-        });
-
         Livewire.on('clickNuevoBien', () =>{
             $('#btn_cerrar_model_oficios').click();
             $('#btn_create_bien').click();
@@ -321,7 +317,7 @@
         function verBien(id) {
             verSpinnerOculto();
             $('#btn_cerrar_model_oficios').click();
-            Livewire.dispatch('showBien', { id: id });
+            Livewire.dispatch('showBien', { rowquid: id });
         }
 
         /* Ekko Lightbox */

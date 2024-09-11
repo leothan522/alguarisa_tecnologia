@@ -1,4 +1,4 @@
-<div wire:ignore.self class="modal fade" id="modal-oficios" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div wire:ignore.self class="modal fade" id="modal-oficios">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -42,19 +42,19 @@
 
             </div>
 
-            {!! verSpinner() !!}
-
             <div class="modal-footer @if(($keyword && $view)) justify-content-between @else justify-content-end @endif ">
                 @if($keyword && $view)
                     <span>Resultados [<b class="text-warning">{{ $total }}</b>]</span>
                 @endif
                 @if($cancelar)
-                    <button type="button" class="btn btn-default btn-sm d-md-none" wire:click="btnCancelar">
+                    <button type="button" wire:click="btnCancelar" class="btn btn-default btn-sm d-md-none">
                         <i class="fas fa-ban"></i> Cancelar
                     </button>
                 @endif
                 <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="btn_cerrar_model_oficios">{{ __('Close') }}</button>
             </div>
+
+            {!! verSpinner() !!}
 
         </div>
     </div>

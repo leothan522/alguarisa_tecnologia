@@ -1,4 +1,4 @@
-<form wire:submit="save" xmlns:wire="http://www.w3.org/1999/xhtml">
+<form wire:submit="save">
 
     <div class="row">
 
@@ -57,8 +57,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="far fa-bookmark"></i></span>
                                     </div>
-                                    <input type="text" class="form-control" wire:model="oficio"
-                                           placeholder="Nro. Oficio" @if($ver) readonly @endif >
+                                    <input type="text" class="form-control" wire:model="oficio" placeholder="Nro. Oficio" @if($ver) readonly @endif >
                                     @error('oficio')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
                                         <i class="icon fas fa-exclamation-triangle"></i>
@@ -68,8 +67,7 @@
                                 </div>
                                 @error('oficio')
                                 <div class="form-check m-2">
-                                    <input type="checkbox" class="form-check-input" id="exampleCheck1"
-                                           wire:click="btnRepetido">
+                                    <input type="checkbox" class="form-check-input" id="exampleCheck1" wire:click="btnRepetido">
                                     <label class="form-check-label" for="exampleCheck1">Repetido</label>
                                 </div>
                                 @enderror
@@ -82,8 +80,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="far fa-bookmark"></i></span>
                                     </div>
-                                    <input type="date" class="form-control" wire:model="fecha"
-                                           placeholder="alfanumérico" @if($ver) readonly @endif >
+                                    <input type="date" class="form-control" wire:model="fecha" placeholder="alfanumérico" @if($ver) readonly @endif >
                                     @error('fecha')
                                     <span class="col-sm-12 text-sm text-bold text-danger">
                                         <i class="icon fas fa-exclamation-triangle"></i>
@@ -101,8 +98,7 @@
                                 <div class="form-group">
                                     {{--<label for="email">Nro. Oficio:</label>--}}
                                     <div class="input-group">
-                                        <input type="text" class="form-control" wire:model="serial"
-                                               wire:keydown.enter="btnSerial" placeholder="Serial ó Identificador">
+                                        <input type="text" class="form-control" wire:model="serial" wire:keydown.enter="btnSerial" placeholder="Serial ó Identificador">
                                         <div class="input-group-append">
                                             <button type="button" class="input-group-text" wire:click="btnSerial">
                                                 <i class="fas fa-search"></i>
@@ -127,28 +123,30 @@
 
                     @if(!$ver || $adicional)
                         <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                {{--<label for="email">Nro. Oficio:</label>--}}
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    {{--<label for="email">Nro. Oficio:</label>--}}
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
                                         <span class="input-group-text">
                                             <i class="far fa-bookmark"></i>
                                             {{--Información Adicional--}}
                                         </span>
-                                    </div>
-                                    <input type="text" class="form-control" wire:model="adicional" placeholder="Información Adicional (Opcional)" @if($ver) readonly @endif >
-                                    {{--<textarea class="form-control" wire:model="adicional" placeholder="Información Adicional (Opcional)"></textarea>--}}
-                                    @error('adicional')
-                                    <span class="col-sm-12 text-sm text-bold text-danger">
+                                        </div>
+                                        <input type="text" class="form-control" wire:model="adicional"
+                                               placeholder="Información Adicional (Opcional)"
+                                               @if($ver) readonly @endif >
+                                        {{--<textarea class="form-control" wire:model="adicional" placeholder="Información Adicional (Opcional)"></textarea>--}}
+                                        @error('adicional')
+                                        <span class="col-sm-12 text-sm text-bold text-danger">
                                             <i class="icon fas fa-exclamation-triangle"></i>
                                             {{ $message }}
                                         </span>
-                                    @enderror
+                                        @enderror
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     @endif
 
                 </div>
@@ -162,7 +160,10 @@
     <div class="row justify-content-end @if($ver) d-none @endif ">
         <div class="col-md-4 m-1">
             <button type="submit" class="btn btn-block @if($nuevo) btn-success @else btn-primary @endif float-right">
-                <i class="fas fa-save"></i> Guardar @if(!$nuevo)Cambios
+                <i class="fas fa-save"></i>
+                Guardar
+                @if(!$nuevo)
+                    Cambios
                 @endif
             </button>
         </div>

@@ -1,4 +1,4 @@
-<div class="card card-navy" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="card card-navy">
 
     <div class="card-header">
         <h3 class="card-title">
@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <div class="card-body table-responsive p-0" @if($equipos > 3) style="height: 30vh;"  @endif >
+    <div class="card-body table-responsive p-0" @if($equipos > 3) style="height: 30vh;" @endif >
 
         <table class="table table-head-fixed table-hover text-nowrap sticky-top">
             <thead>
@@ -36,30 +36,29 @@
             @if(!empty($listarEquipos))
                 @foreach($listarEquipos as $key => $equipo)
                     <li>
-                    <!-- todo text -->
-                    {{--<span class="text">
-                            {{ $equipo->codigo }}
-                    </span>--}}
-                    <!-- Emphasis label -->
-                    <small class="text text-uppercase {{--badge-danger--}}">
-                        {{ $equipo['tipo'] }}
-                        {{ $equipo['marca'] }}
-                        {{ $equipo['modelo'] }}
-                        @if(!is_null($equipo['serial']))
-                            , Serial: {{ $equipo['serial'] }}
-                        @endif
-                        @if(!is_null($equipo['identificador']))
-                           , Identificador: {{ $equipo['identificador'] }}
-                        @endif
-
-                    </small>
+                        <!-- todo text -->
+                        {{--<span class="text">
+                                {{ $equipo->codigo }}
+                        </span>--}}
+                        <!-- Emphasis label -->
+                        <small class="text text-uppercase {{--badge-danger--}}">
+                            {{ $equipo['tipo'] }}
+                            {{ $equipo['marca'] }}
+                            {{ $equipo['modelo'] }}
+                            @if(!is_null($equipo['serial']))
+                                , Serial: {{ $equipo['serial'] }}
+                            @endif
+                            @if(!is_null($equipo['identificador']))
+                                , Identificador: {{ $equipo['identificador'] }}
+                            @endif
+                        </small>
                         @if(!$ver)
                             <!-- General tools such as edit or delete-->
                             <div class="tools text-danger" wire:click="btnQuitarEquipo({{ $key }})">
                                 <i class="fas fa-trash-alt"></i>
                             </div>
                         @else
-                            <div class="tools text-primary" onclick="verBien({{ $equipo['id'] }})">
+                            <div class="tools text-primary" onclick="verBien('{{ $equipo['rowquid'] }}')">
                                 <i class="fas fa-eye"></i>
                             </div>
                         @endif
@@ -76,7 +75,6 @@
         <!-- /.TO DO List -->
 
     </div>
-
 
 
 </div>
