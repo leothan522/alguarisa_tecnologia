@@ -117,6 +117,11 @@ class ImagenesComponent extends Component
             $imagen = Imagen::find($id);
         }else{
             $imagen = new Imagen();
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Imagen::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $imagen->rowquid = $rowquid;
         }
         $ruta = $photo->store("public/imagenes/$path");
         $imagen->imagen = str_replace('public/', 'storage/', $ruta);

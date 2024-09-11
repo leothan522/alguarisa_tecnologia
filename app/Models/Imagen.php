@@ -16,7 +16,8 @@ class Imagen extends Model
         'mini',
         'detail',
         'cart',
-        'banner'
+        'banner',
+        'rowquid'
     ];
 
     public function bien(): BelongsTo
