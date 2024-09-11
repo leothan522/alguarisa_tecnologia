@@ -14,7 +14,7 @@ class ModalUbicacionesComponent extends Component
     use LivewireAlert;
 
     public $listarUbicaciones = [];
-    public $bienes_id, $ubicaciones_id, $actual;
+    public $bienes_id, $ubicacionesRowquid, $ubicaciones_id, $actual;
     public $web = false;
 
     public function render()
@@ -33,7 +33,7 @@ class ModalUbicacionesComponent extends Component
     public function getBienesUbicaciones($bienID)
     {
         $this->resetErrorBag();
-        $this->reset(['listarUbicaciones', 'bienes_id', 'ubicaciones_id', 'actual']);
+        $this->reset(['listarUbicaciones', 'bienes_id', 'ubicaciones_id', 'actual', 'ubicacionesRowquid']);
         $this->bienes_id = $bienID;
         $this->listarUbicaciones = Ubicacion::orderBy('nombre', 'ASC')->get();
     }
@@ -55,6 +55,11 @@ class ModalUbicacionesComponent extends Component
         $bienUbicacion->bienes_id = $this->bienes_id;
         $bienUbicacion->ubicaciones_id = $this->ubicaciones_id;
         $bienUbicacion->actual = 1;
+        do{
+            $rowquid = generarStringAleatorio(16);
+            $existe = BienUbicacion::where('rowquid', $rowquid)->first();
+        }while($existe);
+        $bienUbicacion->rowquid = $rowquid;
         $bienUbicacion->save();
 
         $this->getBienesUbicaciones($this->bienes_id);
@@ -63,9 +68,9 @@ class ModalUbicacionesComponent extends Component
 
     }
 
-    public function destroy($id)
+    public function destroy($rowquid)
     {
-        $bienUbicacion = BienUbicacion::find($id);
+        $bienUbicacion = BienUbicacion::where('rowquid', $rowquid)->first();
         if ($bienUbicacion){
             $bienUbicacion->delete();
             $existe = BienUbicacion::where('bienes_id', $this->bienes_id)->orderBy('created_at', 'DESC')->first();
@@ -73,6 +78,14 @@ class ModalUbicacionesComponent extends Component
                 $existe->actual = 1;
                 $existe->save();
             }
+        }
+    }
+
+    public function updatedUbicacionesRowquid()
+    {
+        $ubicacion = Ubicacion::where('rowquid', $this->ubicacionesRowquid)->first();
+        if ($ubicacion){
+            $this->ubicaciones_id = $ubicacion->id;
         }
     }
 

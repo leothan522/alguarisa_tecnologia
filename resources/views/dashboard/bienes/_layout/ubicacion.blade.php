@@ -1,4 +1,4 @@
-<div wire:ignore.self class="modal fade" id="modal-sm-bien-ubicacion" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div wire:ignore.self class="modal fade" id="modal-sm-bien-ubicacion">
     <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
 
@@ -42,10 +42,10 @@
                                     <td class="text-right">
                                         @if(!$web)
                                             @if($ubicacion->actual && comprobarPermisos('bienes.edit'))
-                                            <button class="btn btn-sm text-danger m-0" wire:click="destroy({{ $ubicacion->id }})">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        @endif
+                                                <button class="btn btn-sm text-danger m-0" wire:click="destroy('{{ $ubicacion->rowquid }}')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>
@@ -71,30 +71,17 @@
                                 <td>
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <select class="custom-select custom-select-sm @error("ubicaciones_id") is-invalid @enderror" wire:model="ubicaciones_id" id="ubicacion_select_ubicaciones">
+                                            <select wire:model.live="ubicacionesRowquid" class="custom-select custom-select-sm @error("ubicaciones_id") is-invalid @enderror" id="ubicacion_select_ubicaciones">
                                                 <option value="">Seleccione</option>
                                                 @foreach($listarUbicaciones as $ubicacion)
-                                                    <option value="{{ $ubicacion->id }}">{{ mb_strtoupper($ubicacion->nombre) }}</option>
+                                                    <option value="{{ $ubicacion->rowquid }}">{{ mb_strtoupper($ubicacion->nombre) }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
                                 </td>
-                                {{--<td>
-                                    <div class="form-group">
-                                        <div class="input-group">
-                                            <select class="custom-select custom-select-sm @error("moneda") is-invalid @enderror" wire:model="moneda">
-                                                <option value="">Seleccione</option>
-                                                <option value="Bolivares">Bolivares</option>
-                                                <option value="Dolares">Dolares</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>--}}
-
                                 <td style="width: 5%;">
-                                    <button type="submit" class="btn @if(/*$ubicacions_id*/false) btn-primary @else btn-success @endif btn-sm"
-                                            @if(!comprobarPermisos('bienes.edit')) disabled @endif >
+                                    <button type="submit" class="btn btn-success btn-sm" @if(!comprobarPermisos('bienes.edit')) disabled @endif >
                                         <i class="fas fa-save"></i>
                                     </button>
                                 </td>
@@ -105,11 +92,12 @@
                 @endif
 
 
-
             </div>
 
             <div class="modal-footer card-footer">
-                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="btn_modal_bienes_propiedad_ubicacion">Cerrar</button>
+                <button type="button" class="btn btn-default btn-sm" data-dismiss="modal" id="btn_modal_bienes_propiedad_ubicacion">
+                    Cerrar
+                </button>
             </div>
 
             {!! verSpinner() !!}

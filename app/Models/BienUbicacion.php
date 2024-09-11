@@ -10,7 +10,12 @@ class BienUbicacion extends Model
 {
     use HasFactory;
     protected $table = "bienes_ubicaciones";
-    protected $fillable = ['bienes_id', 'ubicaciones_id', 'actual'];
+    protected $fillable = [
+        'bienes_id',
+        'ubicaciones_id',
+        'actual',
+        'rowquid'
+    ];
 
     public function bien(): BelongsTo
     {
