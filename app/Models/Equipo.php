@@ -10,7 +10,7 @@ class Equipo extends Model
 {
     use HasFactory;
     protected $table = "equipos";
-    protected $fillable = ['oficios_id', 'bienes_id'];
+    protected $fillable = ['oficios_id', 'bienes_id', 'rowquid'];
 
     public function oficio(): BelongsTo
     {

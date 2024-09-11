@@ -178,6 +178,11 @@ class ModalOficiosComponent extends Component
                     $nuevo = new Equipo();
                     $nuevo->oficios_id = $oficio->id;
                     $nuevo->bienes_id = $equipo['id'];
+                    do{
+                        $rowquid = generarStringAleatorio(16);
+                        $existe = Equipo::where('rowquid', $rowquid)->first();
+                    }while($existe);
+                    $nuevo->rowquid = $rowquid;
                     $nuevo->save();
                 }
             }
@@ -237,6 +242,7 @@ class ModalOficiosComponent extends Component
                 }
 
                 $oficio->auditoria = $auditoria;
+                $oficio->numero = "*".$oficio->numero;
                 $oficio->save();
                 $oficio->delete();
                 $this->alert('success', 'Registro Eliminado.');
