@@ -37,7 +37,7 @@
                                         <td class="text-right">
                                             @if(!$web)
                                                 <button class="btn btn-sm text-primary m-0"
-                                                        wire:click="verOficio({{ $equipo->oficios_id }})"
+                                                        wire:click="verOficio('{{ $equipo->idOficio }}')"
                                                         onclick="verOficio()">
                                                     <i class="fas fa-eye"></i>
                                                 </button>

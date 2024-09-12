@@ -22,9 +22,9 @@ class BienesController extends Controller
         return Excel::download(new BienesExport(), "Bienes_Registrados_$hoy.xlsx");
     }
 
-    public function printEtiqueta($id)
+    public function printEtiqueta($rowquid)
     {
-        $bien = Bien::where('id', $id)->orWhere('token', $id)->first();
+        $bien = Bien::where('id', $rowquid)->orWhere('rowquid', $rowquid)->first();
         if (!$bien){
             return redirect()->route('web.index');
         }
@@ -40,7 +40,7 @@ class BienesController extends Controller
         }
 
         $qr_texto = "ALIMENTOS DEL GUARICO S.A. $identificador $serial \nTIPO: " . strtoupper(verUtf8($bien->tipo->nombre)) . "  \nMARCA: " . strtoupper(verUtf8($bien->marca->nombre)). "  \nMODELO: " . strtoupper(verUtf8($bien->modelo->nombre)). "  \n" . strtoupper(verUtf8($bien->condicion->nombre));
-        $qr_url = route('etiquetas.web', $id);
+        $qr_url = route('etiquetas.web', $rowquid);
         return view('dashboard.bienes.etiquetas.print_etiqueta')
             ->with('texto', $qr_texto)
             ->with('url', $qr_url)
@@ -48,9 +48,9 @@ class BienesController extends Controller
             ->with('identificador', $bien->identificador);
     }
 
-    public function webEtiqueta($id)
+    public function webEtiqueta($rowquid)
     {
-        $bien = Bien::where('id', $id)->orWhere('token', $id)->first();
+        $bien = Bien::where('id', $rowquid)->orWhere('rowquid', $rowquid)->first();
         if (!$bien){
             return redirect()->route('web.index');
         }

@@ -28,9 +28,11 @@ class ModalOficiosVinculadosComponent extends Component
             if ($exite){
                 $equipo->ver = true;
                 $equipo->fecha = $exite->fecha;
+                $equipo->idOficio = $exite->rowquid;
             }else{
                 $equipo->ver = false;
                 $equipo->fecha = null;
+                $equipo->idOficio = null;
             }
         });
         return view('livewire.dashboard.modal-oficios-vinculados-component')
@@ -44,11 +46,11 @@ class ModalOficiosVinculadosComponent extends Component
         $this->bienes_id = $bienID;
     }
 
-    public function verOficio($id)
+    public function verOficio($rowquid)
     {
-        $oficio = Oficio::find($id);
+        $oficio = Oficio::where('rowquid', $rowquid)->first();
         if ($oficio){
-            $this->dispatch('show', id: $id)->to(ModalOficiosComponent::class);
+            $this->dispatch('show', rowquid: $rowquid)->to(ModalOficiosComponent::class);
         }
     }
 
