@@ -162,8 +162,10 @@
 <!-- ./wrapper -->
 <!-- Page specific script -->
 <script>
-  window.addEventListener("load", window.print());
-  setTimeout(window.close, 0);
+  window.onload = function () {
+      window.addEventListener("load", window.print());
+      setTimeout(window.close, 0);
+  }
 </script>
 @yield('js')
 </body>
