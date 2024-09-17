@@ -19,7 +19,7 @@
             <div class="col-6 text-center">
                 <p>Consulta Local</p>
                 <hr>
-                {!! QrCode::size(150)->generate(verUtf8($texto)); !!}
+                {!! QrCode::size(150)->generate($texto); !!}
             </div>
             <div class="col-6 text-center">
                 Consulta en Linea

@@ -39,7 +39,7 @@ class BienesController extends Controller
             $serial = "\nSERIAL: " . strtoupper(verUtf8($bien->serial));
         }
 
-        $qr_texto = "ALIMENTOS DEL GUARICO S.A. $identificador $serial \nTIPO: " . strtoupper(verUtf8($bien->tipo->nombre)) . "  \nMARCA: " . strtoupper(verUtf8($bien->marca->nombre)). "  \nMODELO: " . strtoupper(verUtf8($bien->modelo->nombre)). "  \n" . strtoupper(verUtf8($bien->condicion->nombre));
+        $qr_texto = "ALIMENTOS DEL GUARICO S.A. $identificador $serial \nTIPO: " . strtoupper($bien->tipo->nombre) . "  \nMARCA: " . strtoupper($bien->marca->nombre). "  \nMODELO: " . strtoupper($bien->modelo->nombre). "  \n" . strtoupper($bien->condicion->nombre);
         $qr_url = route('etiquetas.web', $rowquid);
         return view('dashboard.bienes.etiquetas.print_etiqueta')
             ->with('texto', $qr_texto)
