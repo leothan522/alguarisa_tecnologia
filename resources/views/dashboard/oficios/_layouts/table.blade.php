@@ -18,9 +18,9 @@
     <div class="card-body p-0">
         <div class="mailbox-controls">
             <!-- Check all button -->
-            <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+            {{--<button type="button" class="btn btn-default btn-sm checkbox-toggle">
                 <i class="far fa-square"></i>
-            </button>
+            </button>--}}
             {{--<div class="btn-group">
                 <button type="button" class="btn btn-default btn-sm">
                     <i class="far fa-trash-alt"></i>
@@ -33,68 +33,49 @@
                 </button>
             </div>--}}
             <!-- /.btn-group -->
-            <button type="button" class="btn btn-default btn-sm">
+            <button type="button" class="btn btn-default btn-sm" wire:click="limpiar">
+                <i class="fas fa-sort-amount-down"></i>
+            </button>
+            <button type="button" class="btn btn-default btn-sm" wire:click="limpiar">
+                <i class="fas fa-sort-amount-up-alt"></i>
+            </button>
+            <button type="button" class="btn btn-default btn-sm" wire:click="limpiar">
                 <i class="fas fa-sync-alt"></i>
             </button>
             <div class="float-right">
-                1-50/200
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-sm">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-                <!-- /.btn-group -->
+                {{ $oficios->links('layouts.custom-pagination-links') }}
             </div>
             <!-- /.float-right -->
         </div>
-        <div class="table-responsive mailbox-messages">
+        <div class="table-responsive mailbox-messages" style="height: 67vh;">
             <table class="table table-hover table-striped">
                 <tbody>
-                <tr>
-                    <td>
-                        <div class="icheck-primary">
-                            <input type="checkbox" value="" id="check1">
-                            <label for="check1"></label>
-                        </div>
-                    </td>
-                    {{--<td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>--}}
-                    <td class="mailbox-name">
-                        <a href="read-mail.html">068-2024</a>
-                    </td>
-                    <td class="mailbox-subject">
-                        <b>Yilda Ledezma</b> - Anakary Castro
-                    </td>
-                    <td class="mailbox-attachment">
+                @foreach($oficios as $oficio)
+                    <tr>
+                        {{--<td>
+                            <div class="icheck-primary">
+                                <input type="checkbox" value="" id="check1">
+                                <label for="check1"></label>
+                            </div>
+                        </td>--}}
+                        {{--<td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>--}}
+                        <td class="mailbox-name">
+                            <button class="btn btn-link" href="read-mail.html">
+                                {{ $oficio->numero }}
+                            </button>
+                        </td>
+                        <td class="mailbox-subject" style="width: 60%">
+                            {{--<b>Yilda Ledezma</b> - Anakary Castro--}}
 
-                    </td>
-                    <td class="mailbox-date">
-                        31/08/2024
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="icheck-primary">
-                            <input type="checkbox" value="" id="check2">
-                            <label for="check2"></label>
-                        </div>
-                    </td>
-                    {{--<td class="mailbox-star"><a href="#"><i class="fas fa-star-o text-warning"></i></a></td>--}}
-                    <td class="mailbox-name">
-                        <a href="read-mail.html">067-2024</a>
-                    </td>
-                    <td class="mailbox-subject">
-                        <b>Yessika Figueroa</b> - Yilda Ledezma
-                    </td>
-                    <td class="mailbox-attachment">
-                        <i class="fas fa-paperclip"></i>
-                    </td>
-                    <td class="mailbox-date">
-                        31/08/2024
-                    </td>
-                </tr>
+                        </td>
+                        <td class="mailbox-attachment">
+
+                        </td>
+                        <td class="mailbox-date">
+                            {{ getFecha($oficio->fecha) }}
+                        </td>
+                    </tr>
+                @endforeach
                 </tbody>
             </table>
             <!-- /.table -->
@@ -105,35 +86,14 @@
     <div class="card-footer p-0">
         <div class="mailbox-controls">
             <!-- Check all button -->
-            <button type="button" class="btn btn-default btn-sm checkbox-toggle">
+            {{--<button type="button" class="btn btn-default btn-sm checkbox-toggle">
                 <i class="far fa-square"></i>
-            </button>
-            {{--<div class="btn-group">
-                <button type="button" class="btn btn-default btn-sm">
-                    <i class="far fa-trash-alt"></i>
-                </button>
-                <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-reply"></i>
-                </button>
-                <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-share"></i>
-                </button>
-            </div>--}}
-            <!-- /.btn-group -->
-            <button type="button" class="btn btn-default btn-sm">
+            </button>--}}
+            <button type="button" class="btn btn-default btn-sm" wire:click="limpiar">
                 <i class="fas fa-sync-alt"></i>
             </button>
             <div class="float-right">
-                1-50/200
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-sm">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                </div>
-                <!-- /.btn-group -->
+                {{ $oficios->links('layouts.custom-pagination-links') }}
             </div>
             <!-- /.float-right -->
         </div>

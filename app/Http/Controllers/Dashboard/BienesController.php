@@ -24,7 +24,7 @@ class BienesController extends Controller
 
     public function printEtiqueta($rowquid)
     {
-        $bien = Bien::where('id', $rowquid)->orWhere('rowquid', $rowquid)->first();
+        $bien = Bien::where('rowquid', $rowquid)->first();
         if (!$bien){
             return redirect()->route('web.index');
         }
@@ -50,7 +50,11 @@ class BienesController extends Controller
 
     public function webEtiqueta($rowquid)
     {
-        $bien = Bien::where('id', $rowquid)->orWhere('rowquid', $rowquid)->first();
+        if (is_numeric($rowquid)) {
+            $bien = Bien::where('id', $rowquid)->first();
+        }else{
+            $bien = Bien::where('rowquid', $rowquid)->first();
+        }
         if (!$bien){
             return redirect()->route('web.index');
         }

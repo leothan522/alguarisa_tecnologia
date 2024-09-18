@@ -21,7 +21,7 @@
 @endsection
 
 @section('content')
-    @include('dashboard.oficios.content')
+    @livewire('dashboard.oficios-component')
 @endsection
 
 @section('right-sidebar')
