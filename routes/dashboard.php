@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Dashboard\BienesController;
+use App\Http\Controllers\Dashboard\OficiosController;
 use App\Http\Controllers\Dashboard\PruebaController;
 use App\Http\Controllers\FCM\FcmController;
 use Illuminate\Support\Facades\Route;
@@ -42,7 +43,8 @@ Route::middleware([
     Route::get('territorio', [TerritorioController::class, 'index'])->name('territorio.index');
     Route::get('bienes', [BienesController::class, 'index'])->name('bienes.index');
     Route::get('bienes/export', [BienesController::class, 'export'])->name('bienes.export');
-    Route::get('bienes/{id}/etiquetas/', [BienesController::class, 'printEtiqueta'])->name('etiquetas.print');
+    Route::get('bienes/{id}/etiquetas', [BienesController::class, 'printEtiqueta'])->name('etiquetas.print');
+    Route::get('oficios', [OficiosController::class, 'index'])->name('oficios.index');
 
 });
 

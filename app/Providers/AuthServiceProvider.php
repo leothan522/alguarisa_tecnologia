@@ -23,6 +23,10 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
+        Gate::define('oficios', function ($user){
+            return comprobarPermisos('oficios.index');
+        });
+
         Gate::define('bienes', function ($user){
             return comprobarPermisos('bienes.index');
         });

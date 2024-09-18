@@ -315,12 +315,12 @@ return [
             'icon'      => 'fas fa-fw fa-book',
             'can'       => ['bienes'],
             'submenu' => [
-                /*[
+                [
                     'text' => 'Oficios',
                     'icon' => 'fas fa-fw fa-file-invoice',
-                    'route'  => 'bienes.index',
+                    'route'  => 'oficios.index',
                     'can'  => 'bienes',
-                ],*/
+                ],
                 [
                     'text' => 'Bienes',
                     'icon' => 'fas fa-fw fa-boxes',
@@ -625,6 +625,36 @@ return [
                 ],
             ],
         ],
+        'IcheckBootstrap' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/icheck-bootstrap/icheck-bootstrap.css'
+                ]
+            ],
+        ],
+        'Summernote' => [
+            'active' => false,
+            'files' => [
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'vendor/summernote/summernote-bs4.min.css'
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/summernote/summernote-bs4.min.js',
+                ],
+                [
+                    'type' => 'js',
+                    'asset' => true,
+                    'location' => 'vendor/summernote/lang/summernote-es-ES.min.js',
+                ],
+            ],
+        ]
     ],
 
     /*
