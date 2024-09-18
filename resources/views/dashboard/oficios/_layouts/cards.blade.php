@@ -1,6 +1,13 @@
-<button type="button" class="btn btn-primary btn-block mb-3 disabled">
-    <i class="fas fa-file"></i> Nuevo Oficio
-</button>
+@if($view == 'show' || $view == 'form')
+    <button type="button" class="btn btn-primary btn-block mb-3" wire:click="limpiar">
+        <i class="fas fa-arrow-left"></i> Volver a Oficios
+    </button>
+@else
+    <button type="button" class="btn btn-primary btn-block mb-3" wire:click="create">
+        <i class="fas fa-file"></i> Nuevo Oficio
+    </button>
+@endif
+
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">Carpetas</h3>

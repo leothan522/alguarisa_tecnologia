@@ -31,9 +31,11 @@
         </div>--}}
         <!-- /.mailbox-controls -->
         <div class="mailbox-read-message">
-            <div class="embed-responsive embed-responsive-16by9">
-                <iframe class="embed-responsive-item" src="{{asset('ViewerJS/#../storage/pdf/etiqueta.pdf')}}" allowfullscreen></iframe>
-            </div>
+            @if($pdf)
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="{{asset('ViewerJS/#../storage/pdf/etiqueta.pdf')}}" allowfullscreen></iframe>
+                </div>
+            @endif
         </div>
         <!-- /.mailbox-read-message -->
     </div>

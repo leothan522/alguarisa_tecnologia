@@ -3,14 +3,16 @@
         <h3 class="card-title">Oficios Entregados</h3>
 
         <div class="card-tools">
-            <div class="input-group input-group-sm">
-                <input type="text" class="form-control" placeholder="Buscar Oficio">
-                <div class="input-group-append">
-                    <div class="btn btn-primary">
-                        <i class="fas fa-search"></i>
+            <form class="form-inline" wire:submit="buscar">
+                <div class="input-group input-group-sm">
+                    <input type="text" class="form-control" placeholder="Buscar Oficio" wire:model="keyword" required>
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
         <!-- /.card-tools -->
     </div>
@@ -33,13 +35,16 @@
                 </button>
             </div>--}}
             <!-- /.btn-group -->
-            <button type="button" class="btn btn-default btn-sm" wire:click="limpiar">
-                <i class="fas fa-sort-amount-down"></i>
-            </button>
-            <button type="button" class="btn btn-default btn-sm" wire:click="limpiar">
-                <i class="fas fa-sort-amount-up-alt"></i>
-            </button>
-            <button type="button" class="btn btn-default btn-sm" wire:click="limpiar">
+            @if($order == 'DESC')
+                <button type="button" class="btn btn-default btn-sm" wire:click="orderAscending">
+                    <i class="fas fa-sort-amount-down"></i>
+                </button>
+            @else
+                <button type="button" class="btn btn-default btn-sm" wire:click="orderDescending">
+                    <i class="fas fa-sort-amount-up-alt"></i>
+                </button>
+            @endif
+            <button type="button" class="btn btn-default btn-sm" wire:click="actualizar">
                 <i class="fas fa-sync-alt"></i>
             </button>
             <div class="float-right">
@@ -50,32 +55,50 @@
         <div class="table-responsive mailbox-messages" style="height: 67vh;">
             <table class="table table-hover table-striped">
                 <tbody>
-                @foreach($oficios as $oficio)
-                    <tr>
-                        {{--<td>
-                            <div class="icheck-primary">
-                                <input type="checkbox" value="" id="check1">
-                                <label for="check1"></label>
-                            </div>
-                        </td>--}}
-                        {{--<td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>--}}
-                        <td class="mailbox-name">
-                            <button class="btn btn-link" href="read-mail.html">
-                                {{ $oficio->numero }}
-                            </button>
-                        </td>
-                        <td class="mailbox-subject" style="width: 60%">
-                            {{--<b>Yilda Ledezma</b> - Anakary Castro--}}
+                @if($oficios->isNotEmpty())
+                    @foreach($oficios as $oficio)
+                        <tr>
+                            {{--<td>
+                                <div class="icheck-primary">
+                                    <input type="checkbox" value="" id="check1">
+                                    <label for="check1"></label>
+                                </div>
+                            </td>--}}
+                            {{--<td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>--}}
+                            <td class="mailbox-name text-nowrap">
+                                <a class="link-dark" wire:click="show('hola')" style="cursor: pointer;">
+                                    {{ $oficio->numero }}
+                                </a>
+                            </td>
+                            <td class="mailbox-subject" style="width: 60%">
+                                <b>[Dirigido a]</b> - [Con copia a]
+                            </td>
+                            <td>
+                                <small class="float-right text-nowrap">Equipos: {{ formatoMillares($oficio->equipos, 0) }}</small>
+                            </td>
+                            <td class="mailbox-attachment">
 
-                        </td>
-                        <td class="mailbox-attachment">
-
-                        </td>
-                        <td class="mailbox-date">
-                            {{ getFecha($oficio->fecha) }}
-                        </td>
-                    </tr>
-                @endforeach
+                            </td>
+                            <td class="mailbox-date text-center">
+                                {{ getFecha($oficio->fecha) }}
+                            </td>
+                        </tr>
+                    @endforeach
+                @else
+                    @if($keyword)
+                        <tr>
+                           <td colspan="4" class="mailbox-subject text-center">
+                               Sin Resultados.
+                           </td>
+                        </tr>
+                    @else
+                        <tr>
+                            <td colspan="4" class="mailbox-subject text-center">
+                                Sin Registros Guardados.
+                            </td>
+                        </tr>
+                    @endif
+                @endif
                 </tbody>
             </table>
             <!-- /.table -->
@@ -89,7 +112,16 @@
             {{--<button type="button" class="btn btn-default btn-sm checkbox-toggle">
                 <i class="far fa-square"></i>
             </button>--}}
-            <button type="button" class="btn btn-default btn-sm" wire:click="limpiar">
+            @if($order == 'DESC')
+                <button type="button" class="btn btn-default btn-sm" wire:click="orderAscending">
+                    <i class="fas fa-sort-amount-down"></i>
+                </button>
+            @else
+                <button type="button" class="btn btn-default btn-sm" wire:click="orderDescending">
+                    <i class="fas fa-sort-amount-up-alt"></i>
+                </button>
+            @endif
+            <button type="button" class="btn btn-default btn-sm" wire:click="actualizar">
                 <i class="fas fa-sync-alt"></i>
             </button>
             <div class="float-right">
@@ -98,4 +130,7 @@
             <!-- /.float-right -->
         </div>
     </div>
+
+    {!! verSpinner() !!}
+
 </div>

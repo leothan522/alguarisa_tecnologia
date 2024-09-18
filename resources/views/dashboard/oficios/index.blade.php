@@ -1,5 +1,7 @@
 @extends('adminlte::page')
 
+@section('plugins.Lightbox', true)
+@section('plugins.Select2', true)
 @section('plugins.IcheckBootstrap', true)
 @section('plugins.Summernote', true)
 
@@ -36,43 +38,4 @@
     {{--<link rel="stylesheet" href="/css/admin_custom.css">--}}
 @stop
 
-@section('js')
-    <script src="{{ asset("js/app.js") }}"></script>
-    <script>
-        //Enable check and uncheck all functionality
-        $('.checkbox-toggle').click(function () {
-            var clicks = $(this).data('clicks')
-            if (clicks) {
-                //Uncheck all checkboxes
-                $('.mailbox-messages input[type=\'checkbox\']').prop('checked', false)
-                $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
-            } else {
-                //Check all checkboxes
-                $('.mailbox-messages input[type=\'checkbox\']').prop('checked', true)
-                $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
-            }
-            $(this).data('clicks', !clicks)
-        });
 
-        $(function () {
-            //Add text editor
-            $('#compose-textarea').summernote({
-                lang: 'es-ES',
-                toolbar: [
-                    // [groupName, [list of button]]
-                    ['font', ['bold','italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
-                    ['fontname', ['fontname']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                ]
-            })
-        });
-
-        $(document).ready(function () {
-            $('#navbar_search_id').addClass('d-none');
-        });
-
-        console.log('Hi!');
-    </script>
-@endsection
