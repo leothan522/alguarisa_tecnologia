@@ -24,9 +24,25 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text"><i class="fas fa-tag"></i></span>
                     </div>
-                    <input type="text" class="form-control" wire:model="nombre" placeholder="Nombre">
+                    <input type="text" class="form-control" wire:model="nombre" placeholder="Nombre Completo">
                     @error('nombre')
                         <span class="col-sm-12 text-sm text-bold text-danger">
+                            <i class="icon fas fa-exclamation-triangle"></i>
+                            {{ $message }}
+                        </span>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Sufijo</label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                    </div>
+                    <input type="text" class="form-control" wire:model="sufijo" placeholder="Sufijo [Opcional]">
+                    @error('sufijo')
+                    <span class="col-sm-12 text-sm text-bold text-danger">
                             <i class="icon fas fa-exclamation-triangle"></i>
                             {{ $message }}
                         </span>

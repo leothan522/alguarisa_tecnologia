@@ -24,6 +24,9 @@
 
 @section('content')
     @livewire('dashboard.oficios-component')
+    <div>
+        @livewire('dashboard.instituciones-component')
+    </div>
 @endsection
 
 @section('right-sidebar')

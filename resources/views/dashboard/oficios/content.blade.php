@@ -15,6 +15,7 @@
         <div class="@if($view != 'form') d-none @endif">
             @include('dashboard.oficios._layouts.form')
         </div>
+
     </div>
 </div>
 

@@ -15,28 +15,20 @@
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <div class="form-group">
-                <input class="form-control" placeholder="Dirigido a:">
-            </div>
-            <div class="form-group">
-                <input class="form-control" placeholder="Con copia a:">
+
+            <div wire:ignore>
+                <div class="form-group">
+                    <label>Dirigido a:</label>
+                    <select class="select2" multiple="multiple" data-placeholder="Seleccione" style="width: 100%;"></select>
+                </div>
             </div>
 
             <div wire:ignore>
                 <div class="form-group">
-                    <label>Multiple</label>
-                    <select class="select2" multiple="multiple" data-placeholder="Select a State" style="width: 100%;">
-                        <option>Alabama</option>
-                        <option>Alaska</option>
-                        <option>California</option>
-                        <option>Delaware</option>
-                        <option>Tennessee</option>
-                        <option>Texas</option>
-                        <option>Washington</option>
-                    </select>
+                    <label>Con copia a:</label>
+                    <select class="select2" multiple="multiple" data-placeholder="Seleccione" style="width: 100%;"></select>
                 </div>
             </div>
-
 
             <div class="row">
                 <div class="col-md-6">
@@ -83,23 +75,17 @@
 
             <div class="form-group">
                 <div wire:ignore>
-                <textarea id="adicional" class="form-control" style="height: 300px;">
-                    {{--{{ $adicional }}--}}
-                </textarea>
+                    <textarea id="adicional" class="form-control" style="height: 300px;">
+                        {{--{{ $adicional }}--}}
+                    </textarea>
                 </div>
             </div>
 
             <div class="card card-navy card-outline">
 
-                {{--<div class="card-header">
-                    <h3 class="card-title">
-                        Equipos
-                    </h3>
-                </div>--}}
-
                 <div class="card-body table-responsive p-0" @if($equipos > 3) style="height: 30vh;" @endif >
 
-                    <table class="table table-head-fixed table-hover text-nowrap sticky-top">
+                    <table class="table <!--table-head-fixed--> table-hover text-nowrap sticky-top">
                         <thead>
                         <tr class="text-navy">
                             {{--<th style="width: 10%">Código</th>--}}
@@ -116,12 +102,7 @@
                         @if(!empty($listarEquipos))
                             @foreach($listarEquipos as $key => $equipo)
                                 <li>
-                                    <!-- todo text -->
-                                    {{--<span class="text">
-                                            {{ $equipo->codigo }}
-                                    </span>--}}
-                                    <!-- Emphasis label -->
-                                    <small class="text text-uppercase {{--badge-danger--}}">
+                                    <small class="text text-uppercase">
                                         {{ $equipo['tipo'] }}
                                         {{ $equipo['marca'] }}
                                         {{ $equipo['modelo'] }}
@@ -132,27 +113,19 @@
                                             , Identificador: {{ $equipo['identificador'] }}
                                         @endif
                                     </small>
-                                    @if(!$ver)
-                                        <!-- General tools such as edit or delete-->
-                                        <div class="tools text-danger" wire:click="btnQuitarEquipo({{ $key }})">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </div>
-                                    @else
-                                        <div class="tools text-primary" onclick="verBien('{{ $equipo['rowquid'] }}')">
-                                            <i class="fas fa-eye"></i>
-                                        </div>
-                                    @endif
+                                    <!-- General tools such as edit or delete-->
+                                    <div class="tools text-danger" {{--wire:click="btnQuitarEquipo({{ $key }})"--}}>
+                                        <i class="fas fa-trash-alt"></i>
+                                    </div>
                                 </li>
                             @endforeach
                         @else
                             <li class="text-center">
-                                <!-- todo text -->
                                 <span class="text">Sin Equipos vinculados</span>
                             </li>
                         @endif
 
                     </ul>
-                    <!-- /.TO DO List -->
 
                 </div>
 

@@ -38,7 +38,7 @@
 
 <div class="card">
     <div class="card-header">
-        <h3 class="card-title">Etiquetas</h3>
+        <h3 class="card-title">Tablas</h3>
 
         <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -49,23 +49,22 @@
     <div class="card-body p-0">
         <ul class="nav nav-pills flex-column">
             <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="far fa-circle text-success"></i> Verificados
-                </a>
+                <button type="button" class="btn nav-link">
+                    <i class="fas fa-user-tag text-primary"></i> Personas
+                </button>
             </li>
             <li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="far fa-circle text-warning"></i>
-                    En Proceso
-                </a>
+                <button type="button" class="btn nav-link" data-toggle="modal" data-target="#modal-instituciones">
+                    <i class="fas fa-university text-primary"></i> Instituciones
+                </button>
             </li>
 
-            <li class="nav-item">
+            {{--<li class="nav-item">
                 <a href="#" class="nav-link">
                     <i class="far fa-circle text-danger"></i>
                     Por verificar
                 </a>
-            </li>
+            </li>--}}
         </ul>
     </div>
     <!-- /.card-body -->

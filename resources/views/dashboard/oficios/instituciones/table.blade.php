@@ -7,7 +7,7 @@
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Registrados [ <b class="text-warning">{{ $totalRows }}</b> ]
+                Registradas [ <b class="text-warning">{{ $totalRows }}</b> ]
             @endif
         </h3>
 
@@ -29,6 +29,7 @@
             <thead>
             <tr class="text-navy">
                 <th>Nombre</th>
+                <th class="d-none d-md-table-cell">Sufijo</th>
                 <th style="width: 5%;">&nbsp;</th>
             </tr>
             </thead>
@@ -37,6 +38,13 @@
                 @foreach($listarRows as $row)
                     <tr>
                         <td class="text-uppercase text-truncate" style="max-width: 150px;">{{ $row->nombre }}</td>
+                        <td class="d-none d-md-table-cell text-uppercase">
+                            @if($row->sufijo)
+                                {{ $row->sufijo }}
+                            @else
+                                -
+                            @endif
+                        </td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit('{{ $row->rowquid }}')" class="btn btn-primary btn-sm"
@@ -54,7 +62,7 @@
                 @endforeach
             @else
                 <tr class="text-center">
-                    <td colspan="2">
+                    <td colspan="3">
                         @if($keyword)
                             <span>Sin resultados.</span>
                         @else
