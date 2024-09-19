@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Institucion;
+use App\Models\Persona;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
@@ -138,7 +139,7 @@ class InstitucionesComponent extends Component
     #[On('confirmedInstitucion')]
     public function confirmedInstitucion()
     {
-        $id = null;
+        $id = 0;
         $table = $this->getInstitucion($this->rowquid);
         if ($table) {
             $id = $table->id;
@@ -146,6 +147,11 @@ class InstitucionesComponent extends Component
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
+
+        $personas = Persona::where('instituciones_id', $id)->first();
+        if ($personas){
+            $vinculado = true;
+        }
 
         if ($vinculado) {
             $this->alert('warning', '¡No se puede Borrar!', [

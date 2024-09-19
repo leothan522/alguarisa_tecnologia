@@ -12,11 +12,11 @@
         </h3>
 
         <div class="card-tools">
-            <button type="button" class="btn btn-tool" wire:click="limpiarInstituciones">
+            <button type="button" class="btn btn-tool" wire:click="limpiarPersonas">
                 <i class="fas fa-sync-alt"></i>
             </button>
             <button type="button" class="btn btn-tool" wire:click="create"
-                    @if(!comprobarPermisos('instituciones.create')) disabled @endif>
+                    @if(!comprobarPermisos('personas.create')) disabled @endif>
                 <i class="fas fa-file"></i> Nuevo
             </button>
             <button type="button" class="btn btn-tool" wire:click="setLimit" @if($disable) disabled @endif >
@@ -28,7 +28,9 @@
         <table class="table table-sm table-head-fixed table-hover text-nowrap">
             <thead>
             <tr class="text-navy">
-                <th>Nombre</th>
+                <th style="width: 40%;">Nombre</th>
+                <th class="d-none d-md-table-cell">Cargo</th>
+                <th class="d-none d-md-table-cell">Institución</th>
                 <th style="width: 5%;">&nbsp;</th>
             </tr>
             </thead>
@@ -36,16 +38,30 @@
             @if($listarRows->isNotEmpty())
                 @foreach($listarRows as $row)
                     <tr>
-                        <td class="text-uppercase text-truncate" style="max-width: 150px;">{{ $row->nombre }}</td>
+                        <td class="text-uppercase text-capitalize" style="max-width: 150px;">{{ $row->prefijo }} {{ $row->nombre }}</td>
+                        <td class="d-none d-md-table-cell text-capitalize text-truncate" style="max-width: 150px;">
+                            @if($row->cargo)
+                                {{ $row->cargo }}
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td class="d-none d-md-table-cell text-capitalize text-truncate" style="max-width: 150px;">
+                            @if($row->instituciones_id)
+                                {{ $row->institucion->nombre }}
+                            @else
+                                -
+                            @endif
+                        </td>
                         <td class="justify-content-end">
                             <div class="btn-group">
                                 <button wire:click="edit('{{ $row->rowquid }}')" class="btn btn-primary btn-sm"
-                                        @if(!comprobarPermisos('instituciones.edit')) disabled @endif >
+                                        @if(!comprobarPermisos('personas.edit')) disabled @endif >
                                     <i class="fas fa-edit"></i>
                                 </button>
 
                                 <button wire:click="destroy('{{ $row->rowquid }}')" class="btn btn-primary btn-sm"
-                                        @if(!comprobarPermisos('instituciones.destroy')) disabled @endif >
+                                        @if(!comprobarPermisos('personas.destroy')) disabled @endif >
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
@@ -54,7 +70,7 @@
                 @endforeach
             @else
                 <tr class="text-center">
-                    <td colspan="2">
+                    <td colspan="4">
                         @if($keyword)
                             <span>Sin resultados.</span>
                         @else

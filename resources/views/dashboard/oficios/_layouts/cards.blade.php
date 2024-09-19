@@ -48,15 +48,15 @@
     </div>
     <div class="card-body p-0">
         <ul class="nav nav-pills flex-column">
-            <li class="nav-item">
-                <button type="button" class="btn nav-link">
+            <li class="nav-item" data-toggle="modal" data-target="#modal-personas" style="cursor: pointer;">
+                <span class="nav-link">
                     <i class="fas fa-user-tag text-primary"></i> Personas
-                </button>
+                </span>
             </li>
-            <li class="nav-item">
-                <button type="button" class="btn nav-link" data-toggle="modal" data-target="#modal-instituciones">
+            <li class="nav-item" data-toggle="modal" data-target="#modal-instituciones" style="cursor: pointer;">
+                <span class="nav-link">
                     <i class="fas fa-university text-primary"></i> Instituciones
-                </button>
+                </span>
             </li>
 
             {{--<li class="nav-item">

@@ -24,34 +24,68 @@
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
 
-        $('.select2').select2();
+        Livewire.on('personasSelectInstituciones', ({ data }) => {
+
+            let html = '<div class="input-group-prepend">' +
+                '<span class="input-group-text">' +
+                '<i class="fas fa-tag"></i>' +
+                '</span>' +
+                '</div> ' +
+                '<select id="personasSelectInstituciones"></select>';
+
+            $("#div_select_personas_institucion").html(html);
+
+            $("#personasSelectInstituciones")
+                .select2({
+                    theme: 'bootstrap4',
+                    data: data,
+                    placeholder: 'Seleccione',
+                    allowClear: true
+                })
+                .val(null).trigger('change')
+                .on('change', function () {
+                    let val = $(this).val();
+                    Livewire.dispatch('getPersonasSelectInstituciones', { rowquid: val });
+                });
+        });
+
+        Livewire.on('setPersonasSelectInstituciones', ({ rowquid }) => {
+            $('#personasSelectInstituciones').val(rowquid).trigger('change');
+        });
+
+        /*$('.select2').select2();
 
         //Initialize Select2 Elements
         $('.select2bs4').select2({
             theme: 'bootstrap4'
-        });
+        });*/
 
 
         $('#adicional').val('{{ $adicional }}').summernote({
             lang: 'es-ES',
             toolbar: [
                 // [groupName, [list of button]]
-                ['font', ['bold','italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
+                ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],
                 ['fontname', ['fontname']],
                 ['color', ['color']],
                 ['para', ['ul', 'ol', 'paragraph']],
                 ['table', ['table']],
             ],
             callbacks: {
-                onChange: function(contents, $editable) {
+                onChange: function (contents, $editable) {
                     //console.log('onChange:', contents, $editable);
-                    @this.set('adicional', contents)
+                    @this.
+                    set('adicional', contents)
                 }
             }
         });
 
         $(document).ready(function () {
             $('#navbar_search_id').addClass('d-none');
+        });
+
+        $(document).on('select2:open', () => {
+            document.querySelector('.select2-search__field').focus();
         });
 
 

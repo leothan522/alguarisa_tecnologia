@@ -26,6 +26,7 @@
     @livewire('dashboard.oficios-component')
     <div>
         @livewire('dashboard.instituciones-component')
+        @livewire('dashboard.personas-component')
     </div>
 @endsection
 

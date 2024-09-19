@@ -1,4 +1,4 @@
-<div wire:ignore.self class="modal fade" id="modal-instituciones">
+<div wire:ignore.self class="modal fade" id="modal-personas">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,7 +7,7 @@
 
                     <div class="col-md-6">
                         <h4 class="modal-title">
-                            <i class="fas fa-university text-primary"></i> Instituciones
+                            <i class="fas fa-user-tag text-primary"></i> Personas
                         </h4>
                     </div>
 
@@ -35,10 +35,10 @@
 
                 <div class="row justify-content-center">
                     <div class="col-md-6 @if(!$form) d-none @endif ">
-                        @include('dashboard.oficios.instituciones.form')
+                        @include('dashboard.oficios.personas.form')
                     </div>
                     <div class="col-12 @if(!$table) d-none @endif ">
-                        @include('dashboard.oficios.instituciones.table')
+                        @include('dashboard.oficios.personas.table')
                     </div>
                 </div>
 

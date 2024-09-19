@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Institucion;
 use App\Models\Persona;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -16,7 +17,6 @@ class PersonasComponent extends Component
     public $rows = 0, $keyword;
     public $form = false, $table = true, $disable;
     public $nombre, $prefijo, $cargo, $instituciones_id, $sexo;
-    public $listarInstituciones = [];
 
     #[Locked]
     public $personas_id, $rowquid;
@@ -66,9 +66,13 @@ class PersonasComponent extends Component
         $this->reset([
             'form', 'table', 'rowquid', 'personas_id',
             'nombre', 'prefijo', 'cargo', 'instituciones_id', 'sexo',
-            'listarInstituciones'
         ]);
         $this->resetErrorBag();
+        $instituciones = Institucion::orderBy('nombre')->get();
+        $data = getDataSelect2($instituciones, 'nombre');
+        $data[] = ['id' => '', 'text' => 'Seleccione'];
+        //dd($data);
+        $this->dispatch('personasSelectInstituciones', data: $data);
     }
 
     public function create()
@@ -84,6 +88,7 @@ class PersonasComponent extends Component
             'nombre' => ['required', 'min:2', 'max:50'/*, Rule::unique('oficios_personas', 'nombre')->ignore($this->personas_id)*/],
             'prefijo' => 'nullable|min:2|max:50',
             'cargo' => 'nullable|min:2|max:50',
+            'sexo' => 'required',
         ];
 
         $this->validate($rules);
@@ -122,6 +127,8 @@ class PersonasComponent extends Component
             $this->nombre = $table->nombre;
             $this->prefijo = $table->prefijo;
             $this->cargo = $table->cargo;
+            $this->sexo = $table->sexo;
+            $this->dispatch('setPersonasSelectInstituciones', rowquid: $table->institucion->rowquid ?? '');
             $this->form = true;
             $this->table = false;
         }
@@ -137,15 +144,15 @@ class PersonasComponent extends Component
             'confirmButtonText' => '¡Sí, bórralo!',
             'text' => '¡No podrás revertir esto!',
             'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmedInstitucion',
+            'onConfirmed' => 'confirmedPersonas',
         ]);
     }
 
-    #[On('confirmedInstitucion')]
-    public function confirmedInstitucion()
+    #[On('confirmedPersonas')]
+    public function confirmedPersonas()
     {
         $id = null;
-        $table = $this->getInstitucion($this->rowquid);
+        $table = $this->getPersona($this->rowquid);
         if ($table) {
             $id = $table->id;
         }
@@ -166,27 +173,50 @@ class PersonasComponent extends Component
         } else {
             if ($table) {
                 $table->delete();
-                $this->alert('success', 'Institución Eliminada.');
+                $this->alert('success', 'Registro Eliminado.');
             }
         }
 
-        $this->limpiarInstituciones();
+        $this->limpiarPersonas();
     }
 
     public function buscar()
     {
-        $this->limpiarInstituciones();
+        $this->limpiarPersonas();
     }
 
     public function cerrarBusqueda()
     {
         $this->reset(['keyword']);
-        $this->limpiarInstituciones();
+        $this->limpiarPersonas();
     }
 
     protected function getPersona($rowquid): ?Persona
     {
         return Persona::where('rowquid', $rowquid)->first();
+    }
+
+    #[On('personasSelectInstituciones')]
+    public function personasSelectInstituciones($data)
+    {
+        //JS
+    }
+
+    #[On('getPersonasSelectInstituciones')]
+    public function getPersonasSelectInstituciones($rowquid)
+    {
+        $institucion = Institucion::where('rowquid', $rowquid)->first();
+        if ($institucion){
+            $this->instituciones_id = $institucion->id;
+        }else{
+            $this->reset('instituciones_id');
+        }
+    }
+
+    #[On('setPersonasSelectInstituciones')]
+    public function setPersonasSelectInstituciones($rowquid)
+    {
+        //JS
     }
 
 }
