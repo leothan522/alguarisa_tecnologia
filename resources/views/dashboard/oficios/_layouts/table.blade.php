@@ -52,7 +52,7 @@
             </div>
             <!-- /.float-right -->
         </div>
-        <div class="table-responsive mailbox-messages" style="height: 67vh;">
+        <div class="table-responsive mailbox-messages" style="height: 64vh;">
             <table class="table table-hover table-striped">
                 <tbody>
                 @if($oficios->isNotEmpty())
