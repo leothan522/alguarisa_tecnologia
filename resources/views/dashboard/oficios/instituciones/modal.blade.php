@@ -44,7 +44,10 @@
 
             </div>
 
-            <div class="modal-footer justify-content-end">
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modal-personas" data-dismiss="modal">
+                    <i class="fas fa-user-tag"></i> Personas
+                </button>
                 <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">{{ __('Close') }}</button>
             </div>
 

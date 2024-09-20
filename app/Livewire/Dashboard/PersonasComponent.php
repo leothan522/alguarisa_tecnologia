@@ -4,6 +4,7 @@ namespace App\Livewire\Dashboard;
 
 use App\Models\Institucion;
 use App\Models\Persona;
+use Illuminate\Support\Sleep;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
@@ -17,6 +18,7 @@ class PersonasComponent extends Component
     public $rows = 0, $keyword;
     public $form = false, $table = true, $disable;
     public $nombre, $prefijo, $cargo, $instituciones_id, $sexo;
+    public $filtro = '';
 
     #[Locked]
     public $personas_id, $rowquid;
@@ -68,11 +70,7 @@ class PersonasComponent extends Component
             'nombre', 'prefijo', 'cargo', 'instituciones_id', 'sexo',
         ]);
         $this->resetErrorBag();
-        $instituciones = Institucion::orderBy('nombre')->get();
-        $data = getDataSelect2($instituciones, 'nombre');
-        $data[] = ['id' => '', 'text' => 'Seleccione'];
-        //dd($data);
-        $this->dispatch('personasSelectInstituciones', data: $data);
+        $this->dispatch('personasSelectInstituciones', data: $this->getInstituciones());
     }
 
     public function create()
@@ -128,6 +126,7 @@ class PersonasComponent extends Component
             $this->prefijo = $table->prefijo;
             $this->cargo = $table->cargo;
             $this->sexo = $table->sexo;
+            $this->rowquid = $table->rowquid;
             $this->dispatch('setPersonasSelectInstituciones', rowquid: $table->institucion->rowquid ?? '');
             $this->form = true;
             $this->table = false;
@@ -217,6 +216,37 @@ class PersonasComponent extends Component
     public function setPersonasSelectInstituciones($rowquid)
     {
         //JS
+    }
+
+    protected function getInstituciones(): array
+    {
+        $instituciones = Institucion::orderBy('nombre')->get();
+        $data = getDataSelect2($instituciones, 'nombre');
+        $data[] = ['id' => '', 'text' => 'Seleccione'];
+        return $data;
+    }
+
+    #[On('initSelectPersonas')]
+    public function initSelectPersonas()
+    {
+        $this->dispatch('personasSelectInstituciones', data: $this->getInstituciones());
+        if ($this->instituciones_id){
+            $institucion = Institucion::find($this->instituciones_id);
+            if ($institucion){
+                $this->dispatch('setPersonasSelectInstituciones', rowquid: $institucion->rowquid);
+            }
+        }
+    }
+
+    #[On('filtrarPersonasInstitucion')]
+    public function filtrarPersonasInstitucion($id)
+    {
+        $this->cerrarBusqueda();
+        $institucion = Institucion::find($id);
+        if ($institucion){
+            $this->keyword = $institucion->id;
+            $this->filtro = $institucion->nombre;
+        }
     }
 
 }

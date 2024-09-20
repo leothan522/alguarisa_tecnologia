@@ -103,6 +103,9 @@ class InstitucionesComponent extends Component
             $table->nombre = $this->nombre;
             $table->sufijo = $this->sufijo;
             $table->save();
+
+            $this->dispatch('initSelectPersonas')->to(PersonasComponent::class);
+
             $this->alert('success', $message);
         }
 
@@ -166,6 +169,7 @@ class InstitucionesComponent extends Component
         } else {
             if ($table) {
                 $table->delete();
+                $this->dispatch('initSelectPersonas')->to(PersonasComponent::class);
                 $this->alert('success', 'Institución Eliminada.');
             }
         }
@@ -187,6 +191,14 @@ class InstitucionesComponent extends Component
     protected function getInstitucion($rowquid): ?Institucion
     {
         return Institucion::where('rowquid', $rowquid)->first();
+    }
+
+    public function filtrar($rowquid)
+    {
+        $institucion = $this->getInstitucion($rowquid);
+        if ($institucion){
+            $this->dispatch('filtrarPersonasInstitucion', id: $institucion->id)->to(PersonasComponent::class);
+        }
     }
 
 }

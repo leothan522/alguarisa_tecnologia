@@ -47,6 +47,12 @@
                         </td>
                         <td class="justify-content-end">
                             <div class="btn-group">
+
+                                <button wire:click="filtrar('{{ $row->rowquid }}')" class="btn btn-primary btn-sm"
+                                        data-toggle="modal" data-target="#modal-personas" data-dismiss="modal">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+
                                 <button wire:click="edit('{{ $row->rowquid }}')" class="btn btn-primary btn-sm"
                                         @if(!comprobarPermisos('instituciones.edit')) disabled @endif >
                                     <i class="fas fa-edit"></i>

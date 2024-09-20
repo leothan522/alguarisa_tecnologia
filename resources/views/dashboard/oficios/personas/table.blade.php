@@ -2,7 +2,12 @@
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
-                Búsqueda { <b class="text-warning">{{ $keyword }}</b> } [ <b class="text-warning">{{ $rowsCount }}</b> ]
+                @if(!$filtro)
+                    Búsqueda { <b class="text-warning">{{ $keyword }}</b> }
+                @else
+                    Filtro { <b class="text-warning text-capitalize">{{ $filtro }}</b> }
+                @endif
+                [ <b class="text-warning">{{ $rowsCount }}</b> ]
                 <button class="btn btn-tool text-warning" wire:click="cerrarBusqueda">
                     <i class="fas fa-times-circle"></i>
                 </button>

@@ -22,7 +22,8 @@ class Persona extends Model
     {
         return $query->where('nombre', 'LIKE', "%$keyword%")
             ->orWhere('prefijo', 'LIKE', "%$keyword%")
-            ->orWhere('cargo', 'LIKE', "%$keyword%");
+            ->orWhere('cargo', 'LIKE', "%$keyword%")
+            ->orWhere('instituciones_id', is_numeric($keyword) ? $keyword : null);
     }
 
     public function institucion(): BelongsTo
