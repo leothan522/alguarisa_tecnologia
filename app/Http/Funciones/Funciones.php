@@ -444,5 +444,14 @@ function getDataSelect2($rows, $text, $id = "rowquid"): array
     return $data;
 }
 
+function borrarQR($path): void
+{
+    $imagen = "public/{$path}";
+    $exite = Storage::exists($imagen);
+    if ($exite){
+        Storage::delete($imagen);
+    }
+}
+
 //********************** FUNCIONES PROPIAS DEL PROYECTO ATUAL ******************************
 

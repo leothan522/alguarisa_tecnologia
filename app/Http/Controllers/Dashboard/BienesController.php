@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Bien;
 use App\Models\Imagen;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Sleep;
 use Maatwebsite\Excel\Facades\Excel;
 
 class BienesController extends Controller
@@ -24,6 +26,11 @@ class BienesController extends Controller
 
     public function printEtiqueta($rowquid)
     {
+        borrarQR('qrcodelocal.svg');
+        borrarQR('qrcodeonline.svg');
+
+        Sleep::for(500)->millisecond();
+
         $bien = Bien::where('rowquid', $rowquid)->first();
         if (!$bien){
             return redirect()->route('web.index');
