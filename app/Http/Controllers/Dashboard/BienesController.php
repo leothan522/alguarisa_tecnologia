@@ -26,11 +26,6 @@ class BienesController extends Controller
 
     public function printEtiqueta($rowquid)
     {
-        borrarQR('qrcodelocal.svg');
-        borrarQR('qrcodeonline.svg');
-
-        Sleep::for(500)->millisecond();
-
         $bien = Bien::where('rowquid', $rowquid)->first();
         if (!$bien){
             return redirect()->route('web.index');

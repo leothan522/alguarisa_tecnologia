@@ -209,6 +209,9 @@ class BienesComponent extends Component
                 $this->verUbicacion = $ubicaciones->ubicacion->nombre;
             }
 
+            borrarQR('qrcodelocal.svg');
+            borrarQR('qrcodeonline.svg');
+
         }
 
     }
