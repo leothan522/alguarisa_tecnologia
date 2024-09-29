@@ -446,7 +446,7 @@ function getDataSelect2($rows, $text, $id = "rowquid"): array
 
 function borrarQR($path): void
 {
-    $imagen = "public/{$path}";
+    $imagen = "public\\{$path}";
     $exite = Storage::exists($imagen);
     if ($exite){
         Storage::delete($imagen);
