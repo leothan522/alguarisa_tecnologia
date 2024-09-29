@@ -208,10 +208,6 @@ class BienesComponent extends Component
             if ($ubicaciones){
                 $this->verUbicacion = $ubicaciones->ubicacion->nombre;
             }
-
-            borrarQR('qrcodelocal.svg');
-            borrarQR('qrcodeonline.svg');
-
         }
 
     }

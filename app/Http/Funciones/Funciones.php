@@ -161,7 +161,7 @@ function qrCodeGenerate($string = 'Hello World!', $size = 100, $filename = 'qrco
     }
 
     if (file_exists(public_path("storage/{$filename}.svg"))){
-        return '<img src="'.asset("storage/{$filename}.svg?v=".time()).'" alt="QRCode">';
+        return '<img src="'.asset("storage/{$filename}.svg").'" alt="QRCode">';
     }
     return "QRCode";
 }
@@ -444,13 +444,10 @@ function getDataSelect2($rows, $text, $id = "rowquid"): array
     return $data;
 }
 
-function borrarQR($path): void
+function borrarQR(): void
 {
-    $imagen = "public\\{$path}";
-    $exite = Storage::exists($imagen);
-    if ($exite){
-        Storage::delete($imagen);
-    }
+    $path = public_path('storage');;
+    File::delete(File::glob($path.'/*.svg'));
 }
 
 //********************** FUNCIONES PROPIAS DEL PROYECTO ATUAL ******************************

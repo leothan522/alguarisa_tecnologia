@@ -20,13 +20,13 @@
                 <p>Consulta Local</p>
                 <hr>
                 {{--{!! QrCode::size(150)->generate($texto); !!}--}}
-                {!! qrCodeGenerate($texto, 150, 'qrcodelocal') !!}
+                {!! qrCodeGenerate($texto, 150, 'qrcodelocal'.rand()) !!}
             </div>
             <div class="col-6 text-center">
                 Consulta en Linea
                 <hr>
                 {{--{!! QrCode::size(150)->generate($url); !!}--}}
-                {!! qrCodeGenerate($url, 150, 'qrcodeonline') !!}
+                {!! qrCodeGenerate($url, 150, 'qrcodeonline'.rand()) !!}
             </div>
         </div>
     </div>

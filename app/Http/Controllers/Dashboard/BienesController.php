@@ -26,6 +26,9 @@ class BienesController extends Controller
 
     public function printEtiqueta($rowquid)
     {
+        borrarQR();
+        Sleep::for(500)->millisecond();
+
         $bien = Bien::where('rowquid', $rowquid)->first();
         if (!$bien){
             return redirect()->route('web.index');
