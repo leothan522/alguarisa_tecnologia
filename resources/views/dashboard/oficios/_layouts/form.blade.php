@@ -1,8 +1,9 @@
-<form wire:submit="save">
-    <div class="card card-navy">
-        <div class="card-header">
-            <h3 class="card-title">Nuevo Oficio</h3>
-            <div class="card-tools">
+<div class="card card-navy">
+
+    <div class="card-header">
+        <h3 class="card-title">Nuevo Oficio</h3>
+        <div class="card-tools">
+            <form>
                 <div class="input-group input-group-sm">
                     <input type="text" class="form-control" placeholder="Buscar Serial" {{--wire:model="keyword"--}} required>
                     <div class="input-group-append">
@@ -11,24 +12,37 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </form>
         </div>
-        <!-- /.card-header -->
+    </div>
+
+    <form wire:submit="save">
+
         <div class="card-body">
 
-            <div wire:ignore>
-                <div class="form-group">
-                    <label>Dirigido a:</label>
-                    <select class="select2" multiple="multiple" data-placeholder="Seleccione" style="width: 100%;"></select>
+            <div class="form-group">
+                <label>Dirigido a:</label>
+                <div wire:ignore>
+                    <div id="div_select_dirigido_a">
+                        <select class="custom-control custom-select">
+                            <option>Seleccione</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <div wire:ignore>
-                <div class="form-group">
-                    <label>Con copia a:</label>
-                    <select class="select2" multiple="multiple" data-placeholder="Seleccione" style="width: 100%;"></select>
+
+            <div class="form-group">
+                <label>Con copia a:</label>
+                <div wire:ignore>
+                    <div id="div_select_con_copia_a">
+                        <select class="custom-control custom-select">
+                            <option>Seleccione</option>
+                        </select>
+                    </div>
                 </div>
             </div>
+
 
             <div class="row">
                 <div class="col-md-6">
@@ -38,19 +52,19 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="far fa-bookmark"></i></span>
                             </div>
-                            <input type="text" class="form-control" {{--wire:model="oficio"--}} placeholder="Nro. Oficio" >
+                            <input type="text" class="form-control" {{--wire:model="oficio"--}} placeholder="Nro. Oficio">
                             @error('oficio')
-                                <span class="col-sm-12 text-sm text-bold text-danger">
-                                    <i class="icon fas fa-exclamation-triangle"></i>
-                                    {{ $message }}
-                                </span>
+                            <span class="col-sm-12 text-sm text-bold text-danger">
+                                <i class="icon fas fa-exclamation-triangle"></i>
+                                {{ $message }}
+                            </span>
                             @enderror
                         </div>
                         @error('oficio')
-                            <div class="form-check m-2">
-                                <input type="checkbox" class="form-check-input" id="exampleCheck1" {{--wire:click="btnRepetido"--}}>
-                                <label class="form-check-label" for="exampleCheck1">Repetido</label>
-                            </div>
+                        <div class="form-check m-2">
+                            <input type="checkbox" class="form-check-input" id="exampleCheck1" {{--wire:click="btnRepetido"--}}>
+                            <label class="form-check-label" for="exampleCheck1">Repetido</label>
+                        </div>
                         @enderror
                     </div>
                 </div>
@@ -61,12 +75,12 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="far fa-bookmark"></i></span>
                             </div>
-                            <input type="date" class="form-control" {{--wire:model="fecha"--}} placeholder="alfanumérico" >
+                            <input type="date" class="form-control" {{--wire:model="fecha"--}} placeholder="alfanumérico">
                             @error('fecha')
-                                <span class="col-sm-12 text-sm text-bold text-danger">
-                                    <i class="icon fas fa-exclamation-triangle"></i>
-                                    {{ $message }}
-                                </span>
+                            <span class="col-sm-12 text-sm text-bold text-danger">
+                                <i class="icon fas fa-exclamation-triangle"></i>
+                                {{ $message }}
+                            </span>
                             @enderror
                         </div>
                     </div>
@@ -139,8 +153,10 @@
                 </div>
                 <p class="help-block">Max. 32MB</p>
             </div>
+
+
         </div>
-        <!-- /.card-body -->
+
         <div class="card-footer">
             <div class="float-right">
                 <button type="submit" class="btn btn-primary">
@@ -151,7 +167,9 @@
                 <i class="fas fa-times"></i> Descartar
             </button>
         </div>
-    </div>
-</form>
+
+    </form>
+</div>
+
 
 

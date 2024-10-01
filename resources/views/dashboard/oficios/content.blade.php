@@ -24,6 +24,43 @@
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
 
+        // $('.select2').select2();
+
+        //Initialize Select2 Elements
+        /*$('.select2bs4').select2({
+            theme: 'bootstrap4'
+        });*/
+
+        //Enable check and uncheck all functionality
+        // $('.checkbox-toggle').click(function () {
+        //     var clicks = $(this).data('clicks')
+        //     if (clicks) {
+        //         //Uncheck all checkboxes
+        //         $('.mailbox-messages input[type=\'checkbox\']').prop('checked', false)
+        //         $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
+        //     } else {
+        //         //Check all checkboxes
+        //         $('.mailbox-messages input[type=\'checkbox\']').prop('checked', true)
+        //         $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
+        //     }
+        //     $(this).data('clicks', !clicks)
+        // });
+
+        function select_2(id, data, event) {
+            let html = '<select class="select2" multiple="multiple" data-placeholder="Seleccione" style="width: 100%;" id="'+ id +'"></select>';
+            $("#div_" + id).html(html);
+            $("#" + id)
+                .select2({
+                    data: data
+                })
+                .val(null)
+                .trigger('change')
+                .on('change', function () {
+                    let value = $(this).val();
+                    Livewire.dispatch(event, { rowquid: value });
+                });
+        }
+
         Livewire.on('personasSelectInstituciones', ({ data }) => {
 
             let html = '<div class="input-group-prepend">' +
@@ -53,14 +90,6 @@
             $('#personasSelectInstituciones').val(rowquid).trigger('change');
         });
 
-        /*$('.select2').select2();
-
-        //Initialize Select2 Elements
-        $('.select2bs4').select2({
-            theme: 'bootstrap4'
-        });*/
-
-
         $('#adicional').val('{{ $adicional }}').summernote({
             lang: 'es-ES',
             toolbar: [
@@ -73,9 +102,8 @@
             ],
             callbacks: {
                 onChange: function (contents, $editable) {
+                    @this.set('adicional', contents);
                     //console.log('onChange:', contents, $editable);
-                    @this.
-                    set('adicional', contents)
                 }
             }
         });
@@ -87,22 +115,6 @@
         $(document).on('select2:open', () => {
             document.querySelector('.select2-search__field').focus();
         });
-
-
-        //Enable check and uncheck all functionality
-        // $('.checkbox-toggle').click(function () {
-        //     var clicks = $(this).data('clicks')
-        //     if (clicks) {
-        //         //Uncheck all checkboxes
-        //         $('.mailbox-messages input[type=\'checkbox\']').prop('checked', false)
-        //         $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
-        //     } else {
-        //         //Check all checkboxes
-        //         $('.mailbox-messages input[type=\'checkbox\']').prop('checked', true)
-        //         $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
-        //     }
-        //     $(this).data('clicks', !clicks)
-        // });
 
         console.log('Hi!');
     </script>

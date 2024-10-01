@@ -5,16 +5,14 @@ namespace App\Livewire\Dashboard;
 use App\Models\Oficio;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
-use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithoutUrlPagination;
 use Livewire\WithPagination;
-use function Laravel\Prompts\alert;
 
 class OficiosComponent extends Component
 {
     use LivewireAlert;
-    use WithPagination,WithoutUrlPagination;
+    use WithPagination, WithoutUrlPagination;
 
     public $view = 'table',$order = 'DESC', $keyword;
     public $numero, $fecha, $equipos, $adicional, $pdf;
@@ -69,5 +67,7 @@ class OficiosComponent extends Component
         $this->resetPage();
         $this->limpiar();
     }
+
+
 
 }
