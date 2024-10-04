@@ -61,6 +61,25 @@
                 });
         }
 
+        Livewire.on('initSelectDirigido', ({ data }) => {
+            select_2('select_dirigido_a', data, 'getSelectDirigido');
+        });
+
+        Livewire.on('initSelectCopia', ({ data }) => {
+            select_2('select_con_copia_a', data, 'getSelectCopia');
+        });
+
+
+        /*document.getElementById('input_file_pdf').onchange = function () {
+            document.getElementById('label_file_pdf').innerHTML = document.getElementById('input_file_pdf').files[0].name;
+        }
+*/
+
+
+
+
+
+
         Livewire.on('personasSelectInstituciones', ({ data }) => {
 
             let html = '<div class="input-group-prepend">' +
