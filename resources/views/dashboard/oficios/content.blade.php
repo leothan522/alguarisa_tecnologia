@@ -69,9 +69,17 @@
             select_2('select_con_copia_a', data, 'getSelectCopia');
         });
 
+        Livewire.on('setLabelIcono', () => {
+            let nombre = document.getElementById('input_file_pdf').files[0].name;
+            let size = document.getElementById('input_file_pdf').files[0].size;
+            @this.set('nombrePDF', nombre);
+            @this.set('sizePDF', size / 1024);
+        });
+
 
         /*document.getElementById('input_file_pdf').onchange = function () {
-            document.getElementById('label_file_pdf').innerHTML = document.getElementById('input_file_pdf').files[0].name;
+            document.getElementById('label_file_pdf').innerHTML =
+            document.getElementById('input_file_pdf').files[0].name;
         }
 */
 

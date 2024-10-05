@@ -31,7 +31,7 @@
         </div>--}}
         <!-- /.mailbox-controls -->
         <div class="mailbox-read-message">
-            @if($pdf)
+            @if($verPDF)
                 <div class="embed-responsive embed-responsive-16by9">
                     <iframe class="embed-responsive-item" src="{{asset('ViewerJS/#../storage/pdf/etiqueta.pdf')}}" allowfullscreen></iframe>
                 </div>

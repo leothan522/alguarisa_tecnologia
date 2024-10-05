@@ -2,9 +2,11 @@
 
 namespace App\Livewire\Dashboard;
 
+use App\Models\Bien;
 use App\Models\Institucion;
 use App\Models\Oficio;
 use App\Models\Persona;
+use Illuminate\Support\Sleep;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
@@ -22,6 +24,7 @@ class OficiosComponent extends Component
     public $serial;
     public $dirigido, $copia;
     public $numero, $repetido = false, $fecha, $adicional, $equipos = 0, $pdf;
+    public $verPDF = false, $verIconoPDF = false, $nombrePDF, $sizePDF;
     public $listarEquipos = [];
 
     #[Locked]
@@ -40,6 +43,7 @@ class OficiosComponent extends Component
             'view', 'oficios_id', 'rowquid',
             'dirigido', 'copia',
             'numero', 'repetido', 'fecha', 'adicional', 'equipos', 'pdf',
+            'verPDF', 'verIconoPDF', 'nombrePDF', 'sizePDF',
             'listarEquipos'
         ]);
     }
@@ -61,7 +65,7 @@ class OficiosComponent extends Component
     public function rules()
     {
         return [
-            'pdf' => 'nullable|mimes:pdf|max:2024', // 2MB Max
+            'pdf' => 'nullable|mimes:pdf|max:5120', // 5MB Max
         ];
     }
 
@@ -69,6 +73,7 @@ class OficiosComponent extends Component
     {
         return [
             'frontalPhoto.max' => 'la imagen Frontal no debe ser mayor que 2MB.',
+            'pdf.mimes' => 'El archivo a adjuntar debe ser un archivo con formato: pdf.',
         ];
     }
 
@@ -80,7 +85,64 @@ class OficiosComponent extends Component
 
     public function searchSerial()
     {
-        $this->alert('info', 'Buscando Serial.');
+        $rules = ['serial' => 'required|alpha_dash:ascii'];
+        $message = [
+            'serial.required' => 'El campo es obligatorio.',
+            'serial.alpha_dash' => 'El campo sólo debe contener letras, números, guiones y guiones bajos.'
+        ];
+
+        $this->serial = str_replace('/', '_-_', $this->serial);
+
+        $this->validate($rules, $message);
+
+        $this->serial = str_replace('_-_', '/', $this->serial);
+
+        $exite = false;
+
+        foreach ($this->listarEquipos as $equipo){
+            if (mb_strtoupper($equipo['serial']) == mb_strtoupper($this->serial) ||
+                mb_strtoupper($equipo['identificador']) == mb_strtoupper($this->serial)){
+                $exite = true;
+                break;
+            }
+        }
+
+        if (!$exite){
+            $bien = Bien::where('serial', $this->serial)->orWhere('identificador', $this->serial)->first();
+            if ($bien){
+                $this->listarEquipos[] = [
+                    'id' => $bien->id,
+                    'tipo' => $bien->tipo->nombre,
+                    'marca' => $bien->marca->nombre,
+                    'modelo' => $bien->modelo->nombre,
+                    'serial' => $bien->serial,
+                    'identificador' => $bien->identificador,
+                    'rowquid' => $bien->rowquid
+                ];
+                $this->equipos++;
+                $this->reset('serial');
+                $this->alert('info', 'Bien Agregado.');
+            }else{
+                $this->confirm('¿Registrar Bienes?', [
+                    'toast' => false,
+                    'position' => 'center',
+                    'showConfirmButton' => true,
+                    'confirmButtonText' =>  '¡Sí, Registrar Equipo!',
+                    'text' =>  '¡El Serial ó Identificador suministrado NO coindide con algún Bien registrado!',
+                    'cancelButtonText' => 'No',
+                    'onConfirmed' => '',
+                ]);
+            }
+        }else{
+            $this->alert('warning', 'El equipo ya esta agregado.');
+            //$this->reset('serial');
+        }
+    }
+
+    public function btnQuitarEquipo($key)
+    {
+        unset($this->listarEquipos[$key]);
+        $this->equipos--;
     }
 
     protected function getDataSelects(): array
@@ -158,6 +220,25 @@ class OficiosComponent extends Component
     {
         $this->resetPage();
         $this->limpiar();
+    }
+
+    public function updatedPdf()
+    {
+        $this->reset(['verIconoPDF']);
+        $this->validate();
+        $this->verIconoPDF = true;
+        $this->dispatch('setLabelIcono');
+    }
+
+    #[On('setLabelIcono')]
+    public function setLabelIcono()
+    {
+        //JS
+    }
+
+    public function btnResetPDF()
+    {
+        $this->reset(['verIconoPDF', 'nombrePDF', 'sizePDF', 'pdf']);
     }
 
 

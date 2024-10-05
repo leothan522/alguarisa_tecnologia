@@ -5,7 +5,7 @@
         <div class="card-tools">
             <form wire:submit="searchSerial">
                 <div class="input-group input-group-sm">
-                    <input type="text" class="form-control" placeholder="Buscar Serial" {{--wire:model="keyword"--}} required>
+                    <input type="text" class="form-control" placeholder="Buscar Serial" wire:model="serial" required>
                     <div class="input-group-append">
                         <button type="submit" class="btn btn-primary">
                             <i class="fas fa-search"></i>
@@ -22,7 +22,7 @@
 
             <div class="form-group">
                 <label>Dirigido a:</label>
-                {!! json_encode($dirigido) !!}
+                {{--{!! json_encode($dirigido) !!}--}}
                 <div wire:ignore>
                     <div id="div_select_dirigido_a">
                         <select class="custom-control custom-select">
@@ -41,7 +41,7 @@
 
             <div class="form-group">
                 <label>Con copia a:</label>
-                {!! json_encode($copia) !!}
+                {{--{!! json_encode($copia) !!}--}}
                 <div wire:ignore>
                     <div id="div_select_con_copia_a">
                         <select class="custom-control custom-select">
@@ -142,7 +142,7 @@
                                         @endif
                                     </small>
                                     <!-- General tools such as edit or delete-->
-                                    <div class="tools text-danger" {{--wire:click="btnQuitarEquipo({{ $key }})"--}}>
+                                    <div class="tools text-danger" wire:click="btnQuitarEquipo({{ $key }})">
                                         <i class="fas fa-trash-alt"></i>
                                     </div>
                                 </li>
@@ -174,24 +174,27 @@
                     <input type="file" name="attachment" wire:model="pdf" accept="application/pdf" id="input_file_pdf">
                 </div>
 
-                <p class="help-block">Max. 32MB</p>
+                <p class="help-block">Max. 5MB</p>
 
-                @if($pdf)
-                    <ul class="mailbox-attachments d-flex align-items-stretch clearfix">
-                        <li>
-                            <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
-                            {{--<div class="mailbox-attachment-info">
-                                <a class="mailbox-attachment-name">
-                                    <i class="fas fa-paperclip"></i>
-                                    <span id="label_file_pdf">Sep2014-report.pdf</span>
-                                </a>
-                                <span class="mailbox-attachment-size clearfix mt-1">
-                                  <span>1,245 KB</span>
-                                </span>
-                            </div>--}}
-                        </li>
-                    </ul>
-                @endif
+
+                <ul class="mailbox-attachments d-flex align-items-stretch clearfix">
+                    <li @if(!$verIconoPDF) class="d-none" @endif >
+                        <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
+                        <div class="mailbox-attachment-info">
+                            <a class="mailbox-attachment-name">
+                                <i class="fas fa-paperclip"></i>
+                                <span>{{ $nombrePDF }}</span>
+                            </a>
+                            <span class="mailbox-attachment-size clearfix mt-1">
+                              <span>{{ formatoMillares($sizePDF, 0) }} KB</span>
+                                <button type="button" class="btn btn-default btn-sm float-right" wire:click="btnResetPDF">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+
 
                 @error('pdf')
                 <span class="col-sm-12 text-sm text-bold text-danger">
@@ -200,7 +203,7 @@
                 </span>
                 @enderror
 
-                <div class="row justify-content-center">
+                <div class="row justify-content-center mt-2">
                     <div class="col-10">
                         <!-- Progress Bar -->
                         <div x-show="uploading">
