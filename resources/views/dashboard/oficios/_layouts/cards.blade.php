@@ -8,7 +8,7 @@
     </button>
 @endif
 
-<div class="card">
+<div class="card d-none">
     <div class="card-header">
         <h3 class="card-title">Carpetas</h3>
 

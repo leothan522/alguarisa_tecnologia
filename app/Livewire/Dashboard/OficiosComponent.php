@@ -374,6 +374,23 @@ class OficiosComponent extends Component
         $this->resetErrorBag('pdf');
     }
 
+    public function getReceptor($array = []): string
+    {
+        $response = '';
+        foreach ($array as $item => $value){
+            $persona = Persona::where('rowquid', $value)->first();
+            if ($persona){
+                $response .= "[".ucfirst($persona->prefijo . ' ' . $persona->nombre)."]";
+            }else{
+                $institucion = Institucion::where('rowquid', $value)->first();
+                if ($institucion){
+                    $response .= "[".ucfirst($institucion->nombre)."]";
+                }
+            }
+        }
+        return $response;
+    }
+
 
 
 }

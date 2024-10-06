@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Institucion;
+use App\Models\Oficio;
 use App\Models\Persona;
 use Illuminate\Support\Sleep;
 use Illuminate\Validation\Rule;
@@ -150,14 +151,16 @@ class PersonasComponent extends Component
     #[On('confirmedPersonas')]
     public function confirmedPersonas()
     {
-        $id = null;
         $table = $this->getPersona($this->rowquid);
-        if ($table) {
-            $id = $table->id;
-        }
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
+
+        $oficio = Oficio::where('dirigido', 'like', "%$this->rowquid%")
+            ->orWhere('copia', 'like', "%$this->rowquid%")->first();
+        if ($oficio){
+            $vinculado = true;
+        }
 
         if ($vinculado) {
             $this->alert('warning', '¡No se puede Borrar!', [

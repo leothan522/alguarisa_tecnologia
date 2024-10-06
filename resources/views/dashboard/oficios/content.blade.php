@@ -63,7 +63,9 @@
 
         Livewire.on('initSelectDirigido', ({ data }) => {
             select_2('select_dirigido_a', data, 'getSelectDirigido');
-            $('#adicional').summernote('reset');
+            $('#adicional')
+                //.summernote('reset')
+                .summernote('code', '');
         });
 
         Livewire.on('initSelectCopia', ({ data }) => {
@@ -137,9 +139,7 @@
             $('#navbar_search_id').addClass('d-none');
         });
 
-        $(document).on('select2:open', () => {
-            document.querySelector('.select2-search__field').focus();
-        });
+        
 
         console.log('Hi!');
     </script>

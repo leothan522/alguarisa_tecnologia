@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Institucion;
+use App\Models\Oficio;
 use App\Models\Persona;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -153,6 +154,12 @@ class InstitucionesComponent extends Component
 
         $personas = Persona::where('instituciones_id', $id)->first();
         if ($personas){
+            $vinculado = true;
+        }
+
+        $oficio = Oficio::where('dirigido', 'like', "%$this->rowquid%")
+            ->orWhere('copia', 'like', "%$this->rowquid%")->first();
+        if ($oficio){
             $vinculado = true;
         }
 

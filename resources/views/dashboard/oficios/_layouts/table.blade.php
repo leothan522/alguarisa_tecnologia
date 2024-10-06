@@ -79,14 +79,26 @@
                                     {{ $oficio->numero }}
                                 </a>
                             </td>
-                            <td class="mailbox-subject" style="width: 60%">
-                                <b>[Dirigido a]</b> - [Con copia a]
+                            <td class="mailbox-subject text-nowrap text-truncate" style="width: 60%; max-width: 150px">
+
+                                @if(!empty($oficio->dirigido))
+                                    <b>{{ $this->getReceptor(json_decode($oficio->dirigido)) }}</b>
+                                @else
+                                    <b>[Dirigido a]</b> - [Con Copia a]
+                                @endif
+
+                                @if(!empty($oficio->copia))
+                                    - {{ $this->getReceptor(json_decode($oficio->copia)) }}
+                                @endif
                             </td>
                             <td>
-                                <small class="float-right text-nowrap">Equipos: {{ formatoMillares($oficio->equipos, 0) }}</small>
+                                <small
+                                    class="float-right text-nowrap">Equipos: {{ formatoMillares($oficio->equipos, 0) }}</small>
                             </td>
                             <td class="mailbox-attachment">
-
+                                @if($oficio->pdf)
+                                    <i class="fas fa-paperclip"></i>
+                                @endif
                             </td>
                             <td class="mailbox-date text-center">
                                 {{ getFecha($oficio->fecha) }}
@@ -96,9 +108,9 @@
                 @else
                     @if($keyword)
                         <tr>
-                           <td colspan="4" class="mailbox-subject text-center">
-                               Sin Resultados.
-                           </td>
+                            <td colspan="4" class="mailbox-subject text-center">
+                                Sin Resultados.
+                            </td>
                         </tr>
                     @else
                         <tr>
