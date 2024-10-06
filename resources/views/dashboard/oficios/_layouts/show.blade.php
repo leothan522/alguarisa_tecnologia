@@ -1,20 +1,38 @@
 <div class="card card-navy <!--card-outline-->">
     <div class="card-header">
-        <h3 class="card-title">Ver Oficio</h3>
+        <h3 class="card-title">
+            Ver Oficio [ <b class="text-warning">{{ $numero }}</b> ]
+        </h3>
 
         <div class="card-tools">
-            <a href="#" class="btn btn-tool" title="Anterior"><i class="fas fa-chevron-left"></i></a>
-            <a href="#" class="btn btn-tool" title="Siguente"><i class="fas fa-chevron-right"></i></a>
+            {{--<a href="#" class="btn btn-tool" title="Anterior"><i class="fas fa-chevron-left"></i></a>
+            <a href="#" class="btn btn-tool" title="Siguente"><i class="fas fa-chevron-right"></i></a>--}}
+            <button type="button" class="btn btn-tool" wire:click="show('{{ $rowquid }}')">
+                <i class="fas fa-sync-alt"></i>
+            </button>
         </div>
     </div>
     <!-- /.card-header -->
     <div class="card-body p-0">
-        <div class="mailbox-read-info">
-            <h5>Yilda Ledezma</h5>
-            <h6>
-                Cc: Anakari Castro <br>
-                Cc: Anakari Castro <br>
-                <span class="mailbox-read-time float-right">15 Feb. 2015 11:03 PM</span>
+        <div class="mailbox-read-info mr-3 ml-3">
+            <h5>
+                @if(!empty($dirigido))
+                    {!! $this->getReceptor($dirigido, true) !!}
+                @else
+                    [Dirigido a]
+                @endif
+            </h5>
+            <h6 class="mt-2">
+                @if(!empty($copia))
+                    {!! $this->getReceptor($copia, true, true) !!}
+                @else
+                    <br>
+                @endif
+                <span class="mailbox-read-time float-right text-capitalize">
+                    {{--15 Feb. 2015--}}
+                    {{ fechaEnLetras($fecha, "D MMMM YYYY") }}
+                    {{--11:03 PM--}}
+                </span>
             </h6>
         </div>
         <!-- /.mailbox-read-info -->
@@ -30,72 +48,93 @@
             </button>
         </div>--}}
         <!-- /.mailbox-controls -->
+        @if(!empty($adicional))
+            <div class="card-footer bg-white">
+                <div class="card card-navy card-outline">
+                    <div class="card-body table-responsive p-0">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>Información Adicional</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    {!! $adicional !!}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        @endif
+        <div class="card-footer bg-white">
+            <div class="card card-navy card-outline">
+
+                <div class="card-body table-responsive p-0" style="max-height: 30vh;" >
+
+                    <table class="table table-head-fixed table-hover text-nowrap sticky-top">
+                        <thead>
+                        <tr class="text-navy">
+                            {{--<th style="width: 10%">Código</th>--}}
+                            <th>
+                                Equipos
+                                <small class="float-right">Cantidad {{ $equipos }}</small>
+                            </th>
+                        </tr>
+                        </thead>
+                    </table>
+
+                    <!-- TO DO List -->
+                    <ul class="todo-list" data-widget="todo-list">
+                        @if(!empty($listarEquipos))
+                            @php($i = 0)
+                            @foreach($listarEquipos as $key => $equipo)
+                                @php($i++)
+                                <li>
+                                    <small class="text text-uppercase">
+                                        <small class="text-navy">{{ $i }}.&nbsp;-&nbsp;</small>
+                                        {{ $equipo['tipo'] }}
+                                        {{ $equipo['marca'] }}
+                                        {{ $equipo['modelo'] }}
+                                        @if(!is_null($equipo['serial']))
+                                            , Serial: {{ $equipo['serial'] }}
+                                        @endif
+                                        @if(!is_null($equipo['identificador']))
+                                            , Identificador: {{ $equipo['identificador'] }}
+                                        @endif
+                                    </small>
+                                    <!-- General tools such as edit or delete-->
+                                    {{--<div class="tools text-danger" wire:click="btnQuitarEquipo({{ $key }})">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </div>--}}
+                                </li>
+                            @endforeach
+                        @else
+                            <li class="text-center">
+                                <span class="text">Sin Equipos vinculados</span>
+                            </li>
+                        @endif
+
+                    </ul>
+
+                </div>
+
+
+            </div>
+        </div>
         <div class="mailbox-read-message">
             @if($verPDF)
                 <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="{{asset('ViewerJS/#../storage/pdf/etiqueta.pdf')}}" allowfullscreen></iframe>
+                    <iframe class="embed-responsive-item" src="{{asset('ViewerJS/#../'.$verPDF)}}" allowfullscreen></iframe>
                 </div>
             @endif
         </div>
         <!-- /.mailbox-read-message -->
     </div>
     <!-- /.card-body -->
-    <div class="card-footer bg-white">
-        <div class="card">
-            <div class="card-body table-responsive p-0">
-                <table class="table table-striped table-valign-middle">
-                    <thead>
-                    <tr>
-                        <th>Equipos</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                            <img src="{{ asset('img/img_placeholder.png') }}" alt="Product 1" class="img-circle img-size-32 mr-2">
-                        </td>
-                        <td>
-                            <span class="text-uppercase">CAMARA HIK VISION DS-2CE16D0T-IRF , Serial: f88938629 , Identificador: alg-bn-0554</span>
-                        </td>
-                        <td class="text-center">
-                            <a href="#" class="text-muted">
-                                <i class="fas fa-search"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        {{--<ul class="mailbox-attachments d-flex align-items-stretch clearfix">
-            <li>
-                <span class="mailbox-attachment-icon"><i class="far fa-file-pdf"></i></span>
-
-                <div class="mailbox-attachment-info">
-                    <a href="#" class="mailbox-attachment-name"><i class="fas fa-paperclip"></i> Sep2014-report.pdf</a>
-                    <span class="mailbox-attachment-size clearfix mt-1">
-                          <span>1,245 KB</span>
-                          <a href="#" class="btn btn-default btn-sm float-right"><i class="fas fa-cloud-download-alt"></i></a>
-                        </span>
-                </div>
-            </li>
-            <li>
-                <span class="mailbox-attachment-icon has-img">
-                    <img src="{{ asset('img/logo_gobernacion.png') }}" alt="Attachment"></span>
-
-                <div class="mailbox-attachment-info">
-                    <a href="#" class="mailbox-attachment-name"><i class="fas fa-camera"></i> photo1.png</a>
-                    <span class="mailbox-attachment-size clearfix mt-1">
-                          <span>2.67 MB</span>
-                          <a href="#" class="btn btn-default btn-sm float-right"><i
-                                  class="fas fa-cloud-download-alt"></i></a>
-                        </span>
-                </div>
-            </li>
-        </ul>--}}
-    </div>
     <!-- /.card-footer -->
     <div class="card-footer">
         <div class="float-right">
@@ -109,5 +148,8 @@
         {{--<button type="button" class="btn btn-default"><i class="fas fa-print"></i> Imprimir</button>--}}
     </div>
     <!-- /.card-footer -->
+
+    {!! verSpinner() !!}
+
 </div>
 <!-- /.card -->

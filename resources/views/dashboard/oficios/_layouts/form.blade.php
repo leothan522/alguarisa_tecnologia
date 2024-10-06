@@ -117,9 +117,9 @@
 
             <div class="card card-navy card-outline">
 
-                <div class="card-body table-responsive p-0" @if($equipos > 3) style="height: 30vh;" @endif >
+                <div class="card-body table-responsive p-0" style="max-height: 30vh;" >
 
-                    <table class="table <!--table-head-fixed--> table-hover text-nowrap sticky-top">
+                    <table class="table table-head-fixed table-hover text-nowrap sticky-top">
                         <thead>
                         <tr class="text-navy">
                             {{--<th style="width: 10%">Código</th>--}}
@@ -134,9 +134,12 @@
                     <!-- TO DO List -->
                     <ul class="todo-list" data-widget="todo-list">
                         @if(!empty($listarEquipos))
+                            @php($i = 0)
                             @foreach($listarEquipos as $key => $equipo)
+                                @php($i++)
                                 <li>
                                     <small class="text text-uppercase">
+                                        <small class="text-navy">{{ $i }}.&nbsp;-&nbsp;</small>
                                         {{ $equipo['tipo'] }}
                                         {{ $equipo['marca'] }}
                                         {{ $equipo['modelo'] }}

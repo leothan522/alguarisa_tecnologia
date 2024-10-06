@@ -7,7 +7,7 @@ use App\Models\Equipo;
 use App\Models\Institucion;
 use App\Models\Oficio;
 use App\Models\Persona;
-use Illuminate\Support\Sleep;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
@@ -70,7 +70,41 @@ class OficiosComponent extends Component
     public function show($rowquid)
     {
         $this->limpiar();
-        $this->view = 'show';
+        $oficio = $this->getOficio($rowquid);
+        if ($oficio){
+
+            $this->oficios_id = $oficio->id;
+            $this->rowquid = $oficio->rowquid;
+            $this->numero = $oficio->numero;
+            $this->fecha = $oficio->fecha;
+            $this->equipos = intval($oficio->equipos);
+            $this->adicional = $oficio->adicional;
+
+            $equipos = Equipo::where('oficios_id', $this->oficios_id)->get();
+            foreach ($equipos as $equipo){
+                $bien = Bien::find($equipo->bienes_id);
+                $this->listarEquipos[] = [
+                    'id' => $bien->id,
+                    'tipo' => $bien->tipo->nombre,
+                    'marca' => $bien->marca->nombre,
+                    'modelo' => $bien->modelo->nombre,
+                    'serial' => $bien->serial,
+                    'identificador' => $bien->identificador,
+                    'rowquid' => $bien->rowquid,
+                ];
+            }
+
+            $this->dirigido = json_decode($oficio->dirigido);
+            $this->copia = json_decode($oficio->copia);
+            if ($oficio->pdf){
+               $pdf = str_replace('storage/', 'public/', $oficio->pdf);
+                if (Storage::exists($pdf)){
+                    $this->verPDF = $oficio->pdf;
+                }
+            }
+
+            $this->view = 'show';
+        }
     }
 
     public function rules()
@@ -374,21 +408,42 @@ class OficiosComponent extends Component
         $this->resetErrorBag('pdf');
     }
 
-    public function getReceptor($array = []): string
+    public function getReceptor($array = [], $show = false, $copia = false): string
     {
         $response = '';
-        foreach ($array as $item => $value){
+        foreach ($array as $value){
             $persona = Persona::where('rowquid', $value)->first();
             if ($persona){
-                $response .= "[".ucfirst($persona->prefijo . ' ' . $persona->nombre)."]";
+                if (!$show){
+                    $response .= "[".ucfirst($persona->prefijo . ' ' . $persona->nombre)."]";
+                }else{
+                    if (!$copia){
+                        $response .= ucfirst($persona->prefijo . ' ' . $persona->nombre)."<br>";
+                    }else{
+                        $response .= "Cc: ".ucfirst($persona->prefijo . ' ' . $persona->nombre)."<br>";
+                    }
+                }
             }else{
                 $institucion = Institucion::where('rowquid', $value)->first();
                 if ($institucion){
-                    $response .= "[".ucfirst($institucion->nombre)."]";
+                    if (!$show){
+                        $response .= "[".ucfirst($institucion->nombre)."]";
+                    }else{
+                        if (!$copia){
+                            $response .= ucfirst($institucion->nombre)."<br>";
+                        }else{
+                            $response .= "Cc: ".ucfirst($institucion->nombre)."<br>";
+                        }
+                    }
                 }
             }
         }
         return $response;
+    }
+
+    private function getOficio($rowquid): ?Oficio
+    {
+        return Oficio::where('rowquid', $rowquid)->first();
     }
 
 

@@ -34,7 +34,9 @@
         <!-- TO DO List -->
         <ul class="todo-list" data-widget="todo-list">
             @if(!empty($listarEquipos))
+                @php($i = 0)
                 @foreach($listarEquipos as $key => $equipo)
+                    @php($i++)
                     <li>
                         <!-- todo text -->
                         {{--<span class="text">
@@ -42,6 +44,7 @@
                         </span>--}}
                         <!-- Emphasis label -->
                         <small class="text text-uppercase {{--badge-danger--}}">
+                            <small class="text-navy">{{ $i }}.&nbsp;-&nbsp;</small>
                             {{ $equipo['tipo'] }}
                             {{ $equipo['marca'] }}
                             {{ $equipo['modelo'] }}

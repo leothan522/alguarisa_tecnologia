@@ -75,7 +75,7 @@
                             </td>--}}
                             {{--<td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>--}}
                             <td class="mailbox-name text-nowrap">
-                                <a class="link-dark" wire:click="show('hola')" style="cursor: pointer;">
+                                <a class="link-dark" wire:click="show('{{ $oficio->rowquid }}')" style="cursor: pointer;">
                                     {{ $oficio->numero }}
                                 </a>
                             </td>
