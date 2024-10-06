@@ -3,7 +3,7 @@
         <i class="fas fa-arrow-left"></i> Volver a Oficios
     </button>
 @else
-    <button type="button" class="btn btn-primary btn-block mb-3" wire:click="create">
+    <button type="button" class="btn btn-primary btn-block mb-3" wire:click="create" @if(!comprobarPermisos('oficios.create')) disabled @endif >
         <i class="fas fa-file"></i> Nuevo Oficio
     </button>
 @endif
@@ -58,12 +58,14 @@
                     <i class="fas fa-university text-primary"></i> Instituciones
                 </span>
             </li>
-            <li class="nav-item">
-                <a href="{{ route('bienes.index') }}" class="nav-link" target="_blank">
-                    <i class="fas fa-boxes text-primary"></i>
-                    Bienes
-                </a>
-            </li>
+            @if(comprobarPermisos('bienes.index'))
+                <li class="nav-item">
+                    <a href="{{ route('bienes.index') }}" class="nav-link" target="_blank">
+                        <i class="fas fa-boxes text-primary"></i>
+                        Bienes
+                    </a>
+                </li>
+            @endif
         </ul>
     </div>
     <!-- /.card-body -->

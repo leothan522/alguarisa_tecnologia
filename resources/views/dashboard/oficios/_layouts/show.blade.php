@@ -143,11 +143,11 @@
     <!-- /.card-footer -->
     <div class="card-footer">
         <div class="float-right">
-            <button type="button" class="btn btn-default btn-sm" wire:click="edit">
+            <button type="button" class="btn btn-default btn-sm" wire:click="edit" @if(!comprobarPermisos('oficios.edit')) disabled @endif >
                 <i class="fas fa-edit"></i> Editar
             </button>
         </div>
-        <button type="button" class="btn btn-default btn-sm" wire:click="destroy">
+        <button type="button" class="btn btn-default btn-sm" wire:click="destroy" @if(!comprobarPermisos('oficios.destroy')) disabled @endif >
             <i class="fas fa-trash-alt"></i> Eliminar
         </button>
         {{--<button type="button" class="btn btn-default"><i class="fas fa-print"></i> Imprimir</button>--}}

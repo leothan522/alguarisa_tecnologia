@@ -33,6 +33,22 @@ function allPermisos()
                 'Borrar Oficios' => 'oficios.destroy'
             ]
         ],
+        'Personas' => [
+            'route' => 'personas.index',
+            'submenu' => [
+                'Crear Personas' => 'personas.create',
+                'Editar Personas' => 'personas.edit',
+                'Borrar Personas' => 'personas.destroy'
+            ]
+        ],
+        'Instituciones' => [
+            'route' => 'instituciones.index',
+            'submenu' => [
+                'Crear Instituciones' => 'instituciones.create',
+                'Editar Instituciones' => 'instituciones.edit',
+                'Borrar Instituciones' => 'instituciones.destroy'
+            ]
+        ],
         'Bienes' => [
             'route' => 'bienes.index',
             'submenu' => [

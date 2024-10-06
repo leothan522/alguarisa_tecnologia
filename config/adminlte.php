@@ -319,7 +319,7 @@ return [
                     'text' => 'Oficios',
                     'icon' => 'fas fa-fw fa-file-invoice',
                     'route'  => 'oficios.index',
-                    'can'  => 'parametros',
+                    'can'  => 'oficios',
                 ],
                 [
                     'text' => 'Bienes',
