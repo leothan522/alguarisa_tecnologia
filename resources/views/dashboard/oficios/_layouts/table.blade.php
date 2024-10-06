@@ -1,6 +1,15 @@
 <div class="card card-navy <!--card-outline-->">
     <div class="card-header">
-        <h3 class="card-title">Oficios Entregados</h3>
+        <h3 class="card-title">
+            @if($keyword)
+                Búsqueda { <b class="text-warning">{{ $keyword }}</b> } [ <b class="text-warning">{{ $rows }}</b> ]
+                <button class="btn btn-tool text-warning" wire:click="cerrarBusqueda">
+                    <i class="fas fa-times-circle"></i>
+                </button>
+            @else
+                Registrados [ <b class="text-warning">{{ $rows }}</b> ]
+            @endif
+        </h3>
 
         <div class="card-tools">
             <form class="form-inline" wire:submit="buscar">

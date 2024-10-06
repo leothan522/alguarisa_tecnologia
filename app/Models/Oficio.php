@@ -19,6 +19,9 @@ class Oficio extends Model
         'equipos',
         'adicional',
         'pdf',
+        'dirigido',
+        'copia',
+        'repetido',
         'auditoria',
         'rowquid'
     ];

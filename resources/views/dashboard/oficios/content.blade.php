@@ -63,6 +63,7 @@
 
         Livewire.on('initSelectDirigido', ({ data }) => {
             select_2('select_dirigido_a', data, 'getSelectDirigido');
+            $('#adicional').summernote('reset');
         });
 
         Livewire.on('initSelectCopia', ({ data }) => {
@@ -77,16 +78,13 @@
         });
 
 
-        /*document.getElementById('input_file_pdf').onchange = function () {
-            document.getElementById('label_file_pdf').innerHTML =
-            document.getElementById('input_file_pdf').files[0].name;
-        }
-*/
 
 
 
-
-
+        Livewire.on('irBienes', () => {
+            var nuevaPestana = window.open("{{ route('bienes.index') }}", '_blank');
+            nuevaPestana.focus();
+        });
 
         Livewire.on('personasSelectInstituciones', ({ data }) => {
 

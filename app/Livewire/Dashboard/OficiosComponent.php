@@ -3,10 +3,12 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Bien;
+use App\Models\Equipo;
 use App\Models\Institucion;
 use App\Models\Oficio;
 use App\Models\Persona;
 use Illuminate\Support\Sleep;
+use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
@@ -32,9 +34,17 @@ class OficiosComponent extends Component
 
     public function render()
     {
-        $oficios = Oficio::buscar($this->keyword)->orderBy('fecha', $this->order)->paginate(50);
+        $oficios = Oficio::buscar($this->keyword)
+            ->orderBy('fecha', $this->order)
+            ->orderBy('numero', $this->order)
+            ->orderBy('created_at', 'DESC')
+            ->paginate(50);
+
+        $rows = Oficio::buscar($this->keyword)->count();
+
         return view('livewire.dashboard.oficios-component')
-            ->with('oficios', $oficios);
+            ->with('oficios', $oficios)
+            ->with('rows', $rows);
     }
 
     public function limpiar()
@@ -46,6 +56,7 @@ class OficiosComponent extends Component
             'verPDF', 'verIconoPDF', 'nombrePDF', 'sizePDF',
             'listarEquipos'
         ]);
+        $this->resetErrorBag();
     }
 
     public function create()
@@ -64,7 +75,17 @@ class OficiosComponent extends Component
 
     public function rules()
     {
+        if (!$this->repetido){
+            $unico = [ 'required', Rule::unique('oficios', 'numero')->ignore($this->oficios_id)];
+        }else{
+            $unico = 'required';
+        }
         return [
+            'dirigido' => 'required',
+            'copia' => 'nullable|different:dirigido',
+            'numero' => $unico,
+            'fecha' => 'required',
+            'adicional' => 'required_if:equipos,0',
             'pdf' => 'nullable|mimes:pdf|max:5120', // 5MB Max
         ];
     }
@@ -72,7 +93,12 @@ class OficiosComponent extends Component
     public function messages()
     {
         return [
-            'frontalPhoto.max' => 'la imagen Frontal no debe ser mayor que 2MB.',
+            'dirigido.required' => 'El campo dirigido a es obligatorio.',
+            'copia.different' => 'Con copia y Dirigido a deben ser diferentes.',
+            'numero.required' => 'El numero es obligatorio.',
+            'fecha.required' => 'La fecha es obligatoria.',
+            'numero.unique' => 'El numero ya ha sido registrado.',
+            'adicional.required_if' => 'El campo adicional es obligatorio cuando equipos vinculados es 0.',
             'pdf.mimes' => 'El archivo a adjuntar debe ser un archivo con formato: pdf.',
         ];
     }
@@ -80,7 +106,89 @@ class OficiosComponent extends Component
     public function save()
     {
         $this->validate();
-        $this->alert('success', 'Guardado.');
+
+        if ($this->oficios_id){
+            $oficio = Oficio::find($this->oficios_id);
+            $borrar = true;
+            if (is_null($oficio->auditoria)){
+                $auditoria = "[ 'accion' => 'edit', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+            }else{
+                $auditoria = $oficio->auditoria.", [ 'accion' => 'edit', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+            }
+        }else{
+            $oficio = new Oficio();
+            $borrar = false;
+            $auditoria = "[ 'accion' => 'create', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Oficio::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $oficio->rowquid = $rowquid;
+        }
+
+        if ($oficio){
+            $oficio->numero = $this->numero;
+            $oficio->fecha = $this->fecha;
+            $oficio->equipos = $this->equipos;
+            $oficio->adicional = $this->adicional;
+            $oficio->auditoria = $auditoria;
+
+            if (!empty($this->dirigido)){
+                $oficio->dirigido = json_encode($this->dirigido);
+            }
+
+            if (!empty($this->copia)){
+                $oficio->copia = json_encode($this->copia);
+            }
+
+            if ($this->repetido){
+                $oficio->repetido = 1;
+            }
+
+            if ($this->pdf){
+                $ruta = $this->pdf->store("public/pdf");
+                $oficio->pdf = str_replace('public/', 'storage/', $ruta);
+            }
+
+
+            $oficio->save();
+
+            if ($borrar){
+                $equipos = Equipo::where('oficios_id', $oficio->id)->get();
+                foreach ($equipos as $equipo){
+                    $eliminar = Equipo::find($equipo->id);
+                    $eliminar->delete();
+                }
+            }
+
+            if (!empty($this->listarEquipos)) {
+                foreach ($this->listarEquipos as $equipo){
+                    $nuevo = new Equipo();
+                    $nuevo->oficios_id = $oficio->id;
+                    $nuevo->bienes_id = $equipo['id'];
+                    do{
+                        $rowquid = generarStringAleatorio(16);
+                        $existe = Equipo::where('rowquid', $rowquid)->first();
+                    }while($existe);
+                    $nuevo->rowquid = $rowquid;
+                    $nuevo->save();
+                }
+            }
+
+            $this->reset('keyword');
+            $this->alert('success', 'Datos Guardados.');
+            $this->limpiar();
+        }
+
+    }
+
+    public function btnRepetido()
+    {
+        if ($this->repetido){
+            $this->repetido = false;
+        }else{
+            $this->repetido = true;
+        }
     }
 
     public function searchSerial()
@@ -130,13 +238,25 @@ class OficiosComponent extends Component
                     'confirmButtonText' =>  '¡Sí, Registrar Equipo!',
                     'text' =>  '¡El Serial ó Identificador suministrado NO coindide con algún Bien registrado!',
                     'cancelButtonText' => 'No',
-                    'onConfirmed' => '',
+                    'onConfirmed' => 'nuevoBien',
                 ]);
             }
         }else{
             $this->alert('warning', 'El equipo ya esta agregado.');
             //$this->reset('serial');
         }
+    }
+
+    #[On('nuevoBien')]
+    public function nuevoBien()
+    {
+        $this->dispatch('irBienes');
+    }
+
+    #[On('irBienes')]
+    public function irBienes()
+    {
+        //JS
     }
 
     public function btnQuitarEquipo($key)
@@ -216,6 +336,12 @@ class OficiosComponent extends Component
         $this->resetPage();
     }
 
+    public function cerrarBusqueda()
+    {
+        $this->reset(['keyword']);
+        $this->resetPage();
+    }
+
     public function actualizar()
     {
         $this->resetPage();
@@ -225,7 +351,13 @@ class OficiosComponent extends Component
     public function updatedPdf()
     {
         $this->reset(['verIconoPDF']);
-        $this->validate();
+        $rules = [
+            'pdf' => 'nullable|mimes:pdf|max:5120', // 5MB Max
+        ];
+        $messages = [
+            'pdf.mimes' => 'El archivo a adjuntar debe ser un archivo con formato: pdf.',
+        ];
+        $this->validate($rules, $messages);
         $this->verIconoPDF = true;
         $this->dispatch('setLabelIcono');
     }
@@ -239,6 +371,7 @@ class OficiosComponent extends Component
     public function btnResetPDF()
     {
         $this->reset(['verIconoPDF', 'nombrePDF', 'sizePDF', 'pdf']);
+        $this->resetErrorBag('pdf');
     }
 
 

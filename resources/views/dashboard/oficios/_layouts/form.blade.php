@@ -107,6 +107,12 @@
                         {{--{{ $adicional }}--}}
                     </textarea>
                 </div>
+                @error('adicional')
+                <span class="col-sm-12 text-sm text-bold text-danger">
+                    <i class="icon fas fa-exclamation-triangle"></i>
+                    {{ $message }}
+                </span>
+                @enderror
             </div>
 
             <div class="card card-navy card-outline">
@@ -197,7 +203,7 @@
 
 
                 @error('pdf')
-                <span class="col-sm-12 text-sm text-bold text-danger">
+                <span class="col-sm-12 text-sm text-bold text-danger" wire:click="btnResetPDF" style="cursor:pointer;">
                     <i class="icon fas fa-exclamation-triangle"></i>
                     {{ $message }}
                 </span>
@@ -233,6 +239,9 @@
         </div>
 
     </form>
+
+
+
 </div>
 
 

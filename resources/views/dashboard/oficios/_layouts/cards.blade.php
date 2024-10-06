@@ -58,13 +58,12 @@
                     <i class="fas fa-university text-primary"></i> Instituciones
                 </span>
             </li>
-
-            {{--<li class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="far fa-circle text-danger"></i>
-                    Por verificar
+            <li class="nav-item">
+                <a href="{{ route('bienes.index') }}" class="nav-link" target="_blank">
+                    <i class="fas fa-boxes text-primary"></i>
+                    Bienes
                 </a>
-            </li>--}}
+            </li>
         </ul>
     </div>
     <!-- /.card-body -->

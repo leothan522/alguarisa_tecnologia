@@ -5,7 +5,7 @@
 @section('plugins.IcheckBootstrap', true)
 @section('plugins.Summernote', true)
 
-@section('title', 'Dashboard')
+@section('title', 'Oficios')
 
 @section('content_header')
     <div class="container-fluid">
