@@ -106,6 +106,7 @@ class InstitucionesComponent extends Component
             $table->save();
 
             $this->dispatch('initSelectPersonas')->to(PersonasComponent::class);
+            $this->dispatch('initSelectsForm')->to(OficiosComponent::class);
 
             $this->alert('success', $message);
         }

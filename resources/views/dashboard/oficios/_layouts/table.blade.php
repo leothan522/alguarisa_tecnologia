@@ -92,8 +92,12 @@
                                 @endif
                             </td>
                             <td>
-                                <small
-                                    class="float-right text-nowrap">Equipos: {{ formatoMillares($oficio->equipos, 0) }}</small>
+                                <small class="float-right text-nowrap">
+                                    @if($oficio->repetido)
+                                        <i class="far fa-copy"></i>
+                                    @endif
+                                    Equipos: {{ formatoMillares($oficio->equipos, 0) }}
+                                </small>
                             </td>
                             <td class="mailbox-attachment">
                                 @if($oficio->pdf)

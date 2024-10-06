@@ -7,6 +7,11 @@
         <div class="card-tools">
             {{--<a href="#" class="btn btn-tool" title="Anterior"><i class="fas fa-chevron-left"></i></a>
             <a href="#" class="btn btn-tool" title="Siguente"><i class="fas fa-chevron-right"></i></a>--}}
+            @if($verBtnRepetido)
+                <button type="button" class="btn btn-tool" wire:click="verNumerosRepeditos">
+                    <i class="far fa-copy"></i> Numero Repetido
+                </button>
+            @endif
             <button type="button" class="btn btn-tool" wire:click="show('{{ $rowquid }}')">
                 <i class="fas fa-sync-alt"></i>
             </button>
@@ -138,11 +143,11 @@
     <!-- /.card-footer -->
     <div class="card-footer">
         <div class="float-right">
-            <button type="button" class="btn btn-default btn-sm">
+            <button type="button" class="btn btn-default btn-sm" wire:click="edit">
                 <i class="fas fa-edit"></i> Editar
             </button>
         </div>
-        <button type="button" class="btn btn-default btn-sm">
+        <button type="button" class="btn btn-default btn-sm" wire:click="destroy">
             <i class="fas fa-trash-alt"></i> Eliminar
         </button>
         {{--<button type="button" class="btn btn-default"><i class="fas fa-print"></i> Imprimir</button>--}}

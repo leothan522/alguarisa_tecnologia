@@ -63,14 +63,26 @@
 
         Livewire.on('initSelectDirigido', ({ data }) => {
             select_2('select_dirigido_a', data, 'getSelectDirigido');
-            $('#adicional')
-                //.summernote('reset')
-                .summernote('code', '');
+            $('#adicional').summernote('code', '');
+        });
+
+        Livewire.on('setSelectDirigido', ({ rowquid }) => {
+            $('#select_dirigido_a').val(rowquid).trigger('change');
         });
 
         Livewire.on('initSelectCopia', ({ data }) => {
             select_2('select_con_copia_a', data, 'getSelectCopia');
         });
+
+        Livewire.on('setSelectCopia', ({ rowquid }) => {
+            $('#select_con_copia_a').val(rowquid).trigger('change');
+        });
+
+        Livewire.on('setTextArea', ({ texto }) => {
+            $('#adicional').summernote('code', texto);
+        });
+
+
 
         Livewire.on('setLabelIcono', () => {
             let nombre = document.getElementById('input_file_pdf').files[0].name;

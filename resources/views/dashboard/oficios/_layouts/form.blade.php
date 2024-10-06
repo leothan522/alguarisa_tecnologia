@@ -236,14 +236,14 @@
                     <i class="fas fa-save"></i> Guardar
                 </button>
             </div>
-            <button type="reset" class="btn btn-default" wire:click="limpiar">
+            <button type="reset" class="btn btn-default" wire:click="btnDescartar">
                 <i class="fas fa-times"></i> Descartar
             </button>
         </div>
 
     </form>
 
-    <div class="overlay-wrapper" wire:loading wire:target="save, searchSerial, btnQuitarEquipo, btnResetPDF, limpiar">
+    <div class="overlay-wrapper" wire:loading wire:target="save, searchSerial, btnQuitarEquipo, btnResetPDF, limpiar, btnDescartar">
         <div class="overlay">
             <div class="spinner-border text-navy" role="status">
                 <span class="sr-only">Loading...</span>

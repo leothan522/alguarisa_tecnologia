@@ -111,6 +111,7 @@ class PersonasComponent extends Component
             $table->instituciones_id = $this->instituciones_id;
             $table->sexo = $this->sexo;
             $table->save();
+            $this->dispatch('initSelectsForm')->to(OficiosComponent::class);
             $this->alert('success', 'Datos Guardados.');
         }
 
@@ -175,6 +176,7 @@ class PersonasComponent extends Component
         } else {
             if ($table) {
                 $table->delete();
+                $this->dispatch('initSelectsForm')->to(OficiosComponent::class);
                 $this->alert('success', 'Registro Eliminado.');
             }
         }

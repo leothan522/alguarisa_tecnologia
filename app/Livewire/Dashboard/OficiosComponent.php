@@ -8,6 +8,7 @@ use App\Models\Institucion;
 use App\Models\Oficio;
 use App\Models\Persona;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Sleep;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
@@ -26,7 +27,7 @@ class OficiosComponent extends Component
     public $serial;
     public $dirigido, $copia;
     public $numero, $repetido = false, $fecha, $adicional, $equipos = 0, $pdf;
-    public $verPDF = false, $verIconoPDF = false, $nombrePDF, $sizePDF;
+    public $verPDF = false, $verIconoPDF = false, $nombrePDF, $sizePDF, $oldPdf, $borrarPDF = false, $verBtnRepetido = 0;
     public $listarEquipos = [];
 
     #[Locked]
@@ -37,7 +38,7 @@ class OficiosComponent extends Component
         $oficios = Oficio::buscar($this->keyword)
             ->orderBy('fecha', $this->order)
             ->orderBy('numero', $this->order)
-            ->orderBy('created_at', 'DESC')
+            //->orderBy('created_at', 'DESC')
             ->paginate(50);
 
         $rows = Oficio::buscar($this->keyword)->count();
@@ -53,7 +54,7 @@ class OficiosComponent extends Component
             'view', 'oficios_id', 'rowquid',
             'dirigido', 'copia',
             'numero', 'repetido', 'fecha', 'adicional', 'equipos', 'pdf',
-            'verPDF', 'verIconoPDF', 'nombrePDF', 'sizePDF',
+            'verPDF', 'verIconoPDF', 'nombrePDF', 'sizePDF', 'oldPdf', 'borrarPDF', 'verBtnRepetido',
             'listarEquipos'
         ]);
         $this->resetErrorBag();
@@ -64,6 +65,7 @@ class OficiosComponent extends Component
         $this->limpiar();
         $this->dispatch('initSelectDirigido', data: $this->getDataSelects());
         $this->dispatch('initSelectCopia', data: $this->getDataSelects());
+        $this->reset('verPDF');
         $this->view = 'form';
     }
 
@@ -100,11 +102,34 @@ class OficiosComponent extends Component
                $pdf = str_replace('storage/', 'public/', $oficio->pdf);
                 if (Storage::exists($pdf)){
                     $this->verPDF = $oficio->pdf;
+                    $explode = explode('pdf/', $pdf);
+                    $this->nombrePDF = $explode[1];
+                    $this->sizePDF = Storage::size($pdf) / 1024;
+                    $this->verIconoPDF = true;
+                    $this->oldPdf = $pdf;
                 }
             }
 
+            $this->verBtnRepetido = $oficio->repetido;
+
             $this->view = 'show';
         }
+    }
+
+    public function edit()
+    {
+        $this->dispatch('initSelectDirigido', data: $this->getDataSelects());
+        $this->dispatch('initSelectCopia', data: $this->getDataSelects());
+        Sleep::for(500)->millisecond();
+        if (!empty($this->dirigido)){
+            $this->dispatch('setSelectDirigido', rowquid: $this->dirigido);
+        }
+        if (!empty($this->copia)){
+            $this->dispatch('setSelectCopia', rowquid: $this->copia);
+        }
+        $this->dispatch('setTextArea', texto: $this->adicional);
+        $this->reset('verPDF');
+        $this->view = 'form';
     }
 
     public function rules()
@@ -182,6 +207,18 @@ class OficiosComponent extends Component
             if ($this->pdf){
                 $ruta = $this->pdf->store("public/pdf");
                 $oficio->pdf = str_replace('public/', 'storage/', $ruta);
+                if ($this->oldPdf){
+                    $this->borrarPDF = true;
+                }
+            }
+
+            if ($this->borrarPDF){
+                if (Storage::exists($this->oldPdf)){
+                    Storage::delete($this->oldPdf);
+                }
+                if (!$this->pdf){
+                    $oficio->pdf = null;
+                }
             }
 
 
@@ -211,7 +248,7 @@ class OficiosComponent extends Component
 
             $this->reset('keyword');
             $this->alert('success', 'Datos Guardados.');
-            $this->limpiar();
+            $this->show($oficio->rowquid);
         }
 
     }
@@ -406,6 +443,9 @@ class OficiosComponent extends Component
     {
         $this->reset(['verIconoPDF', 'nombrePDF', 'sizePDF', 'pdf']);
         $this->resetErrorBag('pdf');
+        if ($this->oldPdf){
+            $this->borrarPDF = true;
+        }
     }
 
     public function getReceptor($array = [], $show = false, $copia = false): string
@@ -414,13 +454,14 @@ class OficiosComponent extends Component
         foreach ($array as $value){
             $persona = Persona::where('rowquid', $value)->first();
             if ($persona){
+                $prefijo = !empty($persona->prefijo) ?? '';
                 if (!$show){
-                    $response .= "[".ucfirst($persona->prefijo . ' ' . $persona->nombre)."]";
+                    $response .= "[".ucfirst($prefijo . $persona->nombre)."]";
                 }else{
                     if (!$copia){
-                        $response .= ucfirst($persona->prefijo . ' ' . $persona->nombre)."<br>";
+                        $response .= ucfirst($prefijo . $persona->nombre)."<br>";
                     }else{
-                        $response .= "Cc: ".ucfirst($persona->prefijo . ' ' . $persona->nombre)."<br>";
+                        $response .= "Cc: ".ucfirst($prefijo . $persona->nombre)."<br>";
                     }
                 }
             }else{
@@ -446,6 +487,89 @@ class OficiosComponent extends Component
         return Oficio::where('rowquid', $rowquid)->first();
     }
 
+    public function destroy()
+    {
+        $this->confirm('¿Estas seguro?', [
+            'toast' => false,
+            'position' => 'center',
+            'showConfirmButton' => true,
+            'confirmButtonText' =>  '¡Sí, bórralo!',
+            'text' =>  '¡No podrás revertir esto!',
+            'cancelButtonText' => 'No',
+            'onConfirmed' => 'confirmed',
+        ]);
+    }
 
+    #[On('confirmed')]
+    public function confirmed()
+    {
+        $oficio = Oficio::find($this->oficios_id);
 
+        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+        $vinculado = false;
+
+        if ($vinculado) {
+            $this->alert('warning', '¡No se puede Borrar!', [
+                'position' => 'center',
+                'timer' => '',
+                'toast' => false,
+                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
+                'showConfirmButton' => true,
+                'onConfirmed' => '',
+                'confirmButtonText' => 'OK',
+            ]);
+        } else {
+            if ($oficio){
+                if (is_null($oficio->auditoria)){
+                    $auditoria = "[ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+                }else{
+                    $auditoria = $oficio->auditoria.", [ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
+                }
+
+                $oficio->auditoria = $auditoria;
+                $oficio->numero = "*".$oficio->numero;
+                $oficio->save();
+                $oficio->delete();
+                $this->alert('success', 'Registro Eliminado.');
+            }
+        }
+
+        $this->limpiar();
+    }
+
+    #[On('setTextArea')]
+    public function setTextArea($texto)
+    {
+        //JS
+    }
+
+    public function btnDescartar()
+    {
+        if ($this->oficios_id){
+            $this->show($this->rowquid);
+        }else{
+            $this->limpiar();
+        }
+    }
+
+    #[On('initSelectsForm')]
+    public function initSelectsForm()
+    {
+        $this->dispatch('initSelectDirigido', data: $this->getDataSelects());
+        $this->dispatch('initSelectCopia', data: $this->getDataSelects());
+        Sleep::for(500)->millisecond();
+        if (!empty($this->dirigido)){
+            $this->dispatch('setSelectDirigido', rowquid: $this->dirigido);
+        }
+        if (!empty($this->copia)){
+            $this->dispatch('setSelectCopia', rowquid: $this->copia);
+        }
+    }
+
+    public function verNumerosRepeditos()
+    {
+        $this->keyword = $this->numero;
+        $this->reset('view');
+        $this->buscar();
+    }
 }
