@@ -454,7 +454,7 @@ class OficiosComponent extends Component
         foreach ($array as $value){
             $persona = Persona::where('rowquid', $value)->first();
             if ($persona){
-                $prefijo = !empty($persona->prefijo) ?? '';
+                $prefijo = !empty($persona->prefijo) ? $persona->prefijo." " : '';
                 if (!$show){
                     $response .= "[".ucfirst($prefijo . $persona->nombre)."]";
                 }else{
