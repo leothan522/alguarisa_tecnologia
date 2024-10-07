@@ -30,6 +30,11 @@
                                     <tr>
                                         <td class="text-uppercase">
                                             {{ $equipo->oficio->numero }}
+                                            @if($equipo->pdf && !$web)
+                                                <a href="{{ asset($equipo->pdf) }}" target="_blank" class="btn btn-sm text-primary m-0">
+                                                    <i class="fas fa-paperclip"></i>
+                                                </a>
+                                            @endif
                                         </td>
                                         <td class="text-right text-uppercase">
                                             {{ getFecha($equipo->oficio->fecha) }}
