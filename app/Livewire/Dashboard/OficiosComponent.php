@@ -145,7 +145,7 @@ class OficiosComponent extends Component
             'numero' => $unico,
             'fecha' => 'required',
             'adicional' => 'required_if:equipos,0',
-            'pdf' => 'nullable|mimes:pdf|max:5120', // 5MB Max
+            'pdf' => 'nullable|mimes:pdf|max:10240', // 10MB Max
         ];
     }
 
@@ -423,7 +423,7 @@ class OficiosComponent extends Component
     {
         $this->reset(['verIconoPDF']);
         $rules = [
-            'pdf' => 'nullable|mimes:pdf|max:5120', // 5MB Max
+            'pdf' => 'nullable|mimes:pdf|max:10240', // 10MB Max
         ];
         $messages = [
             'pdf.mimes' => 'El archivo a adjuntar debe ser un archivo con formato: pdf.',
