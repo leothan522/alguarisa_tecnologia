@@ -183,7 +183,7 @@
                     <input type="file" name="attachment" wire:model="pdf" accept="application/pdf" id="input_file_pdf">
                 </div>
 
-                <p class="help-block">Max. 5MB</p>
+                <p class="help-block">Max. 10MB</p>
 
 
                 <ul class="mailbox-attachments d-flex align-items-stretch clearfix">
