@@ -24,7 +24,7 @@
                 <label>Dirigido a:</label>
                 {{--{!! json_encode($dirigido) !!}--}}
                 <div wire:ignore>
-                    <div id="div_select_dirigido_a">
+                    <div id="div_select_dirigido_a" class="select2-purple">
                         <select class="custom-control custom-select">
                             <option>Seleccione</option>
                         </select>
@@ -43,7 +43,7 @@
                 <label>Con copia a:</label>
                 {{--{!! json_encode($copia) !!}--}}
                 <div wire:ignore>
-                    <div id="div_select_con_copia_a">
+                    <div id="div_select_con_copia_a" class="select2-purple">
                         <select class="custom-control custom-select">
                             <option>Seleccione</option>
                         </select>

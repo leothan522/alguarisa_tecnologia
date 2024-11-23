@@ -51,7 +51,8 @@
             $("#div_" + id).html(html);
             $("#" + id)
                 .select2({
-                    data: data
+                    data: data,
+                    //theme: 'bootstrap4'
                 })
                 .val(null)
                 .trigger('change')
