@@ -5,15 +5,15 @@ namespace App\Livewire\Dashboard;
 use App\Models\Institucion;
 use App\Models\Oficio;
 use App\Models\Persona;
+use App\Traits\ToastBootstrap;
 use Illuminate\Validation\Rule;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class InstitucionesComponent extends Component
 {
-    use LivewireAlert;
+    use ToastBootstrap;
 
     public $rows = 0, $keyword;
     public $form = false, $table = true, $disable;
@@ -88,7 +88,6 @@ class InstitucionesComponent extends Component
         if (is_null($this->instituciones_id)) {
             //nuevo
             $table = new Institucion();
-            $message = "Institución Creada.";
             do {
                 $rowquid = generarStringAleatorio(16);
                 $existe = Institucion::where('rowquid', $rowquid)->first();
@@ -97,7 +96,6 @@ class InstitucionesComponent extends Component
         } else {
             //editar
             $table = Institucion::find($this->instituciones_id);
-            $message = "Institución Actualizada.";
         }
 
         if ($table) {
@@ -108,7 +106,7 @@ class InstitucionesComponent extends Component
             $this->dispatch('initSelectPersonas')->to(PersonasComponent::class);
             $this->dispatch('initSelectsForm')->to(OficiosComponent::class);
 
-            $this->alert('success', $message);
+            $this->toastBootstrap();
         }
 
         $this->limpiarInstituciones();
@@ -130,15 +128,7 @@ class InstitucionesComponent extends Component
     public function destroy($rowquid)
     {
         $this->rowquid = $rowquid;
-        $this->confirm('¿Estas seguro?', [
-            'toast' => false,
-            'position' => 'center',
-            'showConfirmButton' => true,
-            'confirmButtonText' => '¡Sí, bórralo!',
-            'text' => '¡No podrás revertir esto!',
-            'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmedInstitucion',
-        ]);
+        $this->confirmToastBootstrap('confirmedInstitucion');
     }
 
     #[On('confirmedInstitucion')]
@@ -165,20 +155,13 @@ class InstitucionesComponent extends Component
         }
 
         if ($vinculado) {
-            $this->alert('warning', '¡No se puede Borrar!', [
-                'position' => 'center',
-                'timer' => '',
-                'toast' => false,
-                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
-                'showConfirmButton' => true,
-                'onConfirmed' => '',
-                'confirmButtonText' => 'OK',
-            ]);
+            $this->htmlToastBoostrap();
         } else {
             if ($table) {
+                $nombre = "<b>".mb_strtoupper($table->nombre)."</b>";
                 $table->delete();
                 $this->dispatch('initSelectPersonas')->to(PersonasComponent::class);
-                $this->alert('success', 'Institución Eliminada.');
+                $this->toastBootstrap('success', "Institución $nombre Eliminada.");
             }
         }
 

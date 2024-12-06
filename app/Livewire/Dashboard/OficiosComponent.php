@@ -7,10 +7,10 @@ use App\Models\Equipo;
 use App\Models\Institucion;
 use App\Models\Oficio;
 use App\Models\Persona;
+use App\Traits\ToastBootstrap;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Sleep;
 use Illuminate\Validation\Rule;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -20,7 +20,7 @@ use Livewire\WithPagination;
 
 class OficiosComponent extends Component
 {
-    use LivewireAlert;
+    use ToastBootstrap;
     use WithPagination, WithoutUrlPagination, WithFileUploads;
 
     public $view = 'table',$order = 'DESC', $keyword;
@@ -247,7 +247,7 @@ class OficiosComponent extends Component
             }
 
             $this->reset('keyword');
-            $this->alert('success', 'Datos Guardados.');
+            $this->toastBootstrap();
             $this->show($oficio->rowquid);
         }
 
@@ -300,20 +300,16 @@ class OficiosComponent extends Component
                 ];
                 $this->equipos++;
                 $this->reset('serial');
-                $this->alert('info', 'Bien Agregado.');
+                $this->toastBootstrap('info', 'Bien Agregado.');
             }else{
-                $this->confirm('¿Registrar Bienes?', [
-                    'toast' => false,
-                    'position' => 'center',
-                    'showConfirmButton' => true,
-                    'confirmButtonText' =>  '¡Sí, Registrar Equipo!',
-                    'text' =>  '¡El Serial ó Identificador suministrado NO coindide con algún Bien registrado!',
-                    'cancelButtonText' => 'No',
-                    'onConfirmed' => 'nuevoBien',
+                $this->confirmToastBootstrap('nuevoBien', [
+                    'title' => 'Registrar Bienes',
+                    'message' => "El Serial ó Identificador suministrado NO coindide con algún Bien registrado.",
+                    'button' => "¡Sí, Registrar Equipo!"
                 ]);
             }
         }else{
-            $this->alert('warning', 'El equipo ya esta agregado.');
+            $this->toastBootstrap('warning', 'El equipo ya esta agregado.');
             //$this->reset('serial');
         }
     }
@@ -489,15 +485,7 @@ class OficiosComponent extends Component
 
     public function destroy()
     {
-        $this->confirm('¿Estas seguro?', [
-            'toast' => false,
-            'position' => 'center',
-            'showConfirmButton' => true,
-            'confirmButtonText' =>  '¡Sí, bórralo!',
-            'text' =>  '¡No podrás revertir esto!',
-            'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmed',
-        ]);
+        $this->confirmToastBootstrap('confirmed');
     }
 
     #[On('confirmed')]
@@ -509,17 +497,12 @@ class OficiosComponent extends Component
         $vinculado = false;
 
         if ($vinculado) {
-            $this->alert('warning', '¡No se puede Borrar!', [
-                'position' => 'center',
-                'timer' => '',
-                'toast' => false,
-                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
-                'showConfirmButton' => true,
-                'onConfirmed' => '',
-                'confirmButtonText' => 'OK',
-            ]);
+            $this->htmlToastBoostrap();
         } else {
             if ($oficio){
+
+                $numero = "<b>".mb_strtoupper($oficio->numero)."</b>";
+
                 if (is_null($oficio->auditoria)){
                     $auditoria = "[ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
                 }else{
@@ -530,7 +513,7 @@ class OficiosComponent extends Component
                 $oficio->numero = "*".$oficio->numero;
                 $oficio->save();
                 $oficio->delete();
-                $this->alert('success', 'Registro Eliminado.');
+                $this->toastBootstrap('success', "Oficio Nro. $numero Eliminado.");
             }
         }
 

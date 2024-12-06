@@ -1,7 +1,7 @@
-<div class="card card-navy <!--card-outline-->">
+<div class="card card-navy card-outline">
     <div class="card-header">
         <h3 class="card-title">
-            Ver Oficio [ <b class="text-warning">{{ $numero }}</b> ]
+            Ver Oficio [ <b class="text-primary text-uppercase">{{ $numero }}</b> ]
         </h3>
 
         <div class="card-tools">

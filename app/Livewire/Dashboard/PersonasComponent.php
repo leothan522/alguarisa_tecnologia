@@ -5,16 +5,14 @@ namespace App\Livewire\Dashboard;
 use App\Models\Institucion;
 use App\Models\Oficio;
 use App\Models\Persona;
-use Illuminate\Support\Sleep;
-use Illuminate\Validation\Rule;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Traits\ToastBootstrap;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class PersonasComponent extends Component
 {
-    use LivewireAlert;
+    use ToastBootstrap;
 
     public $rows = 0, $keyword;
     public $form = false, $table = true, $disable;
@@ -112,7 +110,7 @@ class PersonasComponent extends Component
             $table->sexo = $this->sexo;
             $table->save();
             $this->dispatch('initSelectsForm')->to(OficiosComponent::class);
-            $this->alert('success', 'Datos Guardados.');
+            $this->toastBootstrap();
         }
 
         $this->limpiarPersonas();
@@ -138,15 +136,7 @@ class PersonasComponent extends Component
     public function destroy($rowquid)
     {
         $this->rowquid = $rowquid;
-        $this->confirm('¿Estas seguro?', [
-            'toast' => false,
-            'position' => 'center',
-            'showConfirmButton' => true,
-            'confirmButtonText' => '¡Sí, bórralo!',
-            'text' => '¡No podrás revertir esto!',
-            'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmedPersonas',
-        ]);
+        $this->confirmToastBootstrap('confirmedPersonas');
     }
 
     #[On('confirmedPersonas')]
@@ -164,20 +154,13 @@ class PersonasComponent extends Component
         }
 
         if ($vinculado) {
-            $this->alert('warning', '¡No se puede Borrar!', [
-                'position' => 'center',
-                'timer' => '',
-                'toast' => false,
-                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
-                'showConfirmButton' => true,
-                'onConfirmed' => '',
-                'confirmButtonText' => 'OK',
-            ]);
+            $this->htmlToastBoostrap();
         } else {
             if ($table) {
+                $nombre = "<b>".mb_strtoupper($table->nombre)."</b>";
                 $table->delete();
                 $this->dispatch('initSelectsForm')->to(OficiosComponent::class);
-                $this->alert('success', 'Registro Eliminado.');
+                $this->toastBootstrap('success', "Registro $nombre Eliminado.");
             }
         }
 

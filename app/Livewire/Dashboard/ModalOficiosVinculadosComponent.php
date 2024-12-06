@@ -6,13 +6,11 @@ use App\Models\Equipo;
 use App\Models\Oficio;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ModalOficiosVinculadosComponent extends Component
 {
-    use LivewireAlert;
     public $bienes_id;
     public $web = false;
 

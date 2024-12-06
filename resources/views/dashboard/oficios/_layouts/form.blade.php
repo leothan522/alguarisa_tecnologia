@@ -1,7 +1,14 @@
-<div class="card card-navy">
+<div class="card card-navy card-outline">
 
     <div class="card-header">
-        <h3 class="card-title">Nuevo Oficio</h3>
+        <h3 class="card-title">
+            @if($oficios_id)
+                Editar
+            @else
+                Nuevo
+            @endif
+            Oficio
+        </h3>
         <div class="card-tools">
             <form wire:submit="searchSerial">
                 <div class="input-group input-group-sm">

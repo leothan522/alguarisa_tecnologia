@@ -1,13 +1,13 @@
-<div class="card card-navy <!--card-outline-->">
+<div class="card card-navy card-outline">
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
-                Búsqueda { <b class="text-warning">{{ $keyword }}</b> } [ <b class="text-warning">{{ $rows }}</b> ]
-                <button class="btn btn-tool text-warning" wire:click="cerrarBusqueda">
+                Búsqueda { <b class="text-primary">{{ $keyword }}</b> } [ <b class="text-primary">{{ $rows }}</b> ]
+                <button class="btn btn-tool text-danger" wire:click="cerrarBusqueda">
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Registrados [ <b class="text-warning">{{ $rows }}</b> ]
+                Todos [ <b class="text-primary">{{ $rows }}</b> ]
             @endif
         </h3>
 
@@ -75,7 +75,7 @@
                             </td>--}}
                             {{--<td class="mailbox-star"><a href="#"><i class="fas fa-star text-warning"></i></a></td>--}}
                             <td class="mailbox-name text-nowrap">
-                                <a class="link-dark" wire:click="show('{{ $oficio->rowquid }}')" style="cursor: pointer;">
+                                <a class="link-dark text-uppercase" wire:click="show('{{ $oficio->rowquid }}')" style="cursor: pointer;">
                                     {{ $oficio->numero }}
                                 </a>
                             </td>
