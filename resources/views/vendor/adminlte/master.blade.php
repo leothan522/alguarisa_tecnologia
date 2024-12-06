@@ -97,6 +97,8 @@
     @if(config('adminlte.livewire'))
         @if(intval(app()->version()) >= 7)
             @livewireScripts
+            {!! verToastBootstrap() !!}
+            <script src="{{ asset('js/toastBootstrap.js') }}"></script>
         @else
             <livewire:scripts />
         @endif

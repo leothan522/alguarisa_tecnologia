@@ -103,6 +103,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <div class="content">
             <div class="container">
                 @yield('content')
+                {!! verToastBootstrap() !!}
             </div><!-- /.container-fluid -->
         </div>
         <!-- /.content -->
@@ -126,6 +127,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset('vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
 @livewireScripts
 <x-livewire-alert::scripts />
+<script src="{{ asset('js/toastBootstrap.js') }}"></script>
 @yield('js')
 <script>
     function pageLoaded() {

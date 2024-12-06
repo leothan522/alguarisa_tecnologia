@@ -184,6 +184,14 @@ function verSpinner(): string
     return $spinner;
 }
 
+function verToastBootstrap(): string
+{
+    return '
+        <div id="toastBootstrap" class="row justify-content-center">
+            <!-- JS -->
+        </div>
+    ';
+}
 function numSizeCodigo(): int
 {
     $num = 6;
