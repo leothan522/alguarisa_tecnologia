@@ -1,14 +1,14 @@
-<div class="card card-navy">
+<div class="card card-navy card-outline">
 
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
-                Búsqueda { <b class="text-warning">{{ $keyword }}</b> } [ <b class="text-warning">{{ $total }}</b> ]
-                <button class="btn btn-tool text-warning" wire:click="cerrarBusqueda">
+                Búsqueda { <b class="text-primary">{{ $keyword }}</b> } [ <b class="text-primary">{{ $total }}</b> ]
+                <button class="btn btn-tool text-danger" wire:click="cerrarBusqueda">
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Empresas [ <b class="text-warning">{{ $rowsEmpresas }}</b> ]
+                Empresas [ <b class="text-primary">{{ $rowsEmpresas }}</b> ]
             @endif
         </h3>
 

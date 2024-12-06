@@ -2,9 +2,9 @@
 
 namespace App\Livewire\Dashboard;
 
-use App\Models\Almacen;
 use App\Models\Empresa;
 use App\Models\Parametro;
+use App\Traits\ToastBootstrap;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Sleep;
 use Illuminate\Validation\Rule;
@@ -16,7 +16,7 @@ use Livewire\WithFileUploads;
 
 class EmpresasComponent extends Component
 {
-    use LivewireAlert;
+    use ToastBootstrap;
     use WithFileUploads;
 
     public $rows = 0, $numero = 14, $tableStyle = false;
@@ -135,11 +135,9 @@ class EmpresasComponent extends Component
             if ($empresa){
                 $imagen = $empresa->imagen;
             }
-            $message = "Datos Guardados.";
         }else{
             //nuevo
             $empresa = new Empresa();
-            $message = "Empresa Creada.";
             $empresa->default = $this->default;
             if ($this->default){
                 $this->default = 0;
@@ -187,10 +185,8 @@ class EmpresasComponent extends Component
             }
 
             $empresa->save();
-
             $this->show($empresa->rowquid);
-
-            $this->alert('success', $message);
+            $this->toastBootstrap();
 
         }else{
             $this->show($this->empresa_default);
@@ -255,15 +251,7 @@ class EmpresasComponent extends Component
 
     public function destroy()
     {
-        $this->confirm('¿Estas seguro?', [
-            'toast' => false,
-            'position' => 'center',
-            'showConfirmButton' => true,
-            'confirmButtonText' =>  '¡Sí, bórralo!',
-            'text' =>  '¡No podrás revertir esto!',
-            'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmed',
-        ]);
+        $this->confirmToastBootstrap('confirmed');
     }
 
     #[On('confirmed')]
@@ -275,21 +263,13 @@ class EmpresasComponent extends Component
         $vinculado = false;
 
         if ($vinculado) {
-            $this->alert('warning', '¡No se puede Borrar!', [
-                'position' => 'center',
-                'timer' => '',
-                'toast' => false,
-                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
-                'showConfirmButton' => true,
-                'onConfirmed' => '',
-                'confirmButtonText' => 'OK',
-            ]);
+            $this->htmlToastBoostrap();
         } else {
             if ($empresa){
                 $imagen = $empresa->imagen;
                 $empresa->delete();
                 borrarImagenes($imagen, 'empresas');
-                $this->alert('success', 'Empresa Eliminada.');
+                $this->toastBootstrap('success', 'Empresa Eliminada.');
             }
             $this->show($this->empresa_default);
             $this->dispatch('cerrarModal');
@@ -441,7 +421,7 @@ class EmpresasComponent extends Component
             $parametro->save();
         }
 
-        $this->alert('success', 'Horas Guardadas.');
+        $this->toastBootstrap('success', 'Horas Guardadas.');
     }
 
     public function setEstatusEmpresa($rowquid)
