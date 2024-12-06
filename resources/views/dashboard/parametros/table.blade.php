@@ -1,12 +1,12 @@
-<div class="card card-navy" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="card card-navy card-outline" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
-                Busqueda { <b class="text-warning">{{ $keyword }}</b> } [ <b class="text-warning">{{ $totalBusqueda }}</b> ]
-                <button class="btn btn-tool text-warning" wire:click="cerrarBusqueda"><i class="fas fa-times-circle"></i>
+                Búsqueda { <b class="text-primary">{{ $keyword }}</b> } [ <b class="text-primary">{{ $totalBusqueda }}</b> ]
+                <button class="btn btn-tool text-danger" wire:click="cerrarBusqueda"><i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Registrados [ <b class="text-warning">{{ $rowsParametros }}</b> ]
+                Todos [ <b class="text-primary">{{ $rowsParametros }}</b> ]
             @endif
         </h3>
 
@@ -26,7 +26,7 @@
         <table class="table table-sm table-head-fixed table-hover text-nowrap">
             <thead>
             <tr class="text-navy">
-                <th>id</th>
+                <th class="text-center">id</th>
                 <th>nombre</th>
                 <th class="d-none d-md-table-cell">table_id</th>
                 <th class="d-none d-md-table-cell">valor</th>
@@ -37,7 +37,7 @@
             @if($parametros->isNotEmpty())
                 @foreach($parametros as $parametro)
                     <tr>
-                        <td class="text-bold">{{ $parametro->id }}</td>
+                        <td class="text-bold text-center">{{ $parametro->id }}</td>
                         <td class="d-table-cell text-truncate" style="max-width: 150px;">{{ $parametro->nombre }}</td>
                         <td class="d-none d-md-table-cell">
                             @if(is_null($parametro->tabla_id))
