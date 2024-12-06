@@ -1,7 +1,7 @@
 <div class="row justify-content-center" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="col-sm-6 col-md-5">
         <form wire:submit="sendMessage">
-            <div class="card card-navy">
+            <div class="card card-navy card-outline">
 
                 <div class="card-header">
                     <h3 class="card-title">
