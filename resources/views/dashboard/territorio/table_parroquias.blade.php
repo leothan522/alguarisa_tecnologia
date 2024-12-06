@@ -1,20 +1,20 @@
-<div class="card card-navy">
+<div class="card card-navy card-outline">
     <div class="card-header">
         <h3 class="card-title">
             @if($keywordParroquia || $idMunicipio)
                 @if($keywordParroquia)
-                    Parroquias { <b class="text-warning">{{ $keywordParroquia }}</b> } [ <b class="text-warning">{{ $totalParroquias }}</b> ]
-                    <button class="btn btn-tool text-warning" wire:click="cerrarBusqueda('parroquia')">
+                    Parroquias { <b class="text-primary">{{ $keywordParroquia }}</b> } [ <b class="text-primary">{{ $totalParroquias }}</b> ]
+                    <button class="btn btn-tool text-danger" wire:click="cerrarBusqueda('parroquia')">
                         <i class="fas fa-times-circle"></i>
                     </button>
                 @else
-                    Filtrando { <b class="text-warning">{{ $verMunicipio }}</b> } [ <b class="text-warning">{{ $totalParroquias }}</b> ]
-                    <button class="btn btn-tool text-warning" wire:click="cerrarBusqueda('parroquia')">
+                    Filtrando { <b class="text-primary">{{ $verMunicipio }}</b> } [ <b class="text-primary">{{ $totalParroquias }}</b> ]
+                    <button class="btn btn-tool text-danger" wire:click="cerrarBusqueda('parroquia')">
                         <i class="fas fa-times-circle"></i>
                     </button>
                 @endif
             @else
-                Parroquias [ <b class="text-warning">{{ $rowsParroquias }}</b> ]
+                Parroquias [ <b class="text-primary">{{ $rowsParroquias }}</b> ]
             @endif
         </h3>
 

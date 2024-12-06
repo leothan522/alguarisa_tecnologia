@@ -1,13 +1,13 @@
-<div class="card card-navy" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="card card-navy card-outline" xmlns:wire="http://www.w3.org/1999/xhtml">
     <div class="card-header">
         <h3 class="card-title">
             @if($keywordMunicipios)
-                Municipios { <b class="text-warning">{{ $keywordMunicipios }}</b> } [ <b class="text-warning">{{ $totalMunicipios }}</b> ]
-                <button class="btn btn-tool text-warning" wire:click="cerrarBusqueda('municipio')">
+                Municipios { <b class="text-primary">{{ $keywordMunicipios }}</b> } [ <b class="text-primary">{{ $totalMunicipios }}</b> ]
+                <button class="btn btn-tool text-danger" wire:click="cerrarBusqueda('municipio')">
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Municipios [ <b class="text-warning">{{ $rowsMunicipios }}</b> ]
+                Municipios [ <b class="text-primary">{{ $rowsMunicipios }}</b> ]
             @endif
         </h3>
 
