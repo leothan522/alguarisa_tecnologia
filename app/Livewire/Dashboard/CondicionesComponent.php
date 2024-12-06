@@ -4,15 +4,15 @@ namespace App\Livewire\Dashboard;
 
 use App\Models\Bien;
 use App\Models\Condicion;
+use App\Traits\ToastBootstrap;
 use Illuminate\Validation\Rule;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class CondicionesComponent extends Component
 {
-    use LivewireAlert;
+    use ToastBootstrap;
 
     public $rows = 0;
     public $nombre, $keyword;
@@ -81,7 +81,6 @@ class CondicionesComponent extends Component
         if (is_null($this->condiciones_id)){
             //nuevo
             $condicion = new Condicion();
-            $message = "Condición Creada.";
             do{
                 $rowquid = generarStringAleatorio(16);
                 $existe = Condicion::where('rowquid', '=', $rowquid)->first();
@@ -90,14 +89,13 @@ class CondicionesComponent extends Component
         }else{
             //editar
             $condicion = Condicion::find($this->condiciones_id);
-            $message = "Condición Actualizada.";
         }
 
         if ($condicion){
             $condicion->nombre = $this->nombre;
             $condicion->save();
             $this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
-            $this->alert('success', $message);
+            $this->toastBootstrap();
         }
 
         $this->limpiarCondiciones();
@@ -117,15 +115,7 @@ class CondicionesComponent extends Component
     public function destroy($rowquid)
     {
         $this->rowquid = $rowquid;
-        $this->confirm('¿Estas seguro?', [
-            'toast' => false,
-            'position' => 'center',
-            'showConfirmButton' => true,
-            'confirmButtonText' =>  '¡Sí, bórralo!',
-            'text' =>  '¡No podrás revertir esto!',
-            'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmedCondicion',
-        ]);
+        $this->confirmToastBootstrap('confirmedCondicion');
     }
 
     #[On('confirmedCondicion')]
@@ -147,20 +137,13 @@ class CondicionesComponent extends Component
         }
 
         if ($vinculado) {
-            $this->alert('warning', '¡No se puede Borrar!', [
-                'position' => 'center',
-                'timer' => '',
-                'toast' => false,
-                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
-                'showConfirmButton' => true,
-                'onConfirmed' => '',
-                'confirmButtonText' => 'OK',
-            ]);
+            $this->htmlToastBoostrap();
         } else {
             if ($condicion){
+                $nombre = "<b>".mb_strtoupper($condicion->nombre)."</b>";
                 $condicion->delete();
-                $this->alert('success', 'Condición Eliminada.');
                 $this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
+                $this->toastBootstrap('success', "Condición $nombre Eliminada.");
             }
         }
 

@@ -12,17 +12,17 @@ use App\Models\Marca;
 use App\Models\Modelo;
 use App\Models\Parametro;
 use App\Models\Tipo;
+use App\Traits\ToastBootstrap;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class BienesComponent extends Component
 {
-    use LivewireAlert;
+    use ToastBootstrap;
 
     public $rows = 0, $numero = 14, $tableStyle = false;
     public $view = true, $form = false, $ver = false, $nuevo = false, $editar = false, $cancelar = false, $footer = false, $keyword;
@@ -301,7 +301,7 @@ class BienesComponent extends Component
             $this->serial = $serial;
             $this->show($bien->rowquid);
             $this->reset('keyword');
-            $this->alert('success', 'Datos Guardados. ');
+            $this->toastBootstrap();
 
         }else{
             $this->limpiar();
@@ -322,15 +322,7 @@ class BienesComponent extends Component
 
     public function destroy()
     {
-        $this->confirm('¿Estas seguro?', [
-            'toast' => false,
-            'position' => 'center',
-            'showConfirmButton' => true,
-            'confirmButtonText' =>  '¡Sí, bórralo!',
-            'text' =>  '¡No podrás revertir esto!',
-            'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmed',
-        ]);
+        $this->confirmToastBootstrap('confirmed');
     }
 
     #[On('confirmed')]
@@ -347,15 +339,7 @@ class BienesComponent extends Component
         }
 
         if ($vinculado) {
-            $this->alert('warning', '¡No se puede Borrar!', [
-                'position' => 'center',
-                'timer' => '',
-                'toast' => false,
-                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
-                'showConfirmButton' => true,
-                'onConfirmed' => '',
-                'confirmButtonText' => 'OK',
-            ]);
+            $this->htmlToastBoostrap();
         } else {
 
             if ($bien){
@@ -376,7 +360,7 @@ class BienesComponent extends Component
                 $bien->auditoria = $auditoria;
                 $bien->save();
                 $bien->delete();
-                $this->alert('success', 'Registro Eliminado.');
+                $this->toastBootstrap('success', 'Registro Eliminado.');
                 $this->reset('keyword');
             }
 

@@ -7,13 +7,13 @@ use App\Models\Condicion;
 use App\Models\Marca;
 use App\Models\Modelo;
 use App\Models\Tipo;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Traits\ToastBootstrap;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ModalBusquedaComponent extends Component
 {
-    use LivewireAlert;
+    use ToastBootstrap;
 
     public $tipos_id, $marcas_id, $colores_id, $condiciones_id, $modelos_id, $serial, $identificador;
 
@@ -84,7 +84,7 @@ class ModalBusquedaComponent extends Component
             $this->dispatch('busquedaAvanzada', data: $data)->to(BienesComponent::class);
             $this->dispatch('cerrarBusqueda');
         }else{
-            $this->alert('warning', 'Debes Establecer al menos un filtro para la busqueda.');
+            $this->toastBootstrap('warning', 'Debes Establecer al menos un filtro para la busqueda.');
         }
     }
 

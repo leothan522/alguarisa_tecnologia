@@ -1,4 +1,4 @@
-<div class="card card-navy d-none d-sm-block" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="card card-navy card-outline d-none d-sm-block" xmlns:wire="http://www.w3.org/1999/xhtml">
 
     <div class="card-header">
         <h3 class="card-title">

@@ -3,14 +3,14 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Imagen;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
+use App\Traits\ToastBootstrap;
 use Livewire\Attributes\On;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 class ImagenesComponent extends Component
 {
-    use LivewireAlert;
+    use ToastBootstrap;
     use WithFileUploads;
 
     public $bienes_id, $guardar = false;
@@ -105,7 +105,7 @@ class ImagenesComponent extends Component
 
         if ($alert){
             $this->showImagenes($this->bienes_id);
-            $this->alert('success', 'Datos Guardados.');
+            $this->toastBootstrap();
         }
         $this->guardar = false;
 

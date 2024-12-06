@@ -4,15 +4,15 @@ namespace App\Livewire\Dashboard;
 
 use App\Models\Bien;
 use App\Models\Color;
+use App\Traits\ToastBootstrap;
 use Illuminate\Validation\Rule;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ColoresComponent extends Component
 {
-    use LivewireAlert;
+    use ToastBootstrap;
 
     public $rows = 0;
     public $nombre, $keyword;
@@ -81,7 +81,6 @@ class ColoresComponent extends Component
         if (is_null($this->colores_id)){
             //nuevo
             $color = new Color();
-            $message = "Color Creado.";
             do{
                 $rowquid = generarStringAleatorio(16);
                 $existe = Color::where('rowquid', $rowquid)->first();
@@ -90,14 +89,13 @@ class ColoresComponent extends Component
         }else{
             //editar
             $color = Color::find($this->colores_id);
-            $message = "Color Actualizado.";
         }
 
         if ($color){
             $color->nombre = $this->nombre;
             $color->save();
             $this->dispatch('initSelects', select: 'color')->to(BienesComponent::class);
-            $this->alert('success', $message);
+            $this->toastBootstrap();
         }
 
         $this->limpiarColores();
@@ -117,15 +115,7 @@ class ColoresComponent extends Component
     public function destroy($rowquid)
     {
         $this->rowquid = $rowquid;
-        $this->confirm('¿Estas seguro?', [
-            'toast' => false,
-            'position' => 'center',
-            'showConfirmButton' => true,
-            'confirmButtonText' =>  '¡Sí, bórralo!',
-            'text' =>  '¡No podrás revertir esto!',
-            'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmedColores',
-        ]);
+        $this->confirmToastBootstrap('confirmedColores');
     }
 
     #[On('confirmedColores')]
@@ -147,20 +137,13 @@ class ColoresComponent extends Component
         }
 
         if ($vinculado) {
-            $this->alert('warning', '¡No se puede Borrar!', [
-                'position' => 'center',
-                'timer' => '',
-                'toast' => false,
-                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
-                'showConfirmButton' => true,
-                'onConfirmed' => '',
-                'confirmButtonText' => 'OK',
-            ]);
+            $this->htmlToastBoostrap();
         } else {
             if ($color){
+                $nombre = "<b>".mb_strtoupper($color->nombre)."</b>";
                 $color->delete();
-                $this->alert('success', 'Color Eliminado.');
                 $this->dispatch('initSelects', select: 'color')->to(BienesComponent::class);
+                $this->toastBootstrap('success', "Color $nombre Eliminado.");
             }
         }
 

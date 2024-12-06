@@ -3,20 +3,19 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Bien;
-use App\Models\Color;
 use App\Models\Marca;
 use App\Models\Modelo;
 use App\Models\Tipo;
+use App\Traits\ToastBootstrap;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ModelosComponent extends Component
 {
-    use LivewireAlert;
+    use ToastBootstrap;
 
     public $rows = 0;
     public $tipos_id, $tipoRowquid, $marcas_id, $marcaRowquid, $nombre, $keyword;
@@ -101,7 +100,6 @@ class ModelosComponent extends Component
         if (is_null($this->modelos_id)){
             //nuevo
             $modelos = new Modelo();
-            $message = "Modelo Creado.";
             do{
                 $rowquid = generarStringAleatorio(16);
                 $existe = Modelo::where('rowquid', $rowquid)->first();
@@ -110,7 +108,6 @@ class ModelosComponent extends Component
         }else{
             //editar
             $modelos = Modelo::find($this->modelos_id);
-            $message = "Modelo Actualizado.";
         }
 
         if ($modelos){
@@ -119,7 +116,7 @@ class ModelosComponent extends Component
             $modelos->marcas_id = $this->marcas_id;
             $modelos->save();
             $this->dispatch('initSelects', select: 'modelo')->to(BienesComponent::class);
-            $this->alert('success', $message);
+            $this->toastBootstrap();
         }
 
         $this->limpiarModelos();
@@ -164,15 +161,7 @@ class ModelosComponent extends Component
     public function destroy($rowquid)
     {
         $this->rowquid = $rowquid;
-        $this->confirm('¿Estas seguro?', [
-            'toast' => false,
-            'position' => 'center',
-            'showConfirmButton' => true,
-            'confirmButtonText' =>  '¡Sí, bórralo!',
-            'text' =>  '¡No podrás revertir esto!',
-            'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmedModelos',
-        ]);
+        $this->confirmToastBootstrap('confirmedModelos');
     }
 
     #[On('confirmedModelos')]
@@ -194,20 +183,13 @@ class ModelosComponent extends Component
         }
 
         if ($vinculado) {
-            $this->alert('warning', '¡No se puede Borrar!', [
-                'position' => 'center',
-                'timer' => '',
-                'toast' => false,
-                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
-                'showConfirmButton' => true,
-                'onConfirmed' => '',
-                'confirmButtonText' => 'OK',
-            ]);
+            $this->htmlToastBoostrap();
         } else {
             if ($modelos){
+                $nombre = "<b>".mb_strtoupper($modelos->nombre)."</b>";
                 $modelos->delete();
-                $this->alert('success', 'Modelos Eliminado.');
                 $this->dispatch('initSelects', select: 'modelo')->to(BienesComponent::class);
+                $this->toastBootstrap('success', "Modelo $nombre Eliminado.");
             }
         }
 

@@ -3,7 +3,7 @@
         DV. &nbsp;<a href="https://t.me/Leothan" target="_blank">Ing. Yonathan Castillo</a>.
     </span>
     <span>
-        <b>Version</b> 2.0
+        <b>Version</b> 2.2
     </span>
 </div>
 <span class="d-none d-sm-block">

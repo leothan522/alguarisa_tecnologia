@@ -4,15 +4,15 @@ namespace App\Livewire\Dashboard;
 
 use App\Models\BienUbicacion;
 use App\Models\Ubicacion;
+use App\Traits\ToastBootstrap;
 use Illuminate\Validation\Rule;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class UbicacionesComponent extends Component
 {
-    use LivewireAlert;
+    use ToastBootstrap;
 
     public $rows = 0;
     public $nombre, $keyword;
@@ -81,7 +81,6 @@ class UbicacionesComponent extends Component
         if (is_null($this->ubicaciones_id)){
             //nuevo
             $ubicacion = new Ubicacion();
-            $message = "Ubicación Creada.";
             do{
                 $rowquid = generarStringAleatorio(16);
                 $existe = Ubicacion::where('rowquid', $rowquid)->first();
@@ -90,14 +89,13 @@ class UbicacionesComponent extends Component
         }else{
             //editar
             $ubicacion = Ubicacion::find($this->ubicaciones_id);
-            $message = "Ubicación Actualizada.";
         }
 
         if ($ubicacion){
             $ubicacion->nombre = $this->nombre;
             $ubicacion->save();
             //$this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
-            $this->alert('success', $message);
+            $this->toastBootstrap();
         }
 
         $this->limpiarUbicaciones();
@@ -117,15 +115,7 @@ class UbicacionesComponent extends Component
     public function destroy($rowquid)
     {
         $this->rowquid = $rowquid;
-        $this->confirm('¿Estas seguro?', [
-            'toast' => false,
-            'position' => 'center',
-            'showConfirmButton' => true,
-            'confirmButtonText' =>  '¡Sí, bórralo!',
-            'text' =>  '¡No podrás revertir esto!',
-            'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmedUbicacion',
-        ]);
+        $this->confirmToastBootstrap('confirmedUbicacion');
     }
 
     #[On('confirmedUbicacion')]
@@ -147,19 +137,12 @@ class UbicacionesComponent extends Component
         }
 
         if ($vinculado) {
-            $this->alert('warning', '¡No se puede Borrar!', [
-                'position' => 'center',
-                'timer' => '',
-                'toast' => false,
-                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
-                'showConfirmButton' => true,
-                'onConfirmed' => '',
-                'confirmButtonText' => 'OK',
-            ]);
+            $this->htmlToastBoostrap();
         } else {
             if ($ubicacion){
+                $nombre = "<b>".mb_strtoupper($ubicacion->nombre)."</b>";
                 $ubicacion->delete();
-                $this->alert('success', 'Condición Eliminada.');
+                $this->toastBootstrap('success', "Condición $nombre Eliminada.");
             }
         }
 

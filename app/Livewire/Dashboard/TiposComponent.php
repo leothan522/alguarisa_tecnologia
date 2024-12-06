@@ -5,6 +5,7 @@ namespace App\Livewire\Dashboard;
 use App\Models\Bien;
 use App\Models\Modelo;
 use App\Models\Tipo;
+use App\Traits\ToastBootstrap;
 use Illuminate\Validation\Rule;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
@@ -14,6 +15,7 @@ use Livewire\Component;
 class TiposComponent extends Component
 {
     use LivewireAlert;
+    use ToastBootstrap;
 
     public $rows = 0;
     public $nombre, $keyword;
@@ -82,7 +84,6 @@ class TiposComponent extends Component
         if (is_null($this->tipos_id)){
             //nuevo
             $tipo = new Tipo();
-            $message = "Tipo Creado.";
             do{
                 $rowquid = generarStringAleatorio(16);
                 $existe = Tipo::where('rowquid', $rowquid)->first();
@@ -91,14 +92,13 @@ class TiposComponent extends Component
         }else{
             //editar
             $tipo = Tipo::find($this->tipos_id);
-            $message = "Tipo Actualizado.";
         }
 
         if ($tipo){
             $tipo->nombre = $this->nombre;
             $tipo->save();
             $this->dispatch('initSelects', select: 'tipos')->to(BienesComponent::class);
-            $this->alert('success', $message);
+            $this->toastBootstrap();
         }
 
         $this->limpiarTipos();
@@ -119,15 +119,7 @@ class TiposComponent extends Component
     public function destroy($rowquid)
     {
         $this->rowquid = $rowquid;
-        $this->confirm('¿Estas seguro?', [
-            'toast' => false,
-            'position' => 'center',
-            'showConfirmButton' => true,
-            'confirmButtonText' =>  '¡Sí, bórralo!',
-            'text' =>  '¡No podrás revertir esto!',
-            'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmedTipos',
-        ]);
+        $this->confirmToastBootstrap('confirmedTipos');
     }
 
     #[On('confirmedTipos')]
@@ -150,20 +142,13 @@ class TiposComponent extends Component
         }
 
         if ($vinculado) {
-            $this->alert('warning', '¡No se puede Borrar!', [
-                'position' => 'center',
-                'timer' => '',
-                'toast' => false,
-                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
-                'showConfirmButton' => true,
-                'onConfirmed' => '',
-                'confirmButtonText' => 'OK',
-            ]);
+            $this->htmlToastBoostrap();
         } else {
             if ($tipo){
+                $nombre = '<b>'.mb_strtoupper($tipo->nombre).'</b>';
                 $tipo->delete();
-                $this->alert('success', 'Tipo Eliminado.');
                 $this->dispatch('initSelects', select: 'tipos')->to(BienesComponent::class);
+                $this->toastBootstrap('success', "Tipo $nombre Eliminado.");
             }
         }
 

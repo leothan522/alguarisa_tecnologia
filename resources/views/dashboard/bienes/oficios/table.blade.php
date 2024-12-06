@@ -8,7 +8,7 @@
                     <i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Registrados [ <b class="text-warning">{{ $total }}</b> ]
+                Todos [ <b class="text-warning">{{ $total }}</b> ]
             @endif
         </h3>
 

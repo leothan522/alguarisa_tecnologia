@@ -106,9 +106,9 @@
                                         </div>
                                         @error('serial')
                                         <span class="col-sm-12 text-sm text-bold text-danger">
-                                        <i class="icon fas fa-exclamation-triangle"></i>
-                                        {{ $message }}
-                                    </span>
+                                            <i class="icon fas fa-exclamation-triangle"></i>
+                                            {{ $message }}
+                                        </span>
                                         @enderror
                                     </div>
                                 </div>

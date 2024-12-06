@@ -5,16 +5,15 @@ namespace App\Livewire\Dashboard;
 use App\Models\Bien;
 use App\Models\Equipo;
 use App\Models\Oficio;
-use Illuminate\Database\Query\Builder;
+use App\Traits\ToastBootstrap;
 use Illuminate\Validation\Rule;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ModalOficiosComponent extends Component
 {
-    use LivewireAlert;
+    use ToastBootstrap;
 
     public $rows = 0, $numero = 14, $tableStyle = false;
     public $view = true, $form = false, $ver = false, $nuevo = false, $editar = false, $cancelar = false, $keyword;
@@ -188,7 +187,7 @@ class ModalOficiosComponent extends Component
             }
 
             $this->reset('keyword');
-            $this->alert('success', 'Datos Guardados.');
+            $this->toastBootstrap();
         }
 
         $this->limpiar();
@@ -204,15 +203,7 @@ class ModalOficiosComponent extends Component
 
     public function destroy()
     {
-        $this->confirm('¿Estas seguro?', [
-            'toast' => false,
-            'position' => 'center',
-            'showConfirmButton' => true,
-            'confirmButtonText' =>  '¡Sí, bórralo!',
-            'text' =>  '¡No podrás revertir esto!',
-            'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmed',
-        ]);
+        $this->confirmToastBootstrap('confirmed');
     }
 
     #[On('confirmed')]
@@ -224,17 +215,12 @@ class ModalOficiosComponent extends Component
         $vinculado = false;
 
         if ($vinculado) {
-            $this->alert('warning', '¡No se puede Borrar!', [
-                'position' => 'center',
-                'timer' => '',
-                'toast' => false,
-                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
-                'showConfirmButton' => true,
-                'onConfirmed' => '',
-                'confirmButtonText' => 'OK',
-            ]);
+            $this->htmlToastBoostrap();
         } else {
             if ($oficio){
+
+                $numero = "<b>".mb_strtoupper($oficio->numero)."</b>";
+
                 if (is_null($oficio->auditoria)){
                     $auditoria = "[ 'accion' => 'delete', 'users_id' => ". auth()->user()->id.", 'users_name' => '". auth()->user()->name."', 'fecha' => '".date('Y-m-d H:i:s')."']";
                 }else{
@@ -243,9 +229,10 @@ class ModalOficiosComponent extends Component
 
                 $oficio->auditoria = $auditoria;
                 $oficio->numero = "*".$oficio->numero;
+
                 $oficio->save();
                 $oficio->delete();
-                $this->alert('success', 'Registro Eliminado.');
+                $this->toastBootstrap('success', "Oficio Nro. $numero Eliminado.");
             }
         }
 
@@ -293,18 +280,14 @@ class ModalOficiosComponent extends Component
                 $this->equipos++;
                 $this->reset('serial');
             }else{
-                $this->confirm('¿Registrar Bienes?', [
-                    'toast' => false,
-                    'position' => 'center',
-                    'showConfirmButton' => true,
-                    'confirmButtonText' =>  '¡Sí, Registrar Equipo!',
-                    'text' =>  '¡El Serial ó Identificador suministrado NO coindide con algún Bien registrado!',
-                    'cancelButtonText' => 'No',
-                    'onConfirmed' => 'nuevoEquipo',
+                $this->confirmToastBootstrap('nuevoEquipo', [
+                    'title' => 'Registrar Bienes',
+                    'message' => "El Serial ó Identificador suministrado NO coindide con algún Bien registrado.",
+                    'button' => "¡Sí, Registrar Equipo!"
                 ]);
             }
         }else{
-            $this->alert('warning', 'El equipo ya esta agregado.');
+            $this->toastBootstrap('warning', "El Equipo ya se encuentra registrado.");
             //$this->reset('serial');
         }
 

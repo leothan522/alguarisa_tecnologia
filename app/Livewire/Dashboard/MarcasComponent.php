@@ -5,16 +5,15 @@ namespace App\Livewire\Dashboard;
 use App\Models\Bien;
 use App\Models\Marca;
 use App\Models\Modelo;
-use App\Models\Tipo;
+use App\Traits\ToastBootstrap;
 use Illuminate\Validation\Rule;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class MarcasComponent extends Component
 {
-    use LivewireAlert;
+    use ToastBootstrap;
 
     public $rows = 0;
     public $nombre, $keyword;
@@ -83,7 +82,6 @@ class MarcasComponent extends Component
         if (is_null($this->marcas_id)){
             //nuevo
             $marca = new Marca();
-            $message = "Marca Creada.";
             do{
                 $rowquid = generarStringAleatorio(16);
                 $existe = Marca::where('rowquid', $rowquid)->first();
@@ -92,14 +90,13 @@ class MarcasComponent extends Component
         }else{
             //editar
             $marca = Marca::find($this->marcas_id);
-            $message = "Marca Actualizada.";
         }
 
         if ($marca){
             $marca->nombre = $this->nombre;
             $marca->save();
             $this->dispatch('initSelects', select: 'marcas')->to(BienesComponent::class);
-            $this->alert('success', $message);
+            $this->toastBootstrap();
         }
 
         $this->limpiarMarcas();
@@ -120,15 +117,7 @@ class MarcasComponent extends Component
     public function destroy($rowquid)
     {
         $this->rowquid = $rowquid;
-        $this->confirm('¿Estas seguro?', [
-            'toast' => false,
-            'position' => 'center',
-            'showConfirmButton' => true,
-            'confirmButtonText' =>  '¡Sí, bórralo!',
-            'text' =>  '¡No podrás revertir esto!',
-            'cancelButtonText' => 'No',
-            'onConfirmed' => 'confirmedMarcas',
-        ]);
+        $this->confirmToastBootstrap('confirmedMarcas');
     }
 
     #[On('confirmedMarcas')]
@@ -151,20 +140,13 @@ class MarcasComponent extends Component
         }
 
         if ($vinculado) {
-            $this->alert('warning', '¡No se puede Borrar!', [
-                'position' => 'center',
-                'timer' => '',
-                'toast' => false,
-                'text' => 'El registro que intenta borrar ya se encuentra vinculado con otros procesos.',
-                'showConfirmButton' => true,
-                'onConfirmed' => '',
-                'confirmButtonText' => 'OK',
-            ]);
+            $this->htmlToastBoostrap();
         } else {
             if ($marca){
+                $nombre = "<b>".mb_strtoupper($marca->nombre)."</b>";
                 $marca->delete();
-                $this->alert('success', 'Marca Eliminada.');
                 $this->dispatch('initSelects', select: 'marcas')->to(BienesComponent::class);
+                $this->toastBootstrap('success', "Marca $nombre Eliminada.");
             }
         }
 
