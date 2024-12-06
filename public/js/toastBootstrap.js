@@ -130,4 +130,8 @@ function toastBootstrap(options = { toast: true, type: 'success', }) {
     }));
 }
 
+window.flashToastBootstrap = async (flash) => {
+    toastBootstrap(flash);
+};
+
 //console.log('toastBootstrap.js');

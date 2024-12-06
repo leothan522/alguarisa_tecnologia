@@ -15,6 +15,7 @@ class PruebasComponent extends Component
 
     public function prueba()
     {
-        $this->toastBootstrap();
+        $this->flashBootstrap('info', 'prueba flh');
+        return redirect()->route('dashboard');
     }
 }

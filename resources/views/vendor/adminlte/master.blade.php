@@ -99,6 +99,7 @@
             @livewireScripts
             {!! verToastBootstrap() !!}
             <script src="{{ asset('js/toastBootstrap.js') }}"></script>
+            @include('layouts.toastBootstrap')
         @else
             <livewire:scripts />
         @endif

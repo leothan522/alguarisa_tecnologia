@@ -19,7 +19,7 @@ trait ToastBootstrap{
             $this->payload['message'] = $message;
         }
         $this->getOptions($options);
-        $this->showToastBootstrap('toastBootstrap', $this->payload);
+        $this->show('toastBootstrap', $this->payload);
 
     }
 
@@ -31,7 +31,7 @@ trait ToastBootstrap{
             $this->payload['confirmed'] = $confirmed;
         }
         $this->getOptions($options);
-        $this->showToastBootstrap('toastBootstrap', $this->payload);
+        $this->show('toastBootstrap', $this->payload);
     }
 
     public function htmlToastBoostrap($confirmed = null, $options = []): void
@@ -61,7 +61,17 @@ trait ToastBootstrap{
 
     }
 
-    protected function showToastBootstrap($event, $params): Event
+    public function flashBootstrap($type = 'success', $message = "", $options = []): void
+    {
+        $this->payload['type'] = $type;
+        if (!empty($message)) {
+            $this->payload['message'] = $message;
+        }
+        $this->getOptions($options);
+        session()->flash('toastBootstrap-flash', $this->payload);
+    }
+
+    protected function show($event, $params): Event
     {
         $event = new Event($event, $params);
 
