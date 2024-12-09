@@ -347,6 +347,11 @@ class EmpresasComponent extends Component
                 $parametro->nombre = "horario";
                 $parametro->tabla_id = $this->empresas_id;
                 $parametro->valor = 1;
+                do{
+                    $rowquid = generarStringAleatorio(16);
+                    $existe = Parametro::where('rowquid', $rowquid)->first();
+                }while($existe);
+                $parametro->rowquid = $this->rowquid;
             }
         }
         $parametro->save();
@@ -373,6 +378,11 @@ class EmpresasComponent extends Component
             $parametro->nombre = "horario_$dia";
             $parametro->tabla_id = $this->empresas_id;
             $parametro->valor = 1;
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Parametro::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $parametro->rowquid = $rowquid;
             $parametro->save();
         }
 
@@ -406,6 +416,11 @@ class EmpresasComponent extends Component
             $parametro->nombre = "horario_apertura";
             $parametro->tabla_id = $this->empresas_id;
             $parametro->valor = $this->apertura;
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Parametro::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $parametro->rowquid = $rowquid;
             $parametro->save();
         }
 
@@ -418,6 +433,11 @@ class EmpresasComponent extends Component
             $parametro->nombre = "horario_cierre";
             $parametro->tabla_id = $this->empresas_id;
             $parametro->valor = $this->cierre;
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Parametro::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $parametro->rowquid = $rowquid;
             $parametro->save();
         }
 
@@ -442,6 +462,11 @@ class EmpresasComponent extends Component
                 $parametro->nombre = "estatus_tienda";
                 $parametro->tabla_id = $empresa->id;
                 $parametro->valor = 1;
+                do{
+                    $rowquid = generarStringAleatorio(16);
+                    $existe = Parametro::where('rowquid', $rowquid)->first();
+                }while($existe);
+                $parametro->rowquid = $rowquid;
                 $parametro->save();
             }
         }
