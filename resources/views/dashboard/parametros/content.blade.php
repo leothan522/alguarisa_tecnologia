@@ -23,7 +23,7 @@
 
     <div class="col-md-8 col-lg-9">
         @include('dashboard.parametros.table')
-        @include('dashboard.parametros.modal')
+        @include('dashboard.parametros.form')
     </div>
 
 </div>

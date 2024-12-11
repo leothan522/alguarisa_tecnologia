@@ -40,7 +40,19 @@
 
         Livewire.on('cerrarModal', () => {
             $("#btn_modal_default").click();
+            setTimeout(function () {
+                verCargando('div_table_parametros');
+            });
         });
+
+        Livewire.on('delete', () => {
+            verCargando('div_table_parametros');
+        });
+
+        Livewire.on('buscar', () => {
+            verCargando('div_table_parametros');
+        });
+
         console.log('Hi!');
     </script>
 @endsection

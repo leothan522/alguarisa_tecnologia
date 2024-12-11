@@ -169,10 +169,13 @@ function qrCodeGenerate($string = 'Hello World!', $size = 100, $filename = 'qrco
     return "QRCode";
 }
 
-function verSpinner(): string
+function verSpinner($target = null): string
 {
+    if (!empty($target)){
+        $target = 'wire:target="'.$target.'"';
+    }
     $spinner = '
-        <div class="overlay-wrapper verCargando" wire:loading>
+        <div class="overlay-wrapper verCargando" wire:loading '.$target.'>
             <div class="overlay">
                 <div class="spinner-border text-navy" role="status">
                     <span class="sr-only">Loading...</span>

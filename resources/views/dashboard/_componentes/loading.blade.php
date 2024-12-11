@@ -1,4 +1,4 @@
-<div xmlns:wire="http://www.w3.org/1999/xhtml">
+<div>
 
 
     <div class="overlay-wrapper" wire:loading wire:target="checkout">

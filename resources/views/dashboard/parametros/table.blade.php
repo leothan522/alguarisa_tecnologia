@@ -1,4 +1,4 @@
-<div class="card card-navy card-outline" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div id="div_table_parametros" class="card card-navy card-outline">
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
@@ -11,7 +11,7 @@
         </h3>
 
         <div class="card-tools">
-            <button type="button" class="btn btn-tool" wire:click="limpiar">
+            <button type="button" class="btn btn-tool" wire:click="actualizar">
                 <i class="fas fa-sync-alt"></i>
             </button>
             <button class="btn btn-tool" data-toggle="modal" data-target="#modal-default" wire:click="limpiar">
@@ -84,12 +84,12 @@
 
             </tbody>
         </table>
-
     </div>
 
     <div class="card-footer">
         <small>Mostrando {{ $parametros->count() }}</small>
     </div>
 
-    {!! verSpinner() !!}
+    {!! verSpinner('actualizar, cerrarBusqueda, setLimit') !!}
+
 </div>

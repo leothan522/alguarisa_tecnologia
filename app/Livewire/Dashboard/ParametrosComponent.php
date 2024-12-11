@@ -17,6 +17,7 @@ class ParametrosComponent extends Component
     public $rows = 0, $numero = 14, $tableStyle = false;
     public $view = "create", $keyword;
     public $nombre, $tabla_id, $valor;
+    public $verToast = false;
 
     #[Locked]
     public $parametros_id, $rowquid;
@@ -60,7 +61,8 @@ class ParametrosComponent extends Component
     public function limpiar()
     {
         $this->reset([
-            'parametros_id', 'nombre', 'tabla_id', 'valor', 'view', 'rowquid'
+            'parametros_id', 'nombre', 'tabla_id', 'valor', 'view', 'rowquid',
+            'verToast'
         ]);
         $this->resetErrorBag();
     }
@@ -69,9 +71,16 @@ class ParametrosComponent extends Component
     {
         $rules = [
             'nombre' => ['required', 'min:3', 'alpha_dash', Rule::unique('parametros', 'nombre')->ignore($id)],
-            'tabla_id' => 'nullable|integer'
+            'tabla_id' => 'nullable|integer',
+            'valor' => 'required_if:tabla_id,null',
         ];
         return $rules;
+    }
+
+    protected function messages(){
+        return [
+            'valor.required_if' => 'El campo valor es obligatorio cuando tabla id esta vacio.',
+        ];
     }
 
     public function save()
@@ -105,9 +114,10 @@ class ParametrosComponent extends Component
             if ($reset){
                 $this->reset('keyword');
             }
+
+            $this->verToast = true;
             $this->dispatch('cerrarModal');
-            Sleep::for(500)->millisecond();
-            $this->toastBootstrap();
+
         }else{
             $this->limpiar();
             $this->dispatch('cerrarModal');
@@ -142,11 +152,11 @@ class ParametrosComponent extends Component
     public function destroy($rowquid)
     {
         $this->rowquid = $rowquid;
-        $this->confirmToastBootstrap('confirmed');
+        $this->confirmToastBootstrap('delete');
     }
 
-    #[On('confirmed')]
-    public function confirmed()
+    #[On('delete')]
+    public function delete()
     {
         $parametro = $this->getParametro($this->rowquid);
         if ($parametro){
@@ -160,6 +170,11 @@ class ParametrosComponent extends Component
     public function cerrarModal()
     {
         //JS
+        if ($this->verToast){
+            $this->toastBootstrap();
+            $this->reset(['verToast']);
+        }
+
     }
 
     public function cerrarBusqueda()
@@ -171,6 +186,11 @@ class ParametrosComponent extends Component
     protected function getParametro($rowquid): ?Parametro
     {
         return Parametro::where('rowquid', $rowquid)->first();
+    }
+
+    public function actualizar()
+    {
+        //Refresh
     }
 
 }
