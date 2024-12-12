@@ -1,73 +1,95 @@
-<div class="card card-outline card-navy" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div id="div_table_parametros" class="card card-navy card-outline">
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
-                Resultados de la Busqueda { <b class="text-danger">{{ $keyword }}</b> }
-                <button class="btn btn-tool text-danger" wire:click="limpiar">
-                    <i class="fas fa-times-circle"></i>
+                Búsqueda { <b class="text-primary">{{ $keyword }}</b> } [ <b class="text-primary">{{ $totalBusqueda }}</b> ]
+                <button class="btn btn-tool text-danger" wire:click="cerrarBusqueda"><i class="fas fa-times-circle"></i>
                 </button>
             @else
-                Fixed Header Table
+                Todos [ <b class="text-primary">0</b> ]
             @endif
         </h3>
 
         <div class="card-tools">
-            <button type="button" class="btn btn-tool" wire:click="limpiar">
+            <button type="button" class="btn btn-tool" wire:click="actualizar">
                 <i class="fas fa-sync-alt"></i>
             </button>
-            <ul class="pagination pagination-sm float-right">
-                <li class="page-item"><a class="page-link" href="#">«</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">»</a></li>
-            </ul>
+            <button class="btn btn-tool" data-toggle="modal" data-target="#modal-default" wire:click="limpiar">
+                <i class="fas fa-file"></i> Nuevo
+            </button>
+            <button type="button" class="btn btn-tool" wire:click="setLimit" @if(/*($rows >= $rowsParametros) || $rows > $totalBusqueda*/false) disabled @endif >
+                <i class="fas fa-sort-amount-down-alt"></i> Ver más
+            </button>
         </div>
     </div>
-    <div class="card-body table-responsive p-0" {{--style="height: 400px;"--}}>
-        <table class="table {{--table-head-fixed--}} table-hover text-nowrap">
+    <div class="card-body table-responsive p-0" @if($tableStyle) style="height: 67vh;" @endif >
+        <table class="table table-sm table-head-fixed table-hover text-nowrap">
             <thead>
             <tr class="text-navy">
-                <th>ID</th>
-                <th>User</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th style="width: 5%;">Reason</th>
+                <th class="text-center">id</th>
+                <th>nombre</th>
+                <th class="d-none d-md-table-cell">table_id</th>
+                <th class="d-none d-md-table-cell">valor</th>
+                <th style="width: 5%;">&nbsp;</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>183</td>
-                <td>John Doe</td>
-                <td>11-7-2014</td>
-                <td><span class="tag tag-success">Approved</span></td>
-                <td class="justify-content-end">
-                    <div class="btn-group">
-                        <button {{--wire:click="edit({{ $parametro->id }})"--}} class="btn btn-primary btn-sm">
-                            <i class="fas fa-edit"></i>
-                        </button>
+            @if(/*$parametros->isNotEmpty()*/false)
+                @foreach($parametros as $parametro)
+                    <tr>
+                        <td class="text-bold text-center">{{ $parametro->id }}</td>
+                        <td class="d-table-cell text-truncate" style="max-width: 150px;">{{ $parametro->nombre }}</td>
+                        <td class="d-none d-md-table-cell">
+                            @if(is_null($parametro->tabla_id))
+                                null
+                            @else
+                                {{ $parametro->tabla_id }}
+                            @endif
+                        </td>
+                        <td class="d-none d-md-table-cell text-truncate" style="max-width: 150px;">
+                            @if(is_null($parametro->valor))
+                                null
+                            @else
+                                @if($parametro->tabla_id == "-1")
+                                    json{...}
+                                @else
+                                    {{ $parametro->valor }}
+                                @endif
+                            @endif
+                        </td>
+                        <td class="justify-content-end">
+                            <div class="btn-group">
+                                <button wire:click="edit('{{ $parametro->rowquid }}')" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default">
+                                    <i class="fas fa-edit"></i>
+                                </button>
 
-                        <button {{--wire:click="destroy({{ $parametro->id }})"--}} class="btn btn-primary btn-sm">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td>219</td>
-                <td>Alexander Pierce</td>
-                <td>11-7-2014</td>
-                <td><span class="tag tag-warning">Pending</span></td>
-                <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-            </tr>
-            <tr>
-                <td>657</td>
-                <td>Bob Doe</td>
-                <td>11-7-2014</td>
-                <td><span class="tag tag-primary">Approved</span></td>
-                <td>Bacon ipsum dolor sit amet salami venison chicken flank fatback doner.</td>
-            </tr>
+                                <button wire:click="destroy('{{ $parametro->rowquid }}')" class="btn btn-primary btn-sm">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            @else
+                <tr class="text-center">
+                    <td colspan="5">
+                        @if($keyword)
+                            <span>Sin resultados</span>
+                        @else
+                            <span>Sin registros guardados</span>
+                        @endif
+                    </td>
+                </tr>
+            @endif
+
             </tbody>
         </table>
     </div>
+
+    <div class="card-footer">
+        <small>Mostrando 0{{--{{ $parametros->count() }}--}}</small>
+    </div>
+
+    {!! verSpinner() !!}
+
 </div>

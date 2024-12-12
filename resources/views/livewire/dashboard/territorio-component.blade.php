@@ -1,4 +1,6 @@
 <div>
-    {{-- If you look to others for fulfillment, you will never truly be fulfilled. --}}
+    {{-- In work, do what you enjoy. --}}
+    @include('dashboard.territorio.header')
     @include('dashboard.territorio.content')
+    @include('dashboard.territorio.scripts')
 </div>
