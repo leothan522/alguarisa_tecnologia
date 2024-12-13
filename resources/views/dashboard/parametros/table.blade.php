@@ -4,12 +4,12 @@
             @if($keyword)
                 Búsqueda
                 <span class="text-nowrap">{ <b class="text-warning">{{ $keyword }}</b> }</span>
-                <span class="text-nowrap">[ <b class="text-warning">{{ $totalBusqueda }}</b> ]</span>
+                <span class="text-nowrap">[ <b class="text-warning">{{ $rows }}</b> ]</span>
                 <button class="d-sm-none btn btn-tool text-warning" wire:click="cerrarBusqueda">
                     <i class="fas fa-times"></i>
                 </button>
             @else
-                Todos [ <b class="text-warning">{{ $rowsParametros }}</b> ]
+                Todos [ <b class="text-warning">{{ $rows }}</b> ]
             @endif
         </h3>
 
@@ -25,12 +25,12 @@
             <button class="btn btn-tool" data-toggle="modal" data-target="#modal-default" wire:click="limpiar">
                 <i class="fas fa-file"></i> Nuevo
             </button>
-            <button type="button" class="btn btn-tool" wire:click="setLimit" @if(($rows >= $rowsParametros) || $rows > $totalBusqueda) disabled @endif >
+            <button type="button" class="btn btn-tool" wire:click="setLimit" @if($disabled) disabled @endif >
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
         </div>
     </div>
-    <div class="card-body table-responsive p-0" @if($tableStyle) style="height: 67vh;" @endif >
+    <div class="card-body table-responsive p-0" style="max-height: calc(100vh - {{ $size }}px)">
         <table class="table table-sm table-head-fixed table-hover text-nowrap">
             <thead>
             <tr class="text-lightblue">
@@ -38,12 +38,12 @@
                 <th class="text-uppercase">nombre</th>
                 <th class="d-none d-md-table-cell text-uppercase">table_id</th>
                 <th class="d-none d-md-table-cell text-uppercase">valor</th>
-                <th class="text-center" style="width: 5%;"><small>Rows {{ $parametros->count() }}</small></th>
+                <th class="text-center" style="width: 5%;"><small>Rows {{ $ListarParametros->count() }}</small></th>
             </tr>
             </thead>
             <tbody>
-            @if($parametros->isNotEmpty())
-                @foreach($parametros as $parametro)
+            @if($ListarParametros->isNotEmpty())
+                @foreach($ListarParametros as $parametro)
                     <tr>
                         <td class="text-bold text-center">{{ $parametro->id }}</td>
                         <td class="d-table-cell text-truncate" style="max-width: 150px;">{{ $parametro->nombre }}</td>
@@ -67,11 +67,13 @@
                         </td>
                         <td class="justify-content-end">
                             <div class="btn-group">
-                                <button wire:click="edit('{{ $parametro->rowquid }}')" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default">
+                                <button wire:click="edit('{{ $parametro->rowquid }}')" class="btn btn-primary btn-sm"
+                                        data-toggle="modal" data-target="#modal-default">
                                     <i class="fas fa-edit"></i>
                                 </button>
 
-                                <button wire:click="destroy('{{ $parametro->rowquid }}')" class="btn btn-primary btn-sm">
+                                <button wire:click="destroy('{{ $parametro->rowquid }}')"
+                                        class="btn btn-primary btn-sm">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </div>
@@ -95,9 +97,17 @@
     </div>
 
     <div class="card-footer">
-        <small>Mostrando {{ $parametros->count() }}</small>
+        <small>Mostrando {{ $ListarParametros->count() }}</small>
     </div>
 
-    {!! verSpinner('actualizar, cerrarBusqueda, setLimit') !!}
+    {{--{!! verSpinner('actualizar, cerrarBusqueda, setLimit') !!}--}}
+
+    
+
+    <div class="overlay bg-transparent">
+        <div class="spinner-border text-primary" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
 
 </div>

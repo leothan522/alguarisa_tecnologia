@@ -3,6 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Parametro;
+use App\Traits\TableStyle;
 use App\Traits\ToastBootstrap;
 use Illuminate\Support\Sleep;
 use Illuminate\Validation\Rule;
@@ -13,8 +14,8 @@ use Livewire\Component;
 class ParametrosComponent extends Component
 {
     use ToastBootstrap;
+    use TableStyle;
 
-    public $rows = 0, $numero = 14, $tableStyle = false;
     public $view = "create", $keyword;
     public $nombre, $tabla_id, $valor;
     public $verToast = false;
@@ -31,32 +32,20 @@ class ParametrosComponent extends Component
     {
         $parametros = Parametro::buscar($this->keyword)
             ->orderBy('created_at', 'DESC')
-            ->limit($this->rows)
+            ->limit($this->limit)
             ->get();
 
-        $total = Parametro::buscar($this->keyword)->count();
+        $rows = Parametro::buscar($this->keyword)->count();
+        $limit = $parametros->count();
 
-        $rows = Parametro::count();
-
-        if ($rows > $this->numero) {
-            $this->tableStyle = true;
-        }
+        $this->btnVermas($limit, $rows);
 
         return view('livewire.dashboard.parametros-component')
-            ->with('parametros', $parametros)
-            ->with('rowsParametros', $rows)
-            ->with('totalBusqueda', $total);
+            ->with('ListarParametros', $parametros)
+            ->with('rows', $rows);
     }
 
-    public function setLimit()
-    {
-        if (numRowsPaginate() < $this->numero) {
-            $rows = $this->numero;
-        } else {
-            $rows = numRowsPaginate();
-        }
-        $this->rows = $this->rows + $rows;
-    }
+
 
     public function limpiar()
     {
