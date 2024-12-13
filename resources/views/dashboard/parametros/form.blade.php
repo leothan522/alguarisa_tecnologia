@@ -19,7 +19,7 @@
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <small class="text-bold">Nombre:</small>
+                        <small class="text-lightblue text-bold text-uppercase">Nombre:</small>
                         <div class="input-group">
                             <input type="text" class="form-control" wire:model="nombre" name="nombre" placeholder="Nombre">
                             @error('nombre')
@@ -32,7 +32,7 @@
                     </div>
 
                     <div class="form-group">
-                        <small class="text-bold">tabla_id:</small>
+                        <small class="text-lightblue text-bold text-uppercase">tabla_id:</small>
                         <div class="input-group">
                             <input type="text" class="form-control" wire:model="tabla_id" name="tabla_id" placeholder="tabla_id">
                             @error('tabla_id')
@@ -45,7 +45,7 @@
                     </div>
 
                     <div class="form-group">
-                        <small class="text-bold">valor:</small>
+                        <small class="text-lightblue text-bold text-uppercase">valor:</small>
                         <div class="input-group">
                             <input type="text" class="form-control" wire:model="valor" name="valor" placeholder="valor">
                             @error('valor')

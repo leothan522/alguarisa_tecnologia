@@ -1,16 +1,24 @@
 <div id="div_table_parametros" class="card card-navy card-outline">
     <div class="card-header">
-        <h3 class="card-title">
+        <h3 class="card-title mb-2 mb-sm-auto">
             @if($keyword)
-                Búsqueda { <b class="text-primary">{{ $keyword }}</b> } [ <b class="text-primary">{{ $totalBusqueda }}</b> ]
-                <button class="btn btn-tool text-danger" wire:click="cerrarBusqueda"><i class="fas fa-times-circle"></i>
+                Búsqueda
+                <span class="text-nowrap">{ <b class="text-warning">{{ $keyword }}</b> }</span>
+                <span class="text-nowrap">[ <b class="text-warning">{{ $totalBusqueda }}</b> ]</span>
+                <button class="d-sm-none btn btn-tool text-warning" wire:click="cerrarBusqueda">
+                    <i class="fas fa-times"></i>
                 </button>
             @else
-                Todos [ <b class="text-primary">{{ $rowsParametros }}</b> ]
+                Todos [ <b class="text-warning">{{ $rowsParametros }}</b> ]
             @endif
         </h3>
 
         <div class="card-tools">
+            @if($keyword)
+                <button class="d-none d-sm-inline-block btn btn-tool text-warning" wire:click="cerrarBusqueda">
+                    <i class="fas fa-times"></i>
+                </button>
+            @endif
             <button type="button" class="btn btn-tool" wire:click="actualizar">
                 <i class="fas fa-sync-alt"></i>
             </button>
@@ -25,12 +33,12 @@
     <div class="card-body table-responsive p-0" @if($tableStyle) style="height: 67vh;" @endif >
         <table class="table table-sm table-head-fixed table-hover text-nowrap">
             <thead>
-            <tr class="text-navy">
-                <th class="text-center">id</th>
-                <th>nombre</th>
-                <th class="d-none d-md-table-cell">table_id</th>
-                <th class="d-none d-md-table-cell">valor</th>
-                <th style="width: 5%;">&nbsp;</th>
+            <tr class="text-lightblue">
+                <th class="text-center text-uppercase" style="width: 5%">id</th>
+                <th class="text-uppercase">nombre</th>
+                <th class="d-none d-md-table-cell text-uppercase">table_id</th>
+                <th class="d-none d-md-table-cell text-uppercase">valor</th>
+                <th class="text-center" style="width: 5%;"><small>Rows {{ $parametros->count() }}</small></th>
             </tr>
             </thead>
             <tbody>
