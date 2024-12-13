@@ -176,8 +176,8 @@ function verSpinner($target = null): string
     }
     $spinner = '
         <div class="overlay-wrapper verCargando" wire:loading '.$target.'>
-            <div class="overlay">
-                <div class="spinner-border text-navy" role="status">
+            <div class="overlay bg-transparent">
+                <div class="spinner-border text-primary" role="status">
                     <span class="sr-only">Loading...</span>
                 </div>
             </div>

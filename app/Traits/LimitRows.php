@@ -2,11 +2,11 @@
 
 namespace App\Traits;
 
-trait TableStyle
+trait LimitRows
 {
-    public int $size = 305;
+    public int $size = 305; //max-height: 305px;
     public int $limit = 0;
-    public bool $disabled = true;
+    public bool $btnDisabled = true;
 
     public function setLimit(): void
     {
@@ -18,12 +18,12 @@ trait TableStyle
         $this->size = $size;
     }
 
-    public function btnVermas($limit, $rows): void
+    public function btnVerMas($limit, $rows): void
     {
         if ($rows > $limit) {
-            $this->disabled = false;
+            $this->btnDisabled = false;
         }else{
-            $this->disabled = true;
+            $this->btnDisabled = true;
         }
     }
 

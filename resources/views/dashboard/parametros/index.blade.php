@@ -29,30 +29,3 @@
 @section('footer')
     @include('dashboard.footer')
 @endsection
-
-@section('css')
-    {{--<link rel="stylesheet" href="/css/admin_custom.css">--}}
-@stop
-
-@section('js')
-    <script src="{{ asset("js/app.js") }}"></script>
-    <script>
-
-        Livewire.on('cerrarModal', () => {
-            $("#btn_modal_default").click();
-            setTimeout(function () {
-                verCargando('div_table_parametros');
-            });
-        });
-
-        Livewire.on('delete', () => {
-            verCargando('div_table_parametros');
-        });
-
-        Livewire.on('buscar', () => {
-            verCargando('div_table_parametros');
-        });
-
-        console.log('Hi!');
-    </script>
-@endsection

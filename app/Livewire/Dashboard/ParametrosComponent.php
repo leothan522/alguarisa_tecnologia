@@ -3,7 +3,7 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Parametro;
-use App\Traits\TableStyle;
+use App\Traits\LimitRows;
 use App\Traits\ToastBootstrap;
 use Illuminate\Support\Sleep;
 use Illuminate\Validation\Rule;
@@ -14,7 +14,7 @@ use Livewire\Component;
 class ParametrosComponent extends Component
 {
     use ToastBootstrap;
-    use TableStyle;
+    use LimitRows;
 
     public $view = "create", $keyword;
     public $nombre, $tabla_id, $valor;
@@ -38,14 +38,12 @@ class ParametrosComponent extends Component
         $rows = Parametro::buscar($this->keyword)->count();
         $limit = $parametros->count();
 
-        $this->btnVermas($limit, $rows);
+        $this->btnVerMas($limit, $rows);
 
         return view('livewire.dashboard.parametros-component')
             ->with('ListarParametros', $parametros)
             ->with('rows', $rows);
     }
-
-
 
     public function limpiar()
     {
@@ -138,20 +136,15 @@ class ParametrosComponent extends Component
         $this->keyword = $keyword;
     }
 
-    public function destroy($rowquid)
-    {
-        $this->rowquid = $rowquid;
-        $this->confirmToastBootstrap('delete');
-    }
-
     #[On('delete')]
-    public function delete()
+    public function delete($rowquid)
     {
-        $parametro = $this->getParametro($this->rowquid);
+        $parametro = $this->getParametro($rowquid);
         if ($parametro){
+            $nombre = '<b class="text-warning">'.$parametro->nombre.'</b>';
             $parametro->delete();
             $this->limpiar();
-            $this->toastBootstrap('success', 'Parametro Eliminado.');
+            $this->toastBootstrap('success', "Parametro $nombre Eliminado.");
         }
     }
 

@@ -1,5 +1,7 @@
 <div id="div_table_parametros" class="card card-navy card-outline">
+
     <div class="card-header">
+
         <h3 class="card-title mb-2 mb-sm-auto">
             @if($keyword)
                 Búsqueda
@@ -25,11 +27,13 @@
             <button class="btn btn-tool" data-toggle="modal" data-target="#modal-default" wire:click="limpiar">
                 <i class="fas fa-file"></i> Nuevo
             </button>
-            <button type="button" class="btn btn-tool" wire:click="setLimit" @if($disabled) disabled @endif >
+            <button type="button" class="btn btn-tool" wire:click="setLimit" @if($btnDisabled) disabled @endif >
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
         </div>
+
     </div>
+
     <div class="card-body table-responsive p-0" style="max-height: calc(100vh - {{ $size }}px)">
         <table class="table table-sm table-head-fixed table-hover text-nowrap">
             <thead>
@@ -41,7 +45,7 @@
                 <th class="text-center" style="width: 5%;"><small>Rows {{ $ListarParametros->count() }}</small></th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="tbody_parametros" wire:loading.class="invisible" wire:target="actualizar, cerrarBusqueda, setLimit">
             @if($ListarParametros->isNotEmpty())
                 @foreach($ListarParametros as $parametro)
                     <tr>
@@ -72,7 +76,7 @@
                                     <i class="fas fa-edit"></i>
                                 </button>
 
-                                <button wire:click="destroy('{{ $parametro->rowquid }}')"
+                                <button onclick="confirmToastBootstrap('delete',  { rowquid: '{{ $parametro->rowquid }}' })"
                                         class="btn btn-primary btn-sm">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
@@ -100,14 +104,6 @@
         <small>Mostrando {{ $ListarParametros->count() }}</small>
     </div>
 
-    {{--{!! verSpinner('actualizar, cerrarBusqueda, setLimit') !!}--}}
-
-    
-
-    <div class="overlay bg-transparent">
-        <div class="spinner-border text-primary" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-    </div>
+    {!! verSpinner('actualizar, cerrarBusqueda, setLimit') !!}
 
 </div>
