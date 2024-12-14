@@ -16,9 +16,8 @@ class ParametrosComponent extends Component
     use ToastBootstrap;
     use LimitRows;
 
-    public $view = "create", $keyword;
+    public $view = "create", $verToast = false, $keyword;
     public $nombre, $tabla_id, $valor;
-    public $verToast = false;
 
     #[Locked]
     public $parametros_id, $rowquid;
@@ -48,8 +47,10 @@ class ParametrosComponent extends Component
     public function limpiar()
     {
         $this->reset([
-            'parametros_id', 'nombre', 'tabla_id', 'valor', 'view', 'rowquid',
-            'verToast'
+            'view', 'verToast',
+            'nombre', 'tabla_id', 'valor',
+            'parametros_id', 'rowquid',
+
         ]);
         $this->resetErrorBag();
     }
@@ -165,14 +166,14 @@ class ParametrosComponent extends Component
         $this->limpiar();
     }
 
-    protected function getParametro($rowquid): ?Parametro
-    {
-        return Parametro::where('rowquid', $rowquid)->first();
-    }
-
     public function actualizar()
     {
         //Refresh
+    }
+
+    protected function getParametro($rowquid): ?Parametro
+    {
+        return Parametro::where('rowquid', $rowquid)->first();
     }
 
 }

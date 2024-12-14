@@ -4,67 +4,60 @@
             <div class="modal-content">
 
                 <div class="modal-header bg-navy">
-                    <h4 class="modal-title">
+                    <h4 class="modal-title" wire:loading.class="invisible" wire:target="limpiar">
                         @if($view == "create")
                             Crear Parametro
                         @else
                             Editar Parametro
                         @endif
                     </h4>
-                    <button type="button" {{--wire:click="limpiar()"--}} class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span class="text-white" aria-hidden="true">×</span>
                     </button>
                 </div>
 
-                <div class="modal-body">
+                <div class="modal-body" wire:loading.class="invisible">
 
                     <div class="form-group">
-                        <small class="text-bold">Nombre:</small>
+                        <small class="text-lightblue text-bold text-uppercase">Nombre:</small>
                         <div class="input-group">
-                            <input type="text" class="form-control" wire:model="nombre" name="nombre" placeholder="Nombre">
+                            <input type="text" wire:model="nombre" class="form-control @error('nombre') is-invalid @enderror" placeholder="Nombre">
                             @error('nombre')
-                            <span class="col-sm-12 text-sm text-bold text-danger">
-                                <i class="icon fas fa-exclamation-triangle"></i>
-                                {{ $message }}
-                            </span>
+                            <span class="error invalid-feedback text-bold">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <small class="text-bold">tabla_id:</small>
+                        <small class="text-lightblue text-bold text-uppercase">tabla_id:</small>
                         <div class="input-group">
-                            <input type="text" class="form-control" wire:model="tabla_id" name="tabla_id" placeholder="tabla_id">
+                            <input type="number" wire:model="tabla_id" class="form-control @error('tabla_id') is-invalid @enderror" placeholder="Tabla_id">
                             @error('tabla_id')
-                            <span class="col-sm-12 text-sm text-bold text-danger">
-                                <i class="icon fas fa-exclamation-triangle"></i>
-                                {{ $message }}
-                            </span>
+                            <span class="error invalid-feedback text-bold">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <small class="text-bold">valor:</small>
+                        <small class="text-lightblue text-bold text-uppercase">valor:</small>
                         <div class="input-group">
-                            <input type="text" class="form-control" wire:model="valor" name="valor" placeholder="valor">
+                            <input type="text" wire:model="valor" class="form-control @error('valor') is-invalid @enderror" placeholder="Valor">
                             @error('valor')
-                            <span class="col-sm-12 text-sm text-bold text-danger">
-                                <i class="icon fas fa-exclamation-triangle"></i>
-                                {{ $message }}
-                            </span>
+                            <span class="error invalid-feedback text-bold">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
 
                 </div>
 
-                <div class="modal-footer justify-content-between">
+                <div class="modal-footer">
 
-                    <button type="button" class="btn btn-default" data-dismiss="modal" id="btn_modal_default">Cerrar</button>
-                    <button type="submit" class="btn  @if($view == "edit") btn-primary @else btn-success @endif ">
-                        Guardar @if($view == "edit") Cambios @endif
-                    </button>
+                    <div class="row col-12 justify-content-between" wire:loading.class="invisible" wire:target="limpiar, edit">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="btn_modal_default">Cerrar</button>
+                        <button type="submit" class="btn  @if($view == "edit") btn-primary @else btn-success @endif ">
+                            Guardar @if($view == "edit") Cambios @endif
+                        </button>
+                    </div>
 
                 </div>
 
