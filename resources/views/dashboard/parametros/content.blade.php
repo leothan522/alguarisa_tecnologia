@@ -8,7 +8,7 @@
     </div>
 </div>
 
-<div class="row d-sm-none justify-content-center">
+<div class="row d-md-none justify-content-center">
     <div class="col-12">
     @include('dashboard.parametros.manual')
     </div>

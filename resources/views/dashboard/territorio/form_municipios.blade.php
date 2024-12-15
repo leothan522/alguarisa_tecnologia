@@ -1,16 +1,16 @@
-<form wire:submit="save">
-    <div wire:ignore.self class="modal fade" id="modal-default">
+<form wire:submit="saveMunicipios">
+    <div wire:ignore.self class="modal fade" id="modal-default-municipios">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
 
                 <div class="modal-header bg-navy">
-                    <h4 class="modal-title" wire:loading.class="invisible" wire:target="limpiar">
-                        @if($parametros_id)
-                            Crear
-                        @else
+                    <h4 class="modal-title" wire:loading.class="invisible" wire:target="limpiar, editMunicipios">
+                        @if($municipios_id)
                             Editar
+                        @else
+                            Crear
                         @endif
-                            Parametro
+                            Municipio
                     </h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span class="text-white" aria-hidden="true">×</span>
@@ -22,28 +22,28 @@
                     <div class="form-group">
                         <small class="text-lightblue text-bold text-uppercase">Nombre:</small>
                         <div class="input-group">
-                            <input type="text" wire:model="nombre" class="form-control @error('nombre') is-invalid @enderror" placeholder="Nombre">
-                            @error('nombre')
+                            <input type="text" wire:model="nombreMunicipio" class="form-control @error('nombreMunicipio') is-invalid @enderror" placeholder="Nombre Completo">
+                            @error('nombreMunicipio')
                             <span class="error invalid-feedback text-bold">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <small class="text-lightblue text-bold text-uppercase">tabla_id:</small>
+                        <small class="text-lightblue text-bold text-uppercase">Abreviatura:</small>
                         <div class="input-group">
-                            <input type="number" wire:model="tabla_id" class="form-control @error('tabla_id') is-invalid @enderror" placeholder="Tabla_id">
-                            @error('tabla_id')
+                            <input type="text" wire:model="miniMunicipio" class="form-control @error('miniMunicipio') is-invalid @enderror" placeholder="Nombre corto">
+                            @error('miniMunicipio')
                             <span class="error invalid-feedback text-bold">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <small class="text-lightblue text-bold text-uppercase">valor:</small>
+                        <small class="text-lightblue text-bold text-uppercase">Asignación:</small>
                         <div class="input-group">
-                            <input type="text" wire:model="valor" class="form-control @error('valor') is-invalid @enderror" placeholder="Valor">
-                            @error('valor')
+                            <input type="number" min="1" wire:model="familiasMunicipio" class="form-control @error('familiasMunicipio') is-invalid @enderror" placeholder="Nro. Familias">
+                            @error('familiasMunicipio')
                             <span class="error invalid-feedback text-bold">{{ $message }}</span>
                             @enderror
                         </div>
@@ -53,10 +53,10 @@
 
                 <div class="modal-footer">
 
-                    <div class="row col-12 justify-content-between" wire:loading.class="invisible" wire:target="limpiar, edit">
-                        <button type="button" class="btn btn-default" data-dismiss="modal" id="btn_modal_default">Cerrar</button>
-                        <button type="submit" class="btn  @if($parametros_id) btn-primary @else btn-success @endif ">
-                            Guardar @if($parametros_id) Cambios @endif
+                    <div class="row col-12 justify-content-between" wire:loading.class="invisible" wire:target="limpiar, editMunicipios">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="btn_modal_default_municipios">Cerrar</button>
+                        <button type="submit" class="btn  @if($municipios_id) btn-primary @else btn-success @endif ">
+                            Guardar @if($municipios_id) Cambios @endif
                         </button>
                     </div>
 

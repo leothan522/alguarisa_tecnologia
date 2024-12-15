@@ -1,72 +1,96 @@
-<div id="div_table_parametros" class="card card-navy card-outline">
+<div id="div_table_parroquias" class="card card-navy card-outline">
+
     <div class="card-header">
-        <h3 class="card-title">
-            @if($keywordParroquias)
-                Búsqueda { <b class="text-primary">{{ $keywordParroquias }}</b> } [ <b class="text-primary">{{ $rowsParroquias }}</b> ]
-                <button class="btn btn-tool text-danger" wire:click="cerrarBusqueda"><i class="fas fa-times-circle"></i>
+
+        <h3 class="card-title mb-2 mb-sm-auto">
+            @if($keywordParroquias || $idMunicipio)
+                @if($idMunicipio)
+                    Filtrando
+                    <span class="text-nowrap">{ <b class="text-warning">{{ $verMunicipio }}</b> }</span>
+                @else
+                    Búsqueda
+                    <span class="text-nowrap">{ <b class="text-warning">{{ $keywordParroquias }}</b> }</span>
+                @endif
+                <span class="text-nowrap">[ <b class="text-warning">{{ $rowsParroquias }}</b> ]</span>
+                <button class="d-sm-none btn btn-tool text-warning" wire:click="cerrarBusquedaParroquias">
+                    <i class="fas fa-times"></i>
                 </button>
             @else
-                Parroquias [ <b class="text-primary">{{ $rowsParroquias }}</b> ]
+                Parroquias [ <b class="text-warning">{{ $rowsParroquias }}</b> ]
             @endif
         </h3>
 
         <div class="card-tools">
+            @if($keywordParroquias || $idMunicipio)
+                <button class="d-none d-sm-inline-block btn btn-tool text-warning" wire:click="cerrarBusquedaParroquias">
+                    <i class="fas fa-times"></i>
+                </button>
+            @endif
             <button type="button" class="btn btn-tool" wire:click="actualizar">
                 <i class="fas fa-sync-alt"></i>
             </button>
             <button class="btn btn-tool" data-toggle="modal" data-target="#modal-default" wire:click="limpiar">
                 <i class="fas fa-file"></i> Nuevo
             </button>
-            <button type="button" class="btn btn-tool" wire:click="setLimit" @if(/*($rows >= $rowsParametros) || $rows > $totalBusqueda*/false) disabled @endif >
+            <button type="button" class="btn btn-tool" wire:click="setLimitParroquias" @if($btnDisabledParroquias) disabled @endif >
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
         </div>
+
     </div>
-    <div class="card-body table-responsive p-0" @if($tableStyle) style="height: 67vh;" @endif >
+
+    <div class="card-body table-responsive p-0" style="max-height: calc(100vh - {{ $size }}px)">
         <table class="table table-sm table-head-fixed table-hover text-nowrap">
             <thead>
-            <tr class="text-navy">
-                <th class="text-center" style="width: 5%">#</th>
-                <th>Nombre</th>
-                <th class="d-none d-md-table-cell">Municipio</th>
-                <th class="d-none d-md-table-cell text-right">Familias</th>
-                <th style="width: 5%;">&nbsp;</th>
+            <tr class="text-lightblue">
+                <th class="text-center text-uppercase" style="width: 5%">#</th>
+                <th class="text-uppercase">Nombre</th>
+                <th class="d-none d-md-table-cell text-uppercase text-right pr-3">Familias</th>
+                <th class="d-none d-md-table-cell text-uppercase text-center">Mun.</th>
+                <th class="text-center" style="width: 5%;"><small>Rows {{ $listarParroquias->count() }}</small></th>
             </tr>
             </thead>
-            <tbody>
-            @if(/*$parametros->isNotEmpty()*/false)
-                @foreach($parametros as $parametro)
+            <tbody id="tbody_parroquias" wire:loading.class="invisible" wire:target="actualizar, cerrarBusquedaParroquias, setLimitParroquias, filtrar">
+            @if($listarParroquias->isNotEmpty())
+                @php($i = 0)
+                @foreach($listarParroquias as $parroquia)
                     <tr>
-                        <td class="text-bold text-center">{{ $parametro->id }}</td>
-                        <td class="d-table-cell text-truncate" style="max-width: 150px;">{{ $parametro->nombre }}</td>
-                        <td class="d-none d-md-table-cell">
-                            @if(is_null($parametro->tabla_id))
-                                null
-                            @else
-                                {{ $parametro->tabla_id }}
-                            @endif
-                        </td>
-                        <td class="d-none d-md-table-cell text-truncate" style="max-width: 150px;">
-                            @if(is_null($parametro->valor))
-                                null
-                            @else
-                                @if($parametro->tabla_id == "-1")
-                                    json{...}
-                                @else
-                                    {{ $parametro->valor }}
-                                @endif
-                            @endif
-                        </td>
+                        <td class="align-middle text-bold text-center">{{ ++$i }}</td>
+                        <td class="align-middle d-table-cell text-truncate" style="max-width: 150px;">{{ $parroquia->nombre }}</td>
+                        <td class="align-middle d-none d-md-table-cell text-right pr-3">{{ formatoMillares($parroquia->familias, 0) }}</td>
+                        <td class="align-middle d-none d-md-table-cell text-center">{{ $parroquia->municipio->mini }}</td>
                         <td class="justify-content-end">
-                            <div class="btn-group">
-                                <button wire:click="edit('{{ $parametro->rowquid }}')" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modal-default">
+
+                            <div class="btn-group d-md-none">
+                                <button wire:click="edit('{{ $parroquia->rowquid }}')" class="btn btn-primary"
+                                        data-toggle="modal" data-target="#modal-default">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+
+                            <div class="btn-group d-none d-md-flex">
+
+
+                                <button wire:click="setEstatusParroquia('{{ $parroquia->rowquid }}')" class="btn btn-primary btn-sm">
+                                    @if($parroquia->estatus)
+                                        <i class="fas fa-check"></i>
+                                    @else
+                                        <i class="fas fa-ban"></i>
+                                    @endif
+                                </button>
+
+                                <button wire:click="edit('{{ $parroquia->rowquid }}')" class="btn btn-primary btn-sm"
+                                        data-toggle="modal" data-target="#modal-default">
                                     <i class="fas fa-edit"></i>
                                 </button>
 
-                                <button wire:click="destroy('{{ $parametro->rowquid }}')" class="btn btn-primary btn-sm">
+                                <button onclick="confirmToastBootstrap('destroyParroquia',  { rowquid: '{{ $parroquia->rowquid }}' })"
+                                        class="btn btn-primary btn-sm">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
+
                             </div>
+
                         </td>
                     </tr>
                 @endforeach
@@ -87,9 +111,9 @@
     </div>
 
     <div class="card-footer">
-        <small>Mostrando 0{{--{{ $parametros->count() }}--}}</small>
+        <small>Mostrando {{ $listarParroquias->count() }}</small>
     </div>
 
-    {!! verSpinner() !!}
+    {!! verSpinner('actualizar, cerrarBusquedaParroquias, setLimitParroquias, setEstatusParroquia, filtrar') !!}
 
 </div>
