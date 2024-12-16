@@ -29,7 +29,7 @@
             <button type="button" class="btn btn-tool" wire:click="actualizar">
                 <i class="fas fa-sync-alt"></i>
             </button>
-            <button class="btn btn-tool" data-toggle="modal" data-target="#modal-default" wire:click="limpiar">
+            <button class="btn btn-tool" data-toggle="modal" data-target="#modal-default-parroquias" wire:click="formParroquias">
                 <i class="fas fa-file"></i> Nuevo
             </button>
             <button type="button" class="btn btn-tool" wire:click="setLimitParroquias" @if($btnDisabledParroquias) disabled @endif >
@@ -45,8 +45,8 @@
             <tr class="text-lightblue">
                 <th class="text-center text-uppercase" style="width: 5%">#</th>
                 <th class="text-uppercase">Nombre</th>
-                <th class="d-none d-md-table-cell text-uppercase text-right pr-3">Familias</th>
-                <th class="d-none d-md-table-cell text-uppercase text-center">Mun.</th>
+                <th class="d-none d-lg-table-cell text-uppercase text-right pr-3">Familias</th>
+                <th class="d-none d-xl-table-cell text-uppercase text-center">Mun.</th>
                 <th class="text-center" style="width: 5%;"><small>Rows {{ $listarParroquias->count() }}</small></th>
             </tr>
             </thead>
@@ -56,19 +56,19 @@
                 @foreach($listarParroquias as $parroquia)
                     <tr>
                         <td class="align-middle text-bold text-center">{{ ++$i }}</td>
-                        <td class="align-middle d-table-cell text-truncate" style="max-width: 150px;">{{ $parroquia->nombre }}</td>
-                        <td class="align-middle d-none d-md-table-cell text-right pr-3">{{ formatoMillares($parroquia->familias, 0) }}</td>
-                        <td class="align-middle d-none d-md-table-cell text-center">{{ $parroquia->municipio->mini }}</td>
+                        <td class="align-middle d-table-cell text-uppercase text-truncate" style="max-width: 150px;">{{ $parroquia->nombre }}</td>
+                        <td class="align-middle d-none d-lg-table-cell text-right pr-3">{{ formatoMillares($parroquia->familias, 0) }}</td>
+                        <td class="align-middle d-none d-xl-table-cell text-uppercase text-center">{{ $parroquia->municipio->mini }}</td>
                         <td class="justify-content-end">
 
-                            <div class="btn-group d-md-none">
-                                <button wire:click="edit('{{ $parroquia->rowquid }}')" class="btn btn-primary"
-                                        data-toggle="modal" data-target="#modal-default">
+                            <div class="btn-group d-lg-none">
+                                <button wire:click="editParroquias('{{ $parroquia->rowquid }}')" class="btn btn-primary"
+                                        data-toggle="modal" data-target="#modal-show-parroquias">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
 
-                            <div class="btn-group d-none d-md-flex">
+                            <div class="btn-group d-none d-lg-flex">
 
 
                                 <button wire:click="setEstatusParroquia('{{ $parroquia->rowquid }}')" class="btn btn-primary btn-sm">
@@ -79,8 +79,8 @@
                                     @endif
                                 </button>
 
-                                <button wire:click="edit('{{ $parroquia->rowquid }}')" class="btn btn-primary btn-sm"
-                                        data-toggle="modal" data-target="#modal-default">
+                                <button wire:click="editParroquias('{{ $parroquia->rowquid }}')" class="btn btn-primary btn-sm"
+                                        data-toggle="modal" data-target="#modal-default-parroquias">
                                     <i class="fas fa-edit"></i>
                                 </button>
 

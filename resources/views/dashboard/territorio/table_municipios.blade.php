@@ -40,8 +40,8 @@
             <tr class="text-lightblue">
                 <th class="text-center text-uppercase" style="width: 5%">#</th>
                 <th class="text-uppercase">Nombre</th>
-                <th class="d-none d-md-table-cell text-uppercase text-center">Pq.</th>
-                <th class="d-none d-md-table-cell text-uppercase text-right pr-3">Familias</th>
+                <th class="d-none d-sm-table-cell text-uppercase text-center">Pq.</th>
+                <th class="d-none d-lg-table-cell text-uppercase text-right pr-3">Familias</th>
                 <th class="text-center" style="width: 5%;"><small>Rows {{ $listarMunicipios->count() }}</small></th>
             </tr>
             </thead>
@@ -52,24 +52,24 @@
                     <tr>
                         <td class="align-middle text-bold text-center">{{ ++$i }}</td>
                         <td class="align-middle d-table-cell text-uppercase text-truncate" style="max-width: 150px;">{{ $municipio->nombre }}</td>
-                        <td class="d-none d-md-table-cell text-center">
+                        <td class="d-none d-sm-table-cell text-center">
                             <div class="btn-group">
                                 <button wire:click="filtrar('{{ $municipio->rowquid }}')" class="btn btn-outline-success btn-sm text-bold">
                                     {{ formatoMillares($municipio->parroquias, 0) }}
                                 </button>
                             </div>
                         </td>
-                        <td class="align-middle d-none d-md-table-cell text-right pr-3">{{ formatoMillares($municipio->familias, 0) }}</td>
+                        <td class="align-middle d-none d-lg-table-cell text-right pr-3">{{ formatoMillares($municipio->familias, 0) }}</td>
                         <td class="justify-content-end">
 
-                            <div class="btn-group d-md-none">
+                            <div class="btn-group d-lg-none">
                                 <button wire:click="editMunicipios('{{ $municipio->rowquid }}')" class="btn btn-primary"
                                         data-toggle="modal" data-target="#modal-show-municipios">
                                     <i class="fas fa-eye"></i>
                                 </button>
                             </div>
 
-                            <div class="btn-group d-none d-md-flex">
+                            <div class="btn-group d-none d-lg-flex">
 
 
                                 <button wire:click="setEstatusMunicipio('{{ $municipio->rowquid }}')" class="btn btn-primary btn-sm">

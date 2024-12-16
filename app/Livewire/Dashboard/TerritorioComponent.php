@@ -21,6 +21,7 @@ class TerritorioComponent extends Component
     public $keywordMunicipios, $keywordParroquias, $idMunicipio, $verMunicipio;
     public bool $verToast = false;
     public $nombreMunicipio, $miniMunicipio, $familiasMunicipio, $cantidadParroquias;
+    public $municipioParroquia, $nombreParroquia, $miniParroquia, $familiasParroquia;
 
     #[Locked]
     public $municipios_id, $parroquias_id, $rowquid, $estatus;
@@ -60,6 +61,7 @@ class TerritorioComponent extends Component
         $this->reset([
             'verToast',
             'nombreMunicipio', 'miniMunicipio', 'familiasMunicipio', 'cantidadParroquias',
+            'municipioParroquia', 'nombreParroquia', 'miniParroquia', 'familiasParroquia',
             'municipios_id', 'parroquias_id', 'rowquid', 'estatus'
         ]);
         $this->resetErrorBag();
@@ -108,6 +110,91 @@ class TerritorioComponent extends Component
 
     }
 
+    public function saveParroquias()
+    {
+        //primera Validacion
+        $rules = [
+            'municipioParroquia' => 'required',
+            'nombreParroquia' => ['required', 'min:4', Rule::unique('parroquias', 'nombre')->ignore($this->parroquias_id)],
+            'miniParroquia' => ['nullable', 'min:4', Rule::unique('parroquias', 'mini')->ignore($this->parroquias_id)],
+            'familiasParroquia' => 'required|integer',
+        ];
+        $messages = [
+            'municipioParroquia.required' => 'El municipio es obligatorio.',
+            'nombreParroquia.required' => 'El nombre de la parroquia es obligatorio.',
+            'nombreParroquia.min' => 'El nombre de la parroquia debe contener al menos 4 caracteres.',
+            'nombreParroquia.unique' => 'El nombre de la parroquia ya ha sido registrado.',
+            'miniParroquia.required' => 'La abreviatura de la parroquia es obligatoria.',
+            'miniParroquia.min' => 'La abreviatura de la parroquia debe contener al menos 4 caracteres.',
+            'miniParroquia.unique' => 'La abreviatura de la parroquia ya ha sido registrada.',
+            'familiasParroquia.required' => 'El nro. de familias de la parroquia es obligatorio.',
+            'familiasParroquia.integer' => 'El nro. de familias de la parroquia debe ser un número entero.',
+        ];
+        $this->validate($rules, $messages);
+
+        //segunda validacion
+        $max = 0;
+        $municipio = $this->getMunicipio($this->municipioParroquia);
+        if ($municipio){
+            $actual = Parroquia::where('municipios_id', $municipio->id)
+                ->where('id', '!=', $this->parroquias_id)
+                ->sum('familias');
+            if (!is_null($municipio->familias)){
+                $max = $municipio->familias - $actual;
+            }
+        }
+
+        $rules = [
+            'familiasParroquia' => 'integer|max:' . $max,
+        ];
+        $messages = [
+            'familiasParroquia.max' => 'El nro. de familias de las parroquias no debe ser mayor a la del municipio.',
+        ];
+        $this->validate($rules, $messages);
+
+        //Procesamos
+
+        if ($this->parroquias_id){
+            //editar
+            $parroquia = Parroquia::find($this->parroquias_id);
+            $editar = true;
+        }else{
+            $parroquia = new Parroquia();
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Parroquia::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $parroquia->rowquid = $rowquid;
+            $editar = false;
+        }
+
+        if ($parroquia){
+
+            if ($editar){
+                if ($parroquia->municipios_id != $municipio->id){
+                    $anterior = Municipio::find($parroquia->municipios_id);
+                    $anterior->parroquias = $anterior->parroquias - 1;
+                    $anterior->save();
+                    $municipio->parroquias = $municipio->parroquias + 1;
+                    $municipio->save();
+                }
+            }else{
+                $municipio->parroquias = $municipio->parroquias + 1;
+                $municipio->save();
+            }
+
+            $parroquia->nombre = $this->nombreParroquia;
+            $parroquia->mini = $this->miniParroquia;
+            $parroquia->familias = $this->familiasParroquia;
+            $parroquia->municipios_id = $municipio->id;
+            $parroquia->save();
+
+            $this->verToast = true;
+            $this->dispatch('cerrarModalParroquias');
+        }
+
+    }
+
     public function editMunicipios($rowquid)
     {
         $this->limpiar();
@@ -124,6 +211,24 @@ class TerritorioComponent extends Component
 
         }else{
             $this->dispatch('cerrarModalMunicipios');
+        }
+    }
+
+    public function editParroquias($rowquid)
+    {
+        $this->formParroquias();
+        $parroquia = $this->getParroquia($rowquid);
+        if ($parroquia){
+            $this->dispatch('setSelectMunicipio', rowquid: $parroquia->municipio->rowquid);
+            $this->parroquias_id = $parroquia->id;
+            $this->nombreParroquia = $parroquia->nombre;
+            $this->miniParroquia = $parroquia->mini;
+            $this->familiasParroquia = $parroquia->familias;
+            $this->rowquid = $parroquia->rowquid;
+            $this->estatus = $parroquia->estatus;
+            $this->miniMunicipio = $parroquia->municipio->mini;
+        }else{
+            $this->dispatch('cerrarModalParroquias');
         }
     }
 
@@ -175,6 +280,14 @@ class TerritorioComponent extends Component
         }
     }
 
+    public function formParroquias()
+    {
+        $this->limpiar();
+        $rows = Municipio::orderBy('nombre', 'ASC')->get();
+        $municipios = getDataSelect2($rows, 'nombre');
+        $this->dispatch('initSelectMunicipios', data: $municipios);
+    }
+
     public function cerrarBusquedaMunicipios()
     {
         $this->reset(['keywordMunicipios']);
@@ -196,12 +309,32 @@ class TerritorioComponent extends Component
     #[On('cerrarModalParroquias')]
     public function cerrarModalParroquias()
     {
-        //JS
+        if ($this->verToast){
+            $this->toastBootstrap();
+        }
     }
 
     public function actualizar()
     {
         //refresh
+    }
+
+    #[On('initSelectMunicipios')]
+    public function initSelectMunicipios($data)
+    {
+        //JS
+    }
+
+    #[On('getSelectMunicipios')]
+    public function getSelectMunicipios($rowquid)
+    {
+        $this->municipioParroquia = $rowquid;
+    }
+
+    #[On('setSelectMunicipio')]
+    public function setSelectMunicipio($rowquid)
+    {
+        //JS
     }
 
     protected function delete($rowquid, $parroquia = false)
