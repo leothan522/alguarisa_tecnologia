@@ -44,7 +44,7 @@
             <thead>
             <tr class="text-lightblue">
                 <th class="text-center text-uppercase" style="width: 5%">#</th>
-                <th class="text-uppercase">Nombre</th>
+                <th class="text-uppercase">Parroquias</th>
                 <th class="d-none d-lg-table-cell text-uppercase text-right pr-3">Familias</th>
                 <th class="d-none d-xl-table-cell text-uppercase text-center">Mun.</th>
                 <th class="text-center" style="width: 5%;"><small>Rows {{ $listarParroquias->count() }}</small></th>

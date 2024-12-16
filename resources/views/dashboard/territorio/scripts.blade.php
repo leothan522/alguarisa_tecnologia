@@ -6,6 +6,8 @@
         const btnCerrarShowMunicipio = document.querySelector("#btn_modal_show_municipios");
         const btnCerrarModalParroquia = document.querySelector("#btn_modal_default_parroquias");
         const btnCerrarShowParroquia = document.querySelector("#btn_modal_show_parroquias");
+        const btnHeaderMunicipios = document.querySelector("#breadcrumb_municipios");
+        const btnHeaderParroquias = document.querySelector("#breadcrumb_parroquias");
 
         function verSpinnerMunicipios() {
             addClassinvisible("#tbody_municipios")
@@ -71,6 +73,40 @@
         Livewire.on('setSelectMunicipio', ({ rowquid }) => {
             $("#form_parroquias_select").val(rowquid).trigger('change');
         });
+
+        function verDivParroquias() {
+
+            verSpinnerMunicipios();
+
+            btnHeaderParroquias.classList.add('active');
+            btnHeaderParroquias.classList.remove('text-primary');
+            btnHeaderParroquias.style.cursor = 'text';
+            btnHeaderParroquias.removeAttribute('onclick');
+
+            btnHeaderMunicipios.classList.remove('active');
+            btnHeaderMunicipios.classList.add('text-primary');
+            btnHeaderMunicipios.style.cursor = 'pointer';
+            btnHeaderMunicipios.setAttribute('onclick', 'verDivMunicipios()');
+
+            Livewire.dispatch('verTabla', { tabla: 'parroquia' });
+        }
+
+        function verDivMunicipios() {
+
+            verSpinnerParroquias();
+
+            btnHeaderMunicipios.classList.add('active');
+            btnHeaderMunicipios.classList.remove('text-primary');
+            btnHeaderMunicipios.style.cursor = 'text';
+            btnHeaderMunicipios.removeAttribute('onclick');
+
+            btnHeaderParroquias.classList.remove('active');
+            btnHeaderParroquias.classList.add('text-primary');
+            btnHeaderParroquias.style.cursor = 'pointer';
+            btnHeaderParroquias.setAttribute('onclick', 'verDivParroquias()');
+
+            Livewire.dispatch('verTabla', { tabla: 'municipio' });
+        }
 
         $(document).on('select2:open', () => {
             document.querySelector('.select2-search__field').focus();

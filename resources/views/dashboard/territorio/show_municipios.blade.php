@@ -27,7 +27,8 @@
                         <li class="list-group-item">
                             <span>Parroquias:</span>
                             <span class="float-right text-bold text-lightblue text-uppercase">
-                                <button wire:click="filtrar('{{ $rowquid }}')" data-dismiss="modal" class="btn btn-outline-success">
+                                <button wire:click="filtrar('{{ $rowquid }}')" onclick="verDivParroquias()"
+                                        data-dismiss="modal" class="btn btn-outline-success">
                                     {{ formatoMillares($cantidadParroquias, 0) }}
                                 </button>
                             </span>

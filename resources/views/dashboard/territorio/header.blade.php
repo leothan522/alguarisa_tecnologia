@@ -6,10 +6,10 @@
             </div>
             <div class="col-sm-6 d-md-none mt-2 mt-sm-auto">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active">
+                    <li id="breadcrumb_municipios" class="breadcrumb-item active">
                         <span>Municipios</span>
                     </li>
-                    <li class="breadcrumb-item text-primary">
+                    <li id="breadcrumb_parroquias" class="breadcrumb-item text-primary" onclick="verDivParroquias()" style="cursor: pointer;">
                         <span>Parroquias</span>
                     </li>
                 </ol>

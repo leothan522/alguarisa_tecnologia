@@ -1,8 +1,8 @@
 <div class="row justify-content-center">
-    <div id="div_municipios" class="col-md-6">
+    <div id="div_municipios" class="col-md-6 @if($verParroquias) d-none @endif">
         @include('dashboard.territorio.table_municipios')
     </div>
-    <div id="div_parroquias" class="col-md-6 d-none d-md-block">
+    <div id="div_parroquias" class="col-md-6 @if($verMunicipios) d-none @endif d-md-block">
         @include('dashboard.territorio.table_parroquias')
     </div>
 </div>

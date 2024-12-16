@@ -39,7 +39,7 @@
             <thead>
             <tr class="text-lightblue">
                 <th class="text-center text-uppercase" style="width: 5%">#</th>
-                <th class="text-uppercase">Nombre</th>
+                <th class="text-uppercase">Municipios</th>
                 <th class="d-none d-sm-table-cell text-uppercase text-center">Pq.</th>
                 <th class="d-none d-lg-table-cell text-uppercase text-right pr-3">Familias</th>
                 <th class="text-center" style="width: 5%;"><small>Rows {{ $listarMunicipios->count() }}</small></th>
@@ -53,7 +53,13 @@
                         <td class="align-middle text-bold text-center">{{ ++$i }}</td>
                         <td class="align-middle d-table-cell text-uppercase text-truncate" style="max-width: 150px;">{{ $municipio->nombre }}</td>
                         <td class="d-none d-sm-table-cell text-center">
-                            <div class="btn-group">
+                            <div class="btn-group d-md-none">
+                                <button wire:click="filtrar('{{ $municipio->rowquid }}')"  onclick="verDivParroquias()"
+                                        class="btn btn-outline-success btn-sm text-bold">
+                                    {{ formatoMillares($municipio->parroquias, 0) }}
+                                </button>
+                            </div>
+                            <div class="btn-group d-none d-md-block">
                                 <button wire:click="filtrar('{{ $municipio->rowquid }}')" class="btn btn-outline-success btn-sm text-bold">
                                     {{ formatoMillares($municipio->parroquias, 0) }}
                                 </button>

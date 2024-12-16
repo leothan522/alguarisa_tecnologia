@@ -18,6 +18,7 @@ class TerritorioComponent extends Component
 
     public int $limitMunicipios = 0, $limitParroquias = 0;
     public bool $btnDisabledMunicipios = false, $btnDisabledParroquias = false;
+    public bool $verMunicipios = true, $verParroquias = false;
     public $keywordMunicipios, $keywordParroquias, $idMunicipio, $verMunicipio;
     public bool $verToast = false;
     public $nombreMunicipio, $miniMunicipio, $familiasMunicipio, $cantidadParroquias;
@@ -269,6 +270,7 @@ class TerritorioComponent extends Component
     {
         $this->keywordMunicipios = $keyword;
         $this->keywordParroquias = $keyword;
+        $this->reset('idMunicipio');
     }
 
     public function filtrar($rowquid)
@@ -311,6 +313,18 @@ class TerritorioComponent extends Component
     {
         if ($this->verToast){
             $this->toastBootstrap();
+        }
+    }
+
+    #[On('verTabla')]
+    public function verTabla($tabla = "parroa")
+    {
+        if ($tabla == "parroquia"){
+            $this->verMunicipios = false;
+            $this->verParroquias = true;
+        }else{
+            $this->verMunicipios = true;
+            $this->verParroquias = false;
         }
     }
 
