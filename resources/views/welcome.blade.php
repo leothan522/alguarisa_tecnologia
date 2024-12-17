@@ -2,18 +2,18 @@
 
 @section('content')
 
-    <div class="position-relative gradient-form" style="min-height: 100vh; background-color: #eee;">
-        <div class="position-absolute top-50 start-50 translate-middle container py-5 h-100">
+    <div class="position-relative gradient-form" style="min-height: 100vh;">
+        <div class="position-absolute top-50 start-50 translate-middle container">
 
 
-            <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="row d-flex justify-content-center align-items-center">
                 <div class="col-xl-10">
                     <div class="card rounded-3 text-black">
                         <div class="row g-0">
                             <div class="col-lg-6">
                                 <div class="card-body p-md-5 mx-md-4">
 
-                                    <img class="gobernacion_start d-sm-none" src="{{ asset('img/logo_gobernacion.svg') }}" alt="Logo Gobernacion">
+                                    <img class="gobernacion_start d-lg-none" src="{{ asset('img/logo_gobernacion.svg') }}" alt="Logo Gobernacion">
 
                                     <div class="text-center mt-5 pt-5">
                                         <img class="img-fluid mt-lg-5" src="{{ asset('img/logo_alguarisa.png') }}" alt="logo">
