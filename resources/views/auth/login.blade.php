@@ -39,8 +39,8 @@
 
                                         @if (session('status'))
                                             <div class="mb-4">
-                                                <p class="fs-6 text-primary fw-normal">
-                                                    {{ session('status') }}
+                                                <p class="fs-6 d-flex text-success fw-normal">
+                                                    <small>{{ session('status') }}</small>
                                                 </p>
                                             </div>
                                         @endif
