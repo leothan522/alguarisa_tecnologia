@@ -16,7 +16,9 @@
                                     <img class="gobernacion_start d-lg-none" src="{{ asset('img/logo_gobernacion.svg') }}" alt="Logo Gobernacion">
 
                                     <div class="text-center mt-5 mt-sm-auto ">
-                                        <img class="img-fluid" src="{{ asset('img/logo_alguarisa.png') }}" alt="logo">
+                                        <a href="{{ route('web.index') }}">
+                                            <img class="img-fluid" src="{{ asset('img/logo_alguarisa.png') }}" alt="logo">
+                                        </a>
                                         <h6 class="mt-1 mb-4 pb-1 text_title"><strong>Dirección de Tecnología y Sistemas.</strong></h6>
                                     </div>
 
