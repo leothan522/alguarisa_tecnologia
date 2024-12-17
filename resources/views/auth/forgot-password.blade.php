@@ -1,5 +1,7 @@
 @extends('layouts.auth_bootstrap')
 
+@section('title', 'Olvidé mi contraseña')
+
 @section('content')
 
     <div class="position-relative gradient-form" style="min-height: 100vh;">
