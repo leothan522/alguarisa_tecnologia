@@ -24,7 +24,7 @@
                                         <h6 class="mt-1 mb-4 pb-1 text_title"><strong>Dirección de Tecnología y Sistemas.</strong></h6>
                                     </div>
 
-                                    <form class="needs-validation" method="POST" action="{{ route('login') }}" novalidate>
+                                    <form class="needs-validation position-relative" method="POST" action="{{ route('login') }}" novalidate>
                                         @csrf
 
                                         @if ($errors->any())
@@ -77,6 +77,12 @@
                                                 <p class="mb-0 me-2">¿No tienes una cuenta?</p>
                                                 <a href="{{ route('register') }}" class="btn btn-outline-primary btn-sm">{{ __('Register') }}</a>
                                             @endif
+                                        </div>
+
+                                        <div class="position-absolute top-50 start-50 translate-middle d-none verCargando">
+                                            <div class="spinner-border text-primary" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
                                         </div>
 
                                     </form>

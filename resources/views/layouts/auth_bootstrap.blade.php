@@ -114,10 +114,12 @@
                 if (!form.checkValidity()) {
                     event.preventDefault()
                     event.stopPropagation()
+                }else {
+                    form.classList.add('opacity-50');
+                    document.querySelector(".verCargando").classList.remove('d-none');
                 }
-
-                form.classList.add('was-validated')
-            }, false)
+                form.classList.add('was-validated');
+            }, false);
         })
     })()
     console.log('Hi!')
