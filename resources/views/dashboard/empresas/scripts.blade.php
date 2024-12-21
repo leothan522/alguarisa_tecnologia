@@ -1,0 +1,42 @@
+@section('js')
+    <script src="{{ asset("js/app.js") }}"></script>
+    <script>
+
+        function buscar(){
+            addClassinvisible("#table_empresas");
+            verCargando('div_table_empresas');
+            let input = $("#navbarSearch");
+            let keyword  = input.val();
+            if (keyword.length > 0){
+                input.blur();
+                Livewire.dispatch('buscar', { keyword: keyword });
+            }
+            return false;
+        }
+
+        function verSpinnerOculto() {
+            $('.cargar_empresas').removeClass('d-none');
+        }
+
+        function imgEmpresa()
+        {
+            $('#customFileLang').click();
+        }
+
+        Livewire.on('cerrarModal', () => {
+            $('#btn_modal_default').click();
+        });
+
+        /* Ekko Lightbox */
+        $(function () {
+            $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+                event.preventDefault();
+                $(this).ekkoLightbox({
+                    alwaysShowClose: true
+                });
+            });
+        });
+
+        console.log('Hi!');
+    </script>
+@endsection

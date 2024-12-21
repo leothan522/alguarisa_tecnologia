@@ -1,11 +1,13 @@
-<div class="card card-navy" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="card card-navy card-outline" id="div_table_empresas">
 
     <div class="card-header">
         <h3 class="card-title">
             @if($keyword)
-                Búsqueda { <b class="text-warning">{{ $keyword }}</b> } [ <b class="text-warning">{{ $total }}</b> ]
-                <button class="btn btn-tool text-warning" wire:click="show({{ $empresas_id }})">
-                    <i class="fas fa-times-circle"></i>
+                Búsqueda
+                <span class="text-nowrap">{ <b class="text-warning">{{ $keyword }}</b> }</span>
+                <span class="text-nowrap">[ <b class="text-warning">{{ $rowsEmpresas }}</b> ]</span>
+                <button class="d-sm-none btn btn-tool text-warning" wire:click="cerrarBusqueda">
+                    <i class="fas fa-times"></i>
                 </button>
             @else
                 Empresas [ <b class="text-warning">{{ $rowsEmpresas }}</b> ]
@@ -13,28 +15,35 @@
         </h3>
 
         <div class="card-tools">
-            <button type="button" class="btn btn-tool d-sm-none" wire:click="actualizar">
+            @if($keyword)
+                <button class="d-none d-sm-inline-block btn btn-tool text-warning" wire:click="cerrarBusqueda">
+                    <i class="fas fa-times"></i>
+                </button>
+            @endif
+            <button type="button" class="btn btn-tool" wire:click="actualizar">
                 <i class="fas fa-sync-alt"></i>
             </button>
-            <button type="button" class="btn btn-tool d-sm-none" data-toggle="modal" data-target="#modal-default"
-                    wire:click="create" @if(!comprobarPermisos('empresas.create')) disabled @endif>
+            <button type="button" class="btn btn-tool d-sm-none" wire:click="create" @if(!comprobarPermisos('empresas.create')) disabled @endif>
                 <i class="fas fa-file"></i> Nuevo
             </button>
-            <button type="button" class="btn btn-tool" wire:click="setLimit" @if($rows >= $rowsEmpresas) disabled @endif>
+            <button type="button" class="btn btn-tool" wire:click="setLimit" @if($btnDisabled) disabled @endif>
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
         </div>
     </div>
 
-    <div class="card-body table-responsive p-0" @if($tableStyle) style="height: 68vh;" @endif >
+    <div class="card-body table-responsive p-0" id="table_empresas" wire:loading.class="invisible" wire:target="setLimit, actualizar, cerrarBusqueda" style="max-height: calc(100vh - {{ $size }}px)" >
 
         <table class="table table-head-fixed table-hover text-nowrap sticky-top">
             <thead>
-            <tr class="text-navy">
-                {{--<th style="width: 10%">Código</th>--}}
+            <tr class="text-lightblue">
+                <th class="text-uppercase" style="width: 10%">
+                    <!--Código-->
+                    &nbsp;
+                </th>
                 <th>
-                    Nombre
-                    <small class="float-right">Mostrando {{ $total }}</small>
+                    <span class="text-uppercase">Nombre</span>
+                    <small class="float-right">Rows {{ $listarEmpresas->count() }}</small>
                 </th>
             </tr>
             </thead>
@@ -42,38 +51,25 @@
 
         <!-- TO DO List -->
         <ul class="todo-list" data-widget="todo-list">
-            @if($empresas->isNotEmpty())
-                @foreach($empresas as $empresa)
-                    <li class=" @if($empresa->id == $empresas_id) text-warning @endif ">
+            @if($listarEmpresas->isNotEmpty())
+                @foreach($listarEmpresas as $empresa)
+                    <li class=" @if(/*$empresa->id == $empresas_id*/true) text-warning @endif ">
 
                         <!-- todo text -->
-                        <span class="text"
-                              @if(comprobarPermisos('empresas.estatus') || comprobarAccesoEmpresa($empresa->permisos, auth()->id())) style="cursor: pointer"
-                              wire:click="setEstatusEmpresa('{{ $empresa->rowquid }}')" @endif >
-                                <i class="fas fa-power-off @if($this->getEstatusTienda($empresa->rowquid)) text-success @else text-danger @endif"></i>
+                        <span class="text">
+                              codigo
                         </span>
 
                         <!-- Emphasis label -->
-                        <small class="badge" wire:click="show('{{ $empresa->rowquid }}')" style="cursor: pointer;">
-                            <span class="text-uppercase d-none d-md-inline-block text-truncate" style="max-width: 250px;">
-                                @if($empresa->default)
-                                    <i class="fas fa-certificate text-muted text-xs"></i>
-                                @endif
-                                {{ $empresa->nombre }}
-                            </span>
-                            <span class="text-uppercase d-inline-block d-md-none text-truncate" style="max-width: 230px;"
-                                  data-toggle="modal" data-target="#modal-default">
-                                @if($empresa->default)
-                                    <i class="fas fa-certificate text-muted text-xs"></i>
-                                @endif
+                        <small class="badge" style="cursor: pointer;">
+                            <span class="text-uppercase text-truncate" style="max-width: 250px;">
                                 {{ $empresa->nombre }}
                             </span>
                         </small>
 
                         <!-- General tools such as edit or delete-->
-                        <div class="tools text-primary" wire:click="show('{{ $empresa->rowquid }}')">
-                            <i class="fas fa-eye d-none d-md-inline-block"></i>
-                            <i class="fas fa-eye d-md-none" data-toggle="modal" data-target="#modal-default"></i>
+                        <div class="tools text-lightblue">
+                            <i class="fas fa-eye"></i>
                         </div>
 
                     </li>
@@ -91,24 +87,13 @@
 
         </ul>
         <!-- /.TO DO List -->
-
     </div>
 
-    <div class="overlay-wrapper" wire:loading
-         wire:target="setLimit, save, convertirDefault, destroy, confirmed, actualizar">
-        <div class="overlay">
-            <div class="spinner-border text-navy" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-    </div>
-    <div class="overlay-wrapper d-none cargar_empresas">
-        <div class="overlay">
-            <div class="spinner-border text-navy" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
+    <div style="z-index: 1025;">
+        {!! verSpinner('setLimit, actualizar, cerrarBusqueda') !!}
     </div>
 
 </div>
+
+
 

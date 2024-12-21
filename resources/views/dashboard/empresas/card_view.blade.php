@@ -1,5 +1,5 @@
-<div class="card card-navy card-outline d-none d-sm-block">
-    <div class="card-header">
+<div class="card card-navy card-outline">
+    <div class="card-header" wire:loading.class="invisible" wire:target="create, cancel">
         <h3 class="card-title">
             {{ $title }}
         </h3>
@@ -8,28 +8,90 @@
             <button type="button" class="btn btn-tool" wire:click="actualizar">
                 <i class="fas fa-sync-alt"></i>
             </button>
-            @if($nuevo)
+            @if($btnNuevo)
                 <button type="button" class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('empresas.create')) disabled @endif>
                     <i class="fas fa-file"></i> Nuevo
                 </button>
             @endif
-            @if($btn_cancelar)
-                <button type="button" class="btn btn-tool" wire:click="btnCancelar">
+            @if($btnCancelar)
+                <button type="button" class="btn btn-tool" wire:click="cancel">
                     <i class="fas fa-ban"></i> Cancelar
                 </button>
             @endif
         </div>
     </div>
-    <div class="card-body">
+    <div class="card-body table-responsive" wire:loading.class="invisible" wire:target="create, cancel" style="max-height: calc(100vh - {{ $size + $sizeFooter }}px)">
 
-        @include('dashboard.empresas.'.$view)
+        <form class="row" wire:submit="save">
+
+            <div class="col-sm-7 col-lg-6">
+
+                <div class="card card-outline card-navy" >
+
+                    <div class="card-header">
+                        <h5 class="card-title">Información</h5>
+                        <div class="card-tools">
+                            <span class="btn-tool"><i class="fas fa-book"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="card-body @if(!$form) p-0 @endif ">
+                        @if($form)
+                            @include('dashboard.empresas.form')
+                        @else
+                            @include('dashboard.empresas.show')
+                        @endif
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-sm-5 col-lg-6">
+
+                <div class="card card-outline card-navy">
+
+                    <div class="card-header">
+                        <h5 class="card-title">Imagen</h5>
+                        <div class="card-tools">
+                            <span class="btn-tool"><i class="fas fa-image"></i></span>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        @if($form)
+                           {{-- @include('dashboard.empresas.form_imagen')--}}
+                        @else
+                            @include('dashboard.empresas.show_imagen')
+                        @endif
+                    </div>
+                </div>
+
+            </div>
+
+            @if($form)
+                <div class="col-12">
+                    <div class="col-md-4 float-right">
+                        <button type="submit" class="btn btn-block @if($empresas_id) btn-primary @else btn-success @endif">
+                            <i class="fas fa-save mr-1"></i>
+                            Guardar
+                            @if($empresas_id)
+                                Cambios
+                            @endif
+                        </button>
+                    </div>
+                </div>
+            @endif
+
+
+        </form>
 
     </div>
 
-    @if($footer)
-        <div class="card-footer text-center @if(!comprobarAccesoEmpresa($permisos, auth()->id())) d-none @endif">
+    @if(!$form)
+        <div class="card-footer text-center {{--@if(!comprobarAccesoEmpresa($permisos, auth()->id())) d-none @endif--}}" wire:loading.class="invisible" wire:target="create, cancel">
 
-            @if(!$verDefault)
+            {{--@if(!$verDefault)
                 @if(auth()->user()->role == 100)
                     <button type="button" class="btn btn-default btn-sm mr-1" wire:click="destroy"
                             @if(!comprobarPermisos('empresas.destroy')) disabled @endif>
@@ -40,7 +102,7 @@
                         @if(!comprobarPermisos('empresas.edit')) disabled @endif>
                     <i class="fas fa-certificate"></i> Convertir en Default
                 </button>
-            @endif
+            @endif--}}
 
             <button type="button" class="btn btn-default btn-sm" wire:click="btnHorario"
                     @if(!comprobarPermisos('empresas.horario')) disabled @endif>
@@ -55,20 +117,6 @@
         </div>
     @endif
 
-    <div class="overlay-wrapper" wire:loading wire:target="limpiar, create, show, save, edit, convertirDefault,
-                destroy, btnHorario, setHorario, {{--diasActivos,--}} storeHoras, actualizar, btnCancelar, btnBorrarImagen">
-        <div class="overlay">
-            <div class="spinner-border text-navy" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-    </div>
-    <div class="overlay-wrapper d-none cargar_empresas">
-        <div class="overlay">
-            <div class="spinner-border text-navy" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-    </div>
+    {!! verSpinner('create, cancel') !!}
 
 </div>
