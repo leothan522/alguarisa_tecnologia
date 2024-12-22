@@ -1,13 +1,15 @@
 <div class="card card-navy card-outline">
-    <div class="card-header" wire:loading.class="invisible" wire:target="create, cancel">
+    <div class="card-header" wire:loading.class="invisible" wire:target="create, cancel, show">
         <h3 class="card-title">
             {{ $title }}
         </h3>
 
         <div class="card-tools">
-            <button type="button" class="btn btn-tool" wire:click="actualizar">
-                <i class="fas fa-sync-alt"></i>
-            </button>
+            @if(!$form)
+                <button type="button" class="btn btn-tool" wire:click="show('{{ $rowquid }}')">
+                    <i class="fas fa-sync-alt"></i>
+                </button>
+            @endif
             @if($btnNuevo)
                 <button type="button" class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('empresas.create')) disabled @endif>
                     <i class="fas fa-file"></i> Nuevo
@@ -20,7 +22,7 @@
             @endif
         </div>
     </div>
-    <div class="card-body table-responsive" wire:loading.class="invisible" wire:target="create, cancel" style="max-height: calc(100vh - {{ $size + $sizeFooter }}px)">
+    <div class="card-body table-responsive" wire:loading.class="invisible" wire:target="create, cancel, save, show" style="max-height: calc(100vh - {{ $size + $sizeFooter }}px)">
 
         <form class="row" wire:submit="save">
 
@@ -58,9 +60,9 @@
                         </div>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body attachment-block p-0 m-0">
                         @if($form)
-                           {{-- @include('dashboard.empresas.form_imagen')--}}
+                            @include('dashboard.empresas.form_imagen')
                         @else
                             @include('dashboard.empresas.show_imagen')
                         @endif
@@ -89,7 +91,7 @@
     </div>
 
     @if(!$form)
-        <div class="card-footer text-center {{--@if(!comprobarAccesoEmpresa($permisos, auth()->id())) d-none @endif--}}" wire:loading.class="invisible" wire:target="create, cancel">
+        <div class="card-footer text-center {{--@if(!comprobarAccesoEmpresa($permisos, auth()->id())) d-none @endif--}}" wire:loading.class="invisible" wire:target="create, cancel, show">
 
             {{--@if(!$verDefault)
                 @if(auth()->user()->role == 100)
@@ -104,19 +106,19 @@
                 </button>
             @endif--}}
 
-            <button type="button" class="btn btn-default btn-sm" wire:click="btnHorario"
+            <button type="button" class="btn btn-default btn-sm mr-1" wire:click="btnHorario"
                     @if(!comprobarPermisos('empresas.horario')) disabled @endif>
                 <i class="fas fa-clock"></i> Horario
             </button>
 
             <button type="button" class="btn btn-default btn-sm" wire:click="edit"
                     @if(!comprobarPermisos('empresas.edit')) disabled @endif>
-                <i class="fas fa-edit"></i> Editar Información
+                <i class="fas fa-edit"></i> Editar
             </button>
 
         </div>
     @endif
 
-    {!! verSpinner('create, cancel') !!}
+    {!! verSpinner('create, cancel, save, show') !!}
 
 </div>

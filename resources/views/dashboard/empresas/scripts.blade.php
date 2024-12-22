@@ -14,18 +14,10 @@
             return false;
         }
 
-        function verSpinnerOculto() {
-            $('.cargar_empresas').removeClass('d-none');
-        }
-
         function imgEmpresa()
         {
             $('#customFileLang').click();
         }
-
-        Livewire.on('cerrarModal', () => {
-            $('#btn_modal_default').click();
-        });
 
         /* Ekko Lightbox */
         $(function () {

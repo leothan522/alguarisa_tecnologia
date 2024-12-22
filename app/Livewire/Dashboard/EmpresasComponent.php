@@ -3,23 +3,31 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Empresa;
+use App\Models\Imagen;
 use App\Models\Parametro;
+use App\Traits\Imagenes;
 use App\Traits\LimitRows;
 use App\Traits\ToastBootstrap;
+use Illuminate\Validation\Rule;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class EmpresasComponent extends Component
 {
     use ToastBootstrap;
     use LimitRows;
+    use WithFileUploads;
+    use Imagenes;
 
     public $sizeFooter = 0; //60;
-    public $keyword, $btnNuevo = true, $btnCancelar = false, $title = "Ver Empresa", $form = false;
+    public $keyword, $btnNuevo = true, $btnCancelar = false, $title = "Ver Empresa", $form = false, $btnImgBorrar = false;
+    public $nombre, $rif, $jefe, $moneda, $telefonos, $email, $direccion, $default = 0;
+    public $imagen, $mini, $imgID, $photo, $imgBorrar = false;
 
     #[Locked]
-    public $empresas_id;
+    public $empresas_id, $rowquid;
 
     public function mount()
     {
@@ -48,9 +56,36 @@ class EmpresasComponent extends Component
     public function limpiar()
     {
         $this->reset([
-            'btnNuevo', 'btnCancelar', 'title', 'form'
+            'btnNuevo', 'btnCancelar', 'title', 'form', 'btnImgBorrar',
+            'nombre', 'rif', 'jefe', 'moneda', 'telefonos', 'email', 'direccion', 'default',
+            'imagen','mini', 'imgID', 'photo', 'imgBorrar'
         ]);
         $this->resetErrorBag();
+        $this->setSaveImagen(false);
+    }
+
+    public function show($rowquid)
+    {
+        $this->limpiar();
+        $empresa = $this->getEmpresa($rowquid);
+        if ($empresa){
+            $this->empresas_id = $empresa->id;
+            $this->rowquid = $empresa->rowquid;
+            $this->nombre = $empresa->nombre;
+            $this->rif = $empresa->rif;
+            $this->jefe = $empresa->supervisor;
+            $this->moneda = $empresa->moneda;
+            $this->telefonos = $empresa->telefono;
+            $this->email = $empresa->email;
+            $this->direccion = $empresa->direccion;
+            $imagenes  = Imagen::where('bienes_id', $empresa->id)->where('nombre',  'empresas')->first();
+            if ($imagenes){
+                $this->btnImgBorrar = true;
+                $this->imgID = $imagenes->id;
+                $this->imagen = $imagenes->imagen;
+                $this->mini = $imagenes->mini;
+            }
+        }
     }
 
     public function create()
@@ -62,9 +97,97 @@ class EmpresasComponent extends Component
         $this->form = true;
     }
 
+    public function edit()
+    {
+        $this->title = "Editar Empresa";
+        $this->btnCancelar = true;
+        $this->imagen = $this->mini;
+        $this->form = true;
+    }
+
+    public function save()
+    {
+        $rules = [
+            'rif'       =>  ['required', 'min:6', Rule::unique('empresas')->ignore($this->empresas_id)],
+            'nombre'    =>  'required|min:4',
+            'jefe'      =>  'required|min:4',
+            'moneda'    =>  'required',
+            'telefonos' =>  'required',
+            'email'     =>  'required|email',
+            'direccion' =>  'required',
+            'photo'     => 'nullable|image|max:1024',
+        ];
+        $this->validate($rules);
+
+        if ($this->empresas_id){
+            //editar
+            $empresa = Empresa::find($this->empresas_id);
+        }else{
+            $empresa = new Empresa();
+            do{
+                $rowquid = generarStringAleatorio(16);
+                $existe = Empresa::where('rowquid', $rowquid)->first();
+            }while($existe);
+            $empresa->rowquid = $rowquid;
+        }
+
+        if ($empresa){
+            $empresa->rif = $this->rif;
+            $empresa->nombre = $this->nombre;
+            $empresa->supervisor = $this->jefe;
+            $empresa->moneda = $this->moneda;
+            $empresa->telefono = $this->telefonos;
+            $empresa->email = $this->email;
+            $empresa->direccion = $this->direccion;
+            $empresa->save();
+
+            if ($this->saveImagen){
+                $this->procesarImagen($this->imgID, $this->photo, 'empresas', $empresa->id);
+                borrarImagenes($this->imagen, 'empresas');
+            }else{
+                if ($this->imgBorrar){
+                    $this->deleteImagen($this->imgID, 'empresas');
+                }
+            }
+            $this->show($empresa->rowquid);
+            $this->toastBootstrap();
+        }
+    }
+
+    public function updatedPhoto()
+    {
+        $this->validate([
+            'photo' => 'image|max:1024', // 1MB Max
+        ]);
+
+        $this->imagen = crearImagenTemporal($this->photo, 'empresas');
+        $this->setSaveImagen();
+    }
+
+    public function btnBorrarImagen()
+    {
+        if ($this->saveImagen){
+            borrarImagenes($this->imagen, 'empresas');
+            $this->setSaveImagen(false);
+            $this->imagen = $this->mini;
+        }else{
+            if ($this->btnImgBorrar){
+                $this->reset(['btnImgBorrar', 'imagen']);
+                $this->imgBorrar = true;
+            }
+        }
+
+        $this->reset(['photo']);
+        $this->resetErrorBag(['photo']);
+    }
+
     public function cancel()
     {
-        $this->limpiar();
+        if ($this->empresas_id){
+            $this->show($this->rowquid);
+        }else{
+            $this->create();
+        }
     }
 
     #[On('buscar')]

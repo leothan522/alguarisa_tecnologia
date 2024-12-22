@@ -11,7 +11,7 @@
 <div class="form-group">
     <small class="text-lightblue text-bold text-uppercase">RIF:</small>
     <div class="input-group">
-        <input type="text" wire:model="nombre" class="form-control @error('rif') is-invalid @enderror" placeholder="RIF">
+        <input type="text" wire:model="rif" class="form-control @error('rif') is-invalid @enderror" placeholder="RIF">
         @error('rif')
         <span class="error invalid-feedback text-bold">{{ $message }}</span>
         @enderror
@@ -45,7 +45,7 @@
 <div class="form-group">
     <small class="text-lightblue text-bold text-uppercase">Teléfonos:</small>
     <div class="input-group">
-        <input type="text" wire:model="jefe" class="form-control @error('telefonos') is-invalid @enderror" placeholder="Teléfonos">
+        <input type="text" wire:model="telefonos" class="form-control @error('telefonos') is-invalid @enderror" placeholder="Teléfonos">
         @error('telefonos')
         <span class="error invalid-feedback text-bold">{{ $message }}</span>
         @enderror
@@ -65,7 +65,7 @@
 <div class="form-group">
     <small class="text-lightblue text-bold text-uppercase">Dirección:</small>
     <div class="input-group">
-        <input type="text" wire:model="direccion" class="form-control @error('direccion') is-invalid @enderror" placeholder="{{ __('Email') }}">
+        <input type="text" wire:model="direccion" class="form-control @error('direccion') is-invalid @enderror" placeholder="Dirección">
         @error('direccion')
         <span class="error invalid-feedback text-bold">{{ $message }}</span>
         @enderror

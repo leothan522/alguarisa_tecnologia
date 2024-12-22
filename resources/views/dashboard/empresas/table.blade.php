@@ -62,7 +62,7 @@
                         </span>
 
                         <!-- Emphasis label -->
-                        <small class="badge" style="cursor: pointer;">
+                        <small class="badge" style="cursor: pointer;" wire:click="show('{{ $empresa->rowquid }}')">
                             <span class="text-uppercase text-truncate" style="max-width: 250px;">
                                 @if($empresa->default)
                                     <small class="text-bold text-lightblue mr-2">
@@ -74,7 +74,7 @@
                         </small>
 
                         <!-- General tools such as edit or delete-->
-                        <div class="tools text-lightblue">
+                        <div class="tools text-lightblue" wire:click="show('{{ $empresa->rowquid }}')">
                             <i class="fas fa-eye"></i>
                         </div>
 
