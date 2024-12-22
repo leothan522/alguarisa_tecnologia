@@ -27,12 +27,18 @@ class EmpresasComponent extends Component
     public $imagen, $mini, $imgID, $photo, $imgBorrar = false;
 
     #[Locked]
-    public $empresas_id, $rowquid;
+    public $empresas_id, $rowquid, $empresaDefault;
 
     public function mount()
     {
         $this->setLimit();
         $this->setSize(245);
+        $default = $this->getEmpresaDefault();
+        if ($default){
+            $this->show($default->rowquid);
+            $this->empresas_id = $default->id;
+            $this->empresaDefault = $default->id;
+        }
     }
 
     public function render()
@@ -46,6 +52,11 @@ class EmpresasComponent extends Component
         $rows = Empresa::buscar($this->keyword)->count();
 
         $this->btnVerMas($limit, $rows);
+
+        if (empty($this->empresaDefault)){
+            $this->create();
+            $this->default = 1;
+        }
 
         return view('livewire.dashboard.empresas-component')
             ->with('listarEmpresas', $empresas)
@@ -78,6 +89,7 @@ class EmpresasComponent extends Component
             $this->telefonos = $empresa->telefono;
             $this->email = $empresa->email;
             $this->direccion = $empresa->direccion;
+            $this->default = $empresa->default;
             $imagenes  = Imagen::where('bienes_id', $empresa->id)->where('nombre',  'empresas')->first();
             if ($imagenes){
                 $this->btnImgBorrar = true;
@@ -139,6 +151,7 @@ class EmpresasComponent extends Component
             $empresa->telefono = $this->telefonos;
             $empresa->email = $this->email;
             $empresa->direccion = $this->direccion;
+            $empresa->default = $this->default;
             $empresa->save();
 
             if ($this->saveImagen){
@@ -187,6 +200,19 @@ class EmpresasComponent extends Component
             $this->show($this->rowquid);
         }else{
             $this->create();
+        }
+    }
+
+    #[On('delete')]
+    public function delete($rowquid)
+    {
+        $empresa = $this->getEmpresa($rowquid);
+        if ($empresa){
+            $nombre = '<b class="text-warning text-uppercase">'.$empresa->nombre.'</b>';
+            $empresa->delete();
+            $ultima = Empresa::orderBy('created_at', 'DESC')->first();
+            $this->show($ultima->rowquid);
+            $this->toastBootstrap('success', "Empresa $nombre Eliminada.");
         }
     }
 
@@ -253,6 +279,31 @@ class EmpresasComponent extends Component
                 $parametro->rowquid = $rowquid;
                 $parametro->save();
             }
+        }
+    }
+
+    public function convertirDefault()
+    {
+        $this->setEmpresaDefault($this->empresas_id);
+    }
+
+    protected function getEmpresaDefault(): ?Empresa
+    {
+        return Empresa::where('default', 1)->first();
+    }
+
+    protected function setEmpresaDefault($id)
+    {
+        $empresa = Empresa::find($id);
+        if ($empresa){
+            $default = $this->getEmpresaDefault();
+            if ($default){
+                $default->default = 0;
+                $default->save();
+            }
+            $empresa->default = 1;
+            $empresa->save();
+            $this->empresaDefault = $empresa->id;
         }
     }
 

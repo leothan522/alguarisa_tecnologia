@@ -29,6 +29,12 @@
             });
         });
 
+        Livewire.on('delete', () => {
+            addClassinvisible('#div_card_body');
+            addClassinvisible('#div_card_footer');
+            verCargando('div_card_view');
+        });
+
         console.log('Hi!');
     </script>
 @endsection

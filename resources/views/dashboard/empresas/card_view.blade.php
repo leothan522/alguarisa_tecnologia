@@ -1,9 +1,9 @@
-<div class="card card-navy card-outline">
+<div id="div_card_view" class="card card-navy card-outline">
+
     <div class="card-header" wire:loading.class="invisible" wire:target="create, cancel, show">
         <h3 class="card-title">
             {{ $title }}
         </h3>
-
         <div class="card-tools">
             @if(!$form)
                 <button type="button" class="btn btn-tool" wire:click="show('{{ $rowquid }}')">
@@ -22,7 +22,8 @@
             @endif
         </div>
     </div>
-    <div class="card-body table-responsive" wire:loading.class="invisible" wire:target="create, cancel, save, show" style="max-height: calc(100vh - {{ $size + $sizeFooter }}px)">
+
+    <div id="div_card_body" class="card-body table-responsive" wire:loading.class="invisible" wire:target="create, cancel, save, show, convertirDefault" style="max-height: calc(100vh - {{ $size + $sizeFooter }}px)">
 
         <form class="row" wire:submit="save">
 
@@ -90,23 +91,22 @@
 
     </div>
 
-    @if(!$form)
-        <div class="card-footer text-center {{--@if(!comprobarAccesoEmpresa($permisos, auth()->id())) d-none @endif--}}" wire:loading.class="invisible" wire:target="create, cancel, show">
-
-            {{--@if(!$verDefault)
+    @if(!$form && comprobarAccesoEmpresa(auth()->user()->permisos, auth()->id()))
+        <div id="div_card_footer" class="card-footer text-center" wire:loading.class="invisible" wire:target="create, cancel, show, convertirDefault">
+            @if($empresas_id != $empresaDefault)
                 @if(auth()->user()->role == 100)
-                    <button type="button" class="btn btn-default btn-sm mr-1" wire:click="destroy"
+                    <button type="button" class="btn btn-default btn-sm mr-1" onclick="confirmToastBootstrap('delete', { rowquid: '{{ $rowquid }}'})"
                             @if(!comprobarPermisos('empresas.destroy')) disabled @endif>
-                        <i class="fas fa-trash-alt"></i> Borrar Empresa
+                        <i class="fas fa-trash-alt"></i> Borrar
                     </button>
                 @endif
                 <button type="button" class="btn btn-default btn-sm mr-1" wire:click="convertirDefault"
                         @if(!comprobarPermisos('empresas.edit')) disabled @endif>
                     <i class="fas fa-certificate"></i> Convertir en Default
                 </button>
-            @endif--}}
+            @endif
 
-            <button type="button" class="btn btn-default btn-sm mr-1" wire:click="btnHorario"
+            <button type="button" class="btn btn-default btn-sm mr-1 d-none" {{--wire:click="btnHorario"--}}
                     @if(!comprobarPermisos('empresas.horario')) disabled @endif>
                 <i class="fas fa-clock"></i> Horario
             </button>
@@ -119,6 +119,6 @@
         </div>
     @endif
 
-    {!! verSpinner('create, cancel, save, show') !!}
+    {!! verSpinner('create, cancel, save, show, convertirDefault') !!}
 
 </div>

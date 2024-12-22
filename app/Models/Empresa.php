@@ -20,11 +20,6 @@ class Empresa extends Model
         'moneda',
         'supervisor',
         'default',
-        'imagen',
-        'mini',
-        'detail',
-        'cart',
-        'banner',
         'permisos',
         'rowquid'
     ];

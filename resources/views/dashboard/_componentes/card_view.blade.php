@@ -90,21 +90,21 @@
 
     </div>
 
-    @if(!$form)
-        <div class="card-footer text-center {{--@if(!comprobarAccesoEmpresa($permisos, auth()->id())) d-none @endif--}}" wire:loading.class="invisible" wire:target="create, cancel, show">
+    @if(!$form && comprobarAccesoEmpresa(auth()->user()->permisos, auth()->id()))
+        <div class="card-footer text-center" wire:loading.class="invisible" wire:target="create, cancel, show">
 
-            {{--@if(!$verDefault)
+            @if($empresas_id != $empresaDefault)
                 @if(auth()->user()->role == 100)
-                    <button type="button" class="btn btn-default btn-sm mr-1" wire:click="destroy"
+                    <button type="button" class="btn btn-default btn-sm mr-1" onclick="confirmToastBootstrap('delete', { rowquid: '{{ $rowquid }}'})"
                             @if(!comprobarPermisos('empresas.destroy')) disabled @endif>
-                        <i class="fas fa-trash-alt"></i> Borrar Empresa
+                        <i class="fas fa-trash-alt"></i> Borrar
                     </button>
                 @endif
                 <button type="button" class="btn btn-default btn-sm mr-1" wire:click="convertirDefault"
                         @if(!comprobarPermisos('empresas.edit')) disabled @endif>
                     <i class="fas fa-certificate"></i> Convertir en Default
                 </button>
-            @endif--}}
+            @endif
 
             <button type="button" class="btn btn-default btn-sm" wire:click="btnHorario"
                     @if(!comprobarPermisos('empresas.horario')) disabled @endif>

@@ -27,4 +27,11 @@
         <span>Dirección</span>
         <span class="float-right text-bold text-lightblue text-lowercase">{{ $email }}</span>
     </li>
+    @if($empresas_id == $empresaDefault)
+        <li class="list-group-item text-center">
+            <small class="text-bold text-lightblue text-uppercase">
+                <i class="fas fa-certificate"></i> Empresa Default
+            </small>
+        </li>
+    @endif
 </ul>
