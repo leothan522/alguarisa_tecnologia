@@ -313,7 +313,7 @@ class EmpresasComponent extends Component
     protected function setSizeFooter()
     {
         if ($this->ocultarTable){
-            $this->sizeFooter = 60;
+            $this->sizeFooter = 63;
         }else{
             $this->sizeFooter = 0;
         }
