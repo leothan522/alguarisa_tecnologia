@@ -1,6 +1,6 @@
 <div id="div_card_view" class="card card-navy card-outline">
 
-    <div class="card-header" wire:loading.class="invisible" wire:target="create, cancel, show">
+    <div class="card-header" wire:loading.class="invisible" wire:target="create, cancel, show, showHide">
         <h3 class="card-title">
             {{ $title }}
         </h3>
@@ -20,10 +20,13 @@
                     <i class="fas fa-ban"></i> Cancelar
                 </button>
             @endif
+            <button type="button" class="btn btn-tool d-md-none" wire:click="showHide">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
     </div>
 
-    <div id="div_card_body" class="card-body table-responsive" wire:loading.class="invisible" wire:target="create, cancel, save, show, convertirDefault" style="max-height: calc(100vh - {{ $size + $sizeFooter }}px)">
+    <div id="div_card_body" class="card-body table-responsive" wire:loading.class="invisible" wire:target="create, cancel, save, show, convertirDefault, showHide" style="max-height: calc(100vh - {{ $size + $sizeFooter }}px)">
 
         <form class="row" wire:submit="save">
 
@@ -92,7 +95,7 @@
     </div>
 
     @if(!$form && comprobarAccesoEmpresa(auth()->user()->permisos, auth()->id()))
-        <div id="div_card_footer" class="card-footer text-center" wire:loading.class="invisible" wire:target="create, cancel, show, convertirDefault">
+        <div id="div_card_footer" class="card-footer text-center" wire:loading.class="invisible" wire:target="create, cancel, show, convertirDefault, showHide">
             @if($empresas_id != $empresaDefault)
                 @if(auth()->user()->role == 100)
                     <button type="button" class="btn btn-default btn-sm mr-1" onclick="confirmToastBootstrap('delete', { rowquid: '{{ $rowquid }}'})"
@@ -111,14 +114,18 @@
                 <i class="fas fa-clock"></i> Horario
             </button>
 
-            <button type="button" class="btn btn-default btn-sm" wire:click="edit"
+            <button type="button" class="btn btn-default btn-sm mt-2 mt-sm-auto" wire:click="edit"
                     @if(!comprobarPermisos('empresas.edit')) disabled @endif>
                 <i class="fas fa-edit"></i> Editar
+            </button>
+
+            <button type="button" class="btn btn-default btn-sm ml-1 mt-2 mt-sm-auto d-md-none" wire:click="showHide">
+                Cerrar
             </button>
 
         </div>
     @endif
 
-    {!! verSpinner('create, cancel, save, show, convertirDefault') !!}
+    {!! verSpinner('create, cancel, save, show, convertirDefault, showHide') !!}
 
 </div>

@@ -23,7 +23,7 @@
             <button type="button" class="btn btn-tool" wire:click="actualizar">
                 <i class="fas fa-sync-alt"></i>
             </button>
-            <button type="button" class="btn btn-tool d-sm-none" wire:click="create" @if(!comprobarPermisos('empresas.create')) disabled @endif>
+            <button type="button" class="btn btn-tool d-sm-none" wire:click="createHide" @if(!comprobarPermisos('empresas.create')) disabled @endif>
                 <i class="fas fa-file"></i> Nuevo
             </button>
             <button type="button" class="btn btn-tool" wire:click="setLimit" @if($btnDisabled) disabled @endif>
@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <div class="card-body table-responsive p-0" id="table_empresas" wire:loading.class="invisible" wire:target="setLimit, actualizar, cerrarBusqueda" style="max-height: calc(100vh - {{ $size }}px)" >
+    <div class="card-body table-responsive p-0" id="table_empresas" wire:loading.class="invisible" wire:target="setLimit, actualizar, cerrarBusqueda, showHide, createHide" style="max-height: calc(100vh - {{ $size }}px)" >
 
         <table class="table table-head-fixed table-hover text-nowrap sticky-top">
             <thead>
@@ -90,7 +90,7 @@
     </div>
 
     <div style="z-index: 1025;">
-        {!! verSpinner('setLimit, actualizar, cerrarBusqueda') !!}
+        {!! verSpinner('setLimit, actualizar, cerrarBusqueda, showHide, createHide') !!}
     </div>
 
 </div>

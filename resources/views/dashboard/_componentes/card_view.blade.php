@@ -1,5 +1,5 @@
 <div class="card card-navy card-outline">
-    <div class="card-header" wire:loading.class="invisible" wire:target="create, cancel">
+    <div class="card-header" wire:loading.class="invisible" wire:target="create, cancel, show, showHide">
         <h3 class="card-title">
             {{ $title }}
         </h3>
@@ -20,9 +20,12 @@
                     <i class="fas fa-ban"></i> Cancelar
                 </button>
             @endif
+            <button type="button" class="btn btn-tool " {{--data-card-widget="remove"--}}>
+                <i class="fas fa-times"></i>
+            </button>
         </div>
     </div>
-    <div class="card-body table-responsive" wire:loading.class="invisible" wire:target="create, cancel, save, show" style="max-height: calc(100vh - {{ $size + $sizeFooter }}px)">
+    <div class="card-body table-responsive" wire:loading.class="invisible" wire:target="create, cancel, save, show, showHide" style="max-height: calc(100vh - {{ $size + $sizeFooter }}px)">
 
         <form class="row" wire:submit="save">
 
@@ -91,7 +94,7 @@
     </div>
 
     @if(!$form && comprobarAccesoEmpresa(auth()->user()->permisos, auth()->id()))
-        <div class="card-footer text-center" wire:loading.class="invisible" wire:target="create, cancel, show">
+        <div class="card-footer text-center" wire:loading.class="invisible" wire:target="create, cancel, show, showHide">
 
             @if($empresas_id != $empresaDefault)
                 @if(auth()->user()->role == 100)
@@ -116,9 +119,13 @@
                 <i class="fas fa-edit"></i> Editar Información
             </button>
 
+            <button type="button" class="btn btn-tool d-md-none" wire:click="showHide">
+                <i class="fas fa-times"></i>
+            </button>
+
         </div>
     @endif
 
-    {!! verSpinner('create, cancel, save, show') !!}
+    {!! verSpinner('create, cancel, save, show, showHide') !!}
 
 </div>

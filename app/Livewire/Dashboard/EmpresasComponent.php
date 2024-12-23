@@ -22,6 +22,7 @@ class EmpresasComponent extends Component
     use Imagenes;
 
     public $sizeFooter = 0; //60;
+    public $ocultarTable = false, $ocultarCard = true;
     public $keyword, $btnNuevo = true, $btnCancelar = false, $title = "Ver Empresa", $form = false, $btnImgBorrar = false;
     public $nombre, $rif, $jefe, $moneda, $telefonos, $email, $direccion, $default = 0;
     public $imagen, $mini, $imgID, $photo, $imgBorrar = false;
@@ -69,7 +70,7 @@ class EmpresasComponent extends Component
         $this->reset([
             'btnNuevo', 'btnCancelar', 'title', 'form', 'btnImgBorrar',
             'nombre', 'rif', 'jefe', 'moneda', 'telefonos', 'email', 'direccion', 'default',
-            'imagen','mini', 'imgID', 'photo', 'imgBorrar'
+            'imagen','mini', 'imgID', 'photo', 'imgBorrar',
         ]);
         $this->resetErrorBag();
         $this->setSaveImagen(false);
@@ -77,6 +78,7 @@ class EmpresasComponent extends Component
 
     public function show($rowquid)
     {
+        $this->setSizeFooter();
         $this->limpiar();
         $empresa = $this->getEmpresa($rowquid);
         if ($empresa){
@@ -107,6 +109,7 @@ class EmpresasComponent extends Component
         $this->btnNuevo = false;
         $this->btnCancelar = true;
         $this->form = true;
+        $this->sizeFooter = 0;
     }
 
     public function edit()
@@ -115,6 +118,7 @@ class EmpresasComponent extends Component
         $this->btnCancelar = true;
         $this->imagen = $this->mini;
         $this->form = true;
+        $this->sizeFooter = 0;
     }
 
     public function save()
@@ -285,6 +289,34 @@ class EmpresasComponent extends Component
     public function convertirDefault()
     {
         $this->setEmpresaDefault($this->empresas_id);
+    }
+
+    public function showHide($rowquid = null)
+    {
+        if ($rowquid){
+            $this->ocultarTable = true;
+            $this->ocultarCard = false;
+            $this->show($rowquid);
+        }else{
+            $this->ocultarTable = false;
+            $this->ocultarCard = true;
+        }
+    }
+
+    public function createHide()
+    {
+        $this->ocultarTable = true;
+        $this->ocultarCard = false;
+        $this->create();
+    }
+
+    protected function setSizeFooter()
+    {
+        if ($this->ocultarTable){
+            $this->sizeFooter = 60;
+        }else{
+            $this->sizeFooter = 0;
+        }
     }
 
     protected function getEmpresaDefault(): ?Empresa

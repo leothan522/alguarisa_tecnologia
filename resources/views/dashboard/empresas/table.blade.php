@@ -23,7 +23,7 @@
             <button type="button" class="btn btn-tool" wire:click="actualizar">
                 <i class="fas fa-sync-alt"></i>
             </button>
-            <button type="button" class="btn btn-tool d-sm-none" wire:click="create" @if(!comprobarPermisos('empresas.create')) disabled @endif>
+            <button type="button" class="btn btn-tool d-sm-none" wire:click="createHide" @if(!comprobarPermisos('empresas.create')) disabled @endif>
                 <i class="fas fa-file"></i> Nuevo
             </button>
             <button type="button" class="btn btn-tool" wire:click="setLimit" @if($btnDisabled) disabled @endif>
@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <div class="card-body table-responsive p-0" id="table_empresas" wire:loading.class="invisible" wire:target="setLimit, actualizar, cerrarBusqueda" style="max-height: calc(100vh - {{ $size }}px)" >
+    <div class="card-body table-responsive p-0" id="table_empresas" wire:loading.class="invisible" wire:target="setLimit, actualizar, cerrarBusqueda, showHide, createHide" style="max-height: calc(100vh - {{ $size }}px)" >
 
         <table class="table table-head-fixed table-hover text-nowrap sticky-top">
             <thead>
@@ -62,7 +62,7 @@
                         </span>
 
                         <!-- Emphasis label -->
-                        <small class="badge" style="cursor: pointer;" wire:click="show('{{ $empresa->rowquid }}')">
+                        <small class="d-none d-md-inline badge" style="cursor: pointer;" wire:click="show('{{ $empresa->rowquid }}')">
                             <span class="text-uppercase text-truncate" style="max-width: 250px;">
                                 @if($empresa->default)
                                     <small class="text-bold text-lightblue mr-2">
@@ -75,6 +75,23 @@
 
                         <!-- General tools such as edit or delete-->
                         <div class="tools text-lightblue" wire:click="show('{{ $empresa->rowquid }}')">
+                            <i class="d-none d-md-inline fas fa-eye"></i>
+                        </div>
+
+                        <!-- Emphasis label -->
+                        <small class="d-md-none badge" style="cursor: pointer;" wire:click="showHide('{{ $empresa->rowquid }}')">
+                            <span class="text-uppercase text-truncate" style="max-width: 250px;">
+                                @if($empresa->default)
+                                    <small class="text-bold text-lightblue mr-2">
+                                        <i class="fas fa-certificate"></i>
+                                    </small>
+                                @endif
+                                {{ $empresa->nombre }}
+                            </span>
+                        </small>
+
+                        <!-- General tools such as edit or delete-->
+                        <div class="d-md-none tools text-lightblue" wire:click="showHide('{{ $empresa->rowquid }}')">
                             <i class="fas fa-eye"></i>
                         </div>
 
@@ -96,7 +113,7 @@
     </div>
 
     <div style="z-index: 1025;">
-        {!! verSpinner('setLimit, actualizar, cerrarBusqueda') !!}
+        {!! verSpinner('setLimit, actualizar, cerrarBusqueda, showHide, createHide') !!}
     </div>
 
 </div>

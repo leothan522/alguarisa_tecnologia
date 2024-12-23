@@ -317,7 +317,7 @@ class TerritorioComponent extends Component
     }
 
     #[On('verTabla')]
-    public function verTabla($tabla = "parroa")
+    public function verTabla($tabla = "parroquia")
     {
         if ($tabla == "parroquia"){
             $this->verMunicipios = false;
