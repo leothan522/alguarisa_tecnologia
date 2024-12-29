@@ -2,10 +2,10 @@
 <div id="div_show_user" class="card card-navy card-outline">
     <div id="div_show_header" class="card-header border-0 d-md-none" wire:loading.class="invisible" wire:target="showHide, editHide">
         <div class="card-tools">
-            <button type="button" class="btn btn-tool" onclick="confirmToastBootstrap('deleteHide',  { rowquid: '{{ $rowquid }}' })" @if(!comprobarPermisos('empresas.create')) disabled @endif>
+            <button type="button" class="btn btn-tool" onclick="confirmToastBootstrap('deleteHide',  { rowquid: '{{ $rowquid }}' })" @if($verBorrar) disabled @endif>
                 <i class="fas fa-trash-alt"></i> Borrar
             </button>
-            <button type="button" class="btn btn-tool" wire:click="editHide" @if(!comprobarPermisos('empresas.create')) disabled @endif>
+            <button type="button" class="btn btn-tool" wire:click="editHide" @if($verEditar) disabled @endif>
                 <i class="fas fa-edit"></i> Editar
             </button>
             <button type="button" class="btn btn-tool" wire:click="showHide">
@@ -58,7 +58,7 @@
 
         <div class="row @if($form) d-none @endif">
             <div class="col-6">
-                <button type="button" wire:click="setEstatus" class="btn @if($estatus) btn-danger @else btn-success @endif btn-block" @if(!$users_id) disabled @endif>
+                <button type="button" wire:click="setEstatus" class="btn @if($estatus) btn-danger @else btn-success @endif btn-block" @if(!$users_id || $btnEstatus) disabled @endif>
                     <b>
                         <span class="text-nowrap">
                             @if($estatus) Suspender @else Reactivar @endif
@@ -69,7 +69,7 @@
                 </button>
             </div>
             <div class="col-6">
-                <button type="button" wire:click="resetPassword" class="btn btn-secondary btn-block" @if(!$users_id) disabled @endif>
+                <button type="button" wire:click="resetPassword" class="btn btn-secondary btn-block" @if(!$users_id || $btnReset) disabled @endif>
                     <b>
                         <span class="text-nowrap">Restablecer</span>
                         <br>

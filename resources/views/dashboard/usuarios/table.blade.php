@@ -29,7 +29,7 @@
                     <i class="fas fa-file-excel"></i> <i class="fas fa-download"></i>
                 </a>
             @endif
-            <button class="btn btn-tool" wire:click="create">
+            <button class="btn btn-tool" wire:click="create" @if(!comprobarPermisos('usuarios.create')) disabled @endif>
                 <i class="fas fa-file"></i> Nuevo
             </button>
             <button type="button" class="btn btn-tool" wire:click="setLimit" @if($btnDisabled) disabled @endif >
@@ -93,12 +93,12 @@
                                 </button>
 
                                 <button type="button" wire:click="edit('{{ $user->rowquid }}')" class="btn btn-primary btn-sm"
-                                        data-toggle="modal" data-target="#modal-default">
+                                        @if($this->getComprobarPermisos($user)) disabled @endif >
                                     <i class="fas fa-edit"></i>
                                 </button>
 
-                                <button type="button" onclick="confirmToastBootstrap('delete',  { rowquid: '{{ $user->rowquid }}' })"
-                                        class="btn btn-primary btn-sm">
+                                <button type="button" onclick="confirmToastBootstrap('delete',  { rowquid: '{{ $user->rowquid }}' })"  class="btn btn-primary btn-sm"
+                                        @if($this->getComprobarPermisos($user, 'usuarios.destroy')) disabled @endif >
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
 

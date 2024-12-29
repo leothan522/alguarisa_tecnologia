@@ -18,7 +18,7 @@ class UsuariosComponent extends Component
 
     public $keyword, $title = "Crear Usuario", $btnNuevo = true, $form = false;
     public $name, $email, $password, $role, $newPassword, $btnEditar = false;
-    public $verName, $verEmail, $verEstatus, $verRegistro, $verRole, $estatus;
+    public $verName, $verEmail, $verEstatus, $verRegistro, $verRole, $estatus, $btnEstatus, $btnReset, $verEditar, $verBorrar;
     public $listarRoles = [];
     public bool $ocultarTable = false, $ocultarCard = true;
 
@@ -122,6 +122,10 @@ class UsuariosComponent extends Component
             $this->verEstatus = $this->getEstatusUsuario($user->estatus);
             $this->verRegistro = haceCuanto($user->created_at);
             $this->estatus = $user->estatus;
+            $this->btnEstatus = $this->getComprobarPermisos($user, 'usuarios.estatus');
+            $this->btnReset = $this->getComprobarPermisos($user, 'usuarios.password');
+            $this->verEditar = $this->getComprobarPermisos($user);
+            $this->verBorrar = $this->getComprobarPermisos($user, 'usuarios.destroy');
             $this->users_id = $user->id;
             $this->rowquid = $user->rowquid;
             $this->name = $user->name;
@@ -196,6 +200,11 @@ class UsuariosComponent extends Component
         }else{
             $this->limpiar();
         }
+    }
+
+    public function getComprobarPermisos($user, $permiso = "usuarios.edit"): bool
+    {
+        return (!comprobarPermisos($permiso) || $user->role == 100) || (!comprobarPermisos() && ($user->role == 100 || $user->role == 1)) || $user->id == auth()->id();
     }
 
     public function showHide($rowquid = null)
