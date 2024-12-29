@@ -25,6 +25,22 @@
             verCargando('div_show_user');
         });
 
+        Livewire.on('deleteRole', () => {
+            addClassinvisible('#div_footer_roles');
+        });
+
+        function verRoles() {
+            addClassinvisible('#div_header_roles');
+            addClassinvisible('#div_footer_roles');
+            Livewire.dispatch('initModal');
+        }
+
+        function verPermisos(rowquid) {
+            addClassinvisible('#div_header_roles');
+            addClassinvisible('#div_footer_roles');
+            Livewire.dispatch('showPermisos', { rowquid: rowquid });
+        }
+
         console.log('Hi!');
     </script>
 @endsection

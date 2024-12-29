@@ -7,7 +7,13 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     {{--<li class="breadcrumb-item"><a href="#">Home</a></li>--}}
-                    <li class="breadcrumb-item active d-none d-md-inline">Usuarios Registrados</li>
+                    @if(comprobarPermisos())
+                        <li class="breadcrumb-item text-primary">
+                            <button type="button" class="btn btn-link " onclick="verRoles()" data-toggle="modal" data-target="#modal-default-roles">
+                                Roles de Usuario
+                            </button>
+                        </li>
+                    @endif
                 </ol>
             </div>
         </div>

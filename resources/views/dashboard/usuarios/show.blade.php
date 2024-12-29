@@ -41,6 +41,11 @@
             <li class="list-group-item">
                 <b>Registro:</b> <a class="float-right">{{ $verRegistro }}</a>
             </li>
+            @if(comprobarPermisos() && $users_id != auth()->id() && !$form)
+                <li class="list-group-item text-center">
+                    <span class="text-primary" onclick="verPermisos('{{ $rowquid }}')" data-toggle="modal" data-target="#modal-default-roles" style="cursor: pointer;">Ver Permisos</span>
+                </li>
+            @endif
             @if($newPassword)
                 <li class="list-group-item">
                     <div class="row justify-content-between">

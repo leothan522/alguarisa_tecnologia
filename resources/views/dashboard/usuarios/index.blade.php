@@ -6,6 +6,7 @@
 
 @section('content')
     @livewire('dashboard.usuarios-component')
+    @livewire('dashboard.roles-component')
 @endsection
 
 @section('right-sidebar')

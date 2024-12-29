@@ -33,6 +33,16 @@ function allPermisos()
                 'Borrar Oficios' => 'oficios.destroy'
             ]
         ],
+        'Bienes' => [
+            'route' => 'bienes.index',
+            'submenu' => [
+                'Exportar Excel'      => 'bienes.export',
+                'Imprimir Etiquetas'  => 'etiquetas.print',
+                'Crear Bienes' => 'bienes.create',
+                'Editar Bienes' => 'bienes.edit',
+                'Borrar Bienes' => 'bienes.destroy',
+            ]
+        ],
         'Personas' => [
             'route' => 'personas.index',
             'submenu' => [
@@ -47,16 +57,6 @@ function allPermisos()
                 'Crear Instituciones' => 'instituciones.create',
                 'Editar Instituciones' => 'instituciones.edit',
                 'Borrar Instituciones' => 'instituciones.destroy'
-            ]
-        ],
-        'Bienes' => [
-            'route' => 'bienes.index',
-            'submenu' => [
-                'Crear Bienes' => 'bienes.create',
-                'Editar Bienes' => 'bienes.edit',
-                'Borrar Bienes' => 'bienes.destroy',
-                'Exportar Excel'      => 'bienes.export',
-                'Imprimir Etiquetas'  => 'etiquetas.print'
             ]
         ],
         'Tipos' => [
@@ -113,23 +113,12 @@ function allPermisos()
 
             ]
         ],
-        'Usuarios' => [
-            'route' => 'usuarios.index',
-            'submenu' => [
-                'Crear Usuarios' => 'usuarios.create',
-                'Editar Usuarios' => 'usuarios.edit',
-                'Suspender Usuarios' => 'usuarios.estatus',
-                'Reestablecer Contraseña' => 'usuarios.password',
-                'Descargar Excel' => 'usuarios.excel',
-                'Eliminar Usuarios' => 'usuarios.destroy',
-            ]
-        ],
         'Empresas' => [
             'route' => 'empresas.index',
             'submenu' => [
-                'Crear Empresas' => 'empresas.create',
-                '[Abrir][Cerrar] Empresas' => 'empresas.estatus',
+                'Abrir ó Cerrar' => 'empresas.estatus',
                 'Definir Horarios' => 'empresas.horario',
+                'Crear Empresas' => 'empresas.create',
                 'Editar Empresas' => 'empresas.edit',
                 'Borrar Empresas' => 'empresas.destroy'
 
@@ -144,6 +133,17 @@ function allPermisos()
                 'Crear Parroquias' => 'parroquias.create',
                 'Editar Parroquias' => 'parroquias.edit',
                 'Borrar Parroquias' => 'parroquias.destroy'
+            ]
+        ],
+        'Usuarios' => [
+            'route' => 'usuarios.index',
+            'submenu' => [
+                'Exportar Excel' => 'usuarios.excel',
+                'Suspender Usuarios' => 'usuarios.estatus',
+                'Restituir Contraseña' => 'usuarios.password',
+                'Crear Usuarios' => 'usuarios.create',
+                'Editar Usuarios' => 'usuarios.edit',
+                'Borrar Usuarios' => 'usuarios.destroy',
             ]
         ],
     ];

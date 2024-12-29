@@ -281,6 +281,12 @@ class UsuariosComponent extends Component
         return $status[$i];
     }
 
+    #[On('selectRoles')]
+    public function selectRoles()
+    {
+        $this->listarRoles = $this->getRoles();
+    }
+
     protected function getLastUser(): string
     {
         $last = '';
