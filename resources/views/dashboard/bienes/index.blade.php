@@ -341,6 +341,12 @@
             return false;
         }
 
+        const sidebar_tablas_bienes = document.querySelector('.sidebar_tablas_bienes');
+
+        document.addEventListener('DOMContentLoaded', function() {
+            sidebar_tablas_bienes.classList.remove('d-none');
+        });
+
         console.log('Hi!');
     </script>
 @endsection

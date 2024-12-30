@@ -109,7 +109,7 @@
                 @endforeach
             @else
                 <tr class="text-center">
-                    <td colspan="5">
+                    <td colspan="8">
                         @if($keyword)
                             <span>Sin resultados</span>
                         @else

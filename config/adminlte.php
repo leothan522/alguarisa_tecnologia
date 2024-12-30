@@ -330,7 +330,28 @@ return [
                     'icon' => 'fas fa-fw fa-boxes',
                     'route'  => 'bienes.index',
                     'can'  => 'bienes',
-                ]
+                ],
+                [
+                    'text'    => 'Tablas',
+                    'icon' => 'fas fa-fw fa-table',
+                    'url'     => '#',
+                    'classes' => 'd-none sidebar_tablas_bienes',
+                    'submenu' => [
+                        [
+                            'text' => 'Tipos',
+                            'url'  => '#',
+                            'data'  => [
+                                'toggle' => 'modal',
+                                'target' => '#modal-tipos',
+                            ],
+                            'id' => 'sidebar_tabla_tipos'
+                        ],
+                        [
+                            'text' => 'Marcas',
+                            'url'  => '#',
+                        ],
+                    ],
+                ],
             ],
         ],
         [
