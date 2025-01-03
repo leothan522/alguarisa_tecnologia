@@ -1,82 +1,95 @@
-<div class="card card-navy">
-    <div class="card-header">
-        <h3 class="card-title">
+<div id="div_table_{{ $modulo }}" class="card card-navy card-outline">
+
+    <div class="card-header" wire:loading.class="invisible" wire:target="create, cancel, edit, buscar">
+
+        <h3 class="card-title mb-2 mb-sm-auto">
             @if($keyword)
-                Búsqueda { <b class="text-warning">{{ $keyword }}</b> } [ <b class="text-warning">{{ $totalBusqueda }}</b> ]
-                <button class="btn btn-tool text-warning" wire:click="cerrarBusqueda">
-                    <i class="fas fa-times-circle"></i>
+                Búsqueda
+                <span class="text-nowrap">{ <b class="text-warning">{{ $keyword }}</b> }</span>
+                <span class="text-nowrap">[ <b class="text-warning">{{ $rows }}</b> ]</span>
+                <button class="d-sm-none btn btn-tool text-warning" wire:click="cerrarBusqueda">
+                    <i class="fas fa-times"></i>
                 </button>
             @else
-                Registrados [ <b class="text-warning">{{ $rowsModelos }}</b> ]
+                Todos [ <b class="text-warning">{{ $rows }}</b> ]
             @endif
         </h3>
 
         <div class="card-tools">
-            <button type="button" class="btn btn-tool" wire:click="limpiarModelos">
+            @if($keyword)
+                <button class="d-none d-sm-inline-block btn btn-tool text-warning" wire:click="cerrarBusqueda">
+                    <i class="fas fa-times"></i>
+                </button>
+            @endif
+            <button type="button" class="btn btn-tool" wire:click="actualizar">
                 <i class="fas fa-sync-alt"></i>
             </button>
-            <button type="button" class="btn btn-tool" wire:click="create"
-                    @if(!comprobarPermisos('modelos.create')) disabled @endif>
+            <button class="btn btn-tool" wire:click="create">
                 <i class="fas fa-file"></i> Nuevo
             </button>
-            <button type="button" class="btn btn-tool" wire:click="setLimit"
-                    @if(($rows > $rowsModelos) || ($keyword && $rows > $totalBusqueda)) disabled @endif >
+            <button type="button" class="btn btn-tool" wire:click="setLimit" @if($btnDisabled) disabled @endif >
                 <i class="fas fa-sort-amount-down-alt"></i> Ver más
             </button>
         </div>
+
     </div>
-    <div class="card-body table-responsive p-0" style="height: 47vh;">
+
+    <div class="card-body table-responsive p-0" wire:loading.class="invisible" wire:target="create, cancel, edit, buscar" style="max-height: calc(100vh - {{ $size }}px)">
         <table class="table table-sm table-head-fixed table-hover text-nowrap">
             <thead>
-            <tr class="text-navy">
-                <th>Modelo</th>
-                <th class="d-none d-md-table-cell">Tipo</th>
-                <th class="d-none d-md-table-cell">Marca</th>
-                <th style="width: 5%;">&nbsp;</th>
+            <tr class="text-lightblue">
+                <th class="text-center text-uppercase" style="width: 5%">#</th>
+                <th class="text-uppercase">nombre</th>
+                {{--<th class="d-none d-md-table-cell text-uppercase">Tipo</th>
+                <th class="d-none d-md-table-cell text-uppercase">Marca</th>--}}
+                <th class="text-center" style="width: 5%;"><small>Rows {{ $listar->count() }}</small></th>
             </tr>
             </thead>
-            <tbody>
-            @if($listarModelos->isNotEmpty())
-                @foreach($listarModelos as $modelo)
+            <tbody id="tbody_{{ $modulo }}" wire:loading.class="invisible" wire:target="actualizar, cerrarBusqueda, setLimit">
+            @if($listar->isNotEmpty())
+                @php($i = 0)
+                @foreach($listar as $parametro)
                     <tr>
-                        <td class="text-uppercase text-truncate" style="max-width: 150px;">{{ $modelo->nombre }}</td>
-                        <td class="text-uppercase text-truncate d-none d-md-table-cell"
-                            style="max-width: 150px;">{{ $modelo->tipo->nombre }}</td>
-                        <td class="text-uppercase text-truncate d-none d-md-table-cell"
-                            style="max-width: 150px;">{{ $modelo->marca->nombre }}</td>
+                        <td class="align-middle text-bold text-center">{{ ++$i }}</td>
+                        <td class="align-middle d-table-cell text-uppercase text-truncate" style="max-width: 150px;" data-toggle="tooltip" data-placement="top" title="{{ $parametro->tipo->nombre }} {{ $parametro->marca->nombre }}">
+                            {{ $parametro->nombre }}
+                            {{--<small class="d-none d-md-inline float-right">{{ $parametro->tipo->nombre }} {{ $parametro->marca->nombre }}</small>--}}
+                        </td>
+                        {{--<td class="align-middle d-none d-md-table-cell text-truncate" style="max-width: 150px;">{{ $parametro->tipo->nombre }}</td>
+                        <td class="align-middle d-none d-md-table-cell text-truncate" style="max-width: 150px;">{{ $parametro->marca->nombre }}</td>--}}
                         <td class="justify-content-end">
-                            <div class="d-none d-md-block">
-                                <div class="btn-group">
-                                    <button type="button" wire:click="edit('{{ $modelo->rowquid }}')"
-                                            class="btn btn-primary btn-sm"
-                                            @if(!comprobarPermisos('modelos.edit')) disabled @endif >
-                                        <i class="fas fa-edit"></i>
-                                    </button>
 
-                                    <button type="button" wire:click="destroy('{{ $modelo->rowquid }}')"
-                                            class="btn btn-primary btn-sm"
-                                            @if(!comprobarPermisos('modelos.destroy')) disabled @endif >
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </div>
+                            <div class="btn-group d-md-none">
+                                <button wire:click="edit('{{ $parametro->rowquid }}')" class="btn btn-primary"
+                                        @if(!comprobarPermisos($modulo.'.edit')) disabled @endif>
+                                    <i class="fas fa-eye"></i>
+                                </button>
                             </div>
-                            <div class="d-md-none">
-                                <div class="btn-group">
-                                    <button type="button" wire:click="verModel('{{ $modelo->rowquid }}')" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
+
+                            <div class="btn-group d-none d-md-flex">
+
+                                <button wire:click="edit('{{ $parametro->rowquid }}')" class="btn btn-primary btn-sm"
+                                        @if(!comprobarPermisos($modulo.'.edit')) disabled @endif>
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                <button onclick="confirmToastBootstrap('{{ $confirmed }}',  { rowquid: '{{ $parametro->rowquid }}' })"
+                                        class="btn btn-primary btn-sm" @if(!comprobarPermisos($modulo.'.destroy')) disabled @endif>
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+
                             </div>
+
                         </td>
                     </tr>
                 @endforeach
             @else
                 <tr class="text-center">
-                    <td colspan="4">
+                    <td colspan="5">
                         @if($keyword)
-                            <span>Sin resultados.</span>
+                            <span>Sin resultados</span>
                         @else
-                            <span>Aún se se ha creado un Modelo.</span>
+                            <span>Sin registros guardados</span>
                         @endif
                     </td>
                 </tr>
@@ -85,7 +98,11 @@
             </tbody>
         </table>
     </div>
-    <div class="card-footer">
-        <small>Mostrando {{ $listarModelos->count() }}</small>
+
+    <div class="card-footer" wire:loading.class="invisible" wire:target="create, cancel, edit, buscar">
+        <small>Mostrando {{ $listar->count() }}</small>
     </div>
+
+    {!! verSpinner('create, cancel, edit, actualizar, cerrarBusqueda, setLimit, buscar') !!}
+
 </div>

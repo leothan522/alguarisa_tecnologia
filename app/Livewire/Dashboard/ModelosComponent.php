@@ -6,256 +6,186 @@ use App\Models\Bien;
 use App\Models\Marca;
 use App\Models\Modelo;
 use App\Models\Tipo;
+use App\Traits\LimitRows;
+use App\Traits\ModalTable;
 use App\Traits\ToastBootstrap;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ModelosComponent extends Component
 {
     use ToastBootstrap;
+    use LimitRows;
+    use ModalTable;
 
-    public $rows = 0;
-    public $tipos_id, $tipoRowquid, $marcas_id, $marcaRowquid, $nombre, $keyword;
-    public $form = false, $table = true, $show = false, $verTipo, $verMarca;
-
-    #[Locked]
-    public $modelos_id, $rowquid;
+    public $nombre, $tipo, $marca;
 
     public function mount()
     {
         $this->setLimit();
+        $this->setSize(483);
+        $this->modalTitle = "Modelos";
+        $this->confirmed = 'deleteModelos';
+        $this->modulo = 'modelos';
     }
 
     public function render()
     {
-        $modelos = Modelo::buscar($this->keyword)
+        $listar = Modelo::buscar($this->keyword)
             ->orderBy('created_at', 'DESC')
-            ->limit($this->rows)
-            ->get()
-        ;
-        $total = Modelo::buscar($this->keyword)
-            ->orderBy('created_at', 'DESC')
-            ->count();
+            ->limit($this->limit)
+            ->get();
+        $limit = $listar->count();
+        $rows = Modelo::buscar($this->keyword)->count();
+        $this->btnVerMas($limit, $rows);
 
-        $rowsModelos = Modelo::count();
         return view('livewire.dashboard.modelos-component')
-            ->with('listarModelos', $modelos)
-            ->with('rowsModelos', $rowsModelos)
-            ->with('totalBusqueda', $total);
+            ->with('listar', $listar)
+            ->with('rows', $rows);
     }
 
-    public function setLimit()
+    public function limpiar()
     {
-        if (numRowsPaginate() < 12) { $rows = 12; } else { $rows = numRowsPaginate(); }
-        $this->rows = $this->rows + $rows;
-    }
-
-    #[On('limpiarModelos')]
-    public function limpiarModelos()
-    {
+        $this->limpiarModal();
         $this->reset([
-            'modelos_id', 'tipos_id', 'marcas_id', 'nombre', 'form', 'table', 'show', 'verTipo', 'verMarca'
+            'nombre', 'tipo', 'marca',
         ]);
-        $this->resetErrorBag();
 
         $tipos = Tipo::orderBy('nombre', 'ASC')->get();
         $data = getDataSelect2($tipos, 'nombre');
-        $this->dispatch('modeloSelectTipos', data: $data);
+        $this->dispatch('initModeloTipos', data: $data);
 
         $marcas = Marca::orderBy('nombre', 'ASC')->get();
         $data = getDataSelect2($marcas, 'nombre');
-        $this->dispatch('modeloSelectMarcas', data: $data);
-    }
+        $this->dispatch('initModeloMarcas', data: $data);
 
-    public function create()
-    {
-        $this->form = true;
-        $this->table = false;
     }
 
     public function save()
     {
         $rules = [
-            'nombre'       =>  ['required', 'min:2', 'max:40',
+            'nombre' => ['required', 'min:2', 'max:50',
                 Rule::unique('modelos', 'nombre')
-                    ->where(fn (Builder $query) =>
-                    $query->where('tipos_id', $this->tipos_id)
-                        ->where('marcas_id', $this->marcas_id))
-                    ->ignore($this->modelos_id)],
-            'tipos_id'     => 'required',
-            'marcas_id'     => 'required',
+                    ->where(fn (Builder $query) => $query->where('tipos_id', $this->tipo)->where('marcas_id', $this->marca))
+                    ->ignore($this->tabla_id)],
+            'tipo' => 'required',
+            'marca' => 'required',
         ];
-        $messages = [
-            'tipos_id.required' => 'El Tipo es obligatorio.',
-            'marcas_id.required' => 'La Marca es obligatoria.',
-            'nombre.required' => 'La Modelo es obligatorio.',
-            'nombre.min' => 'El modelo debe contener al menos 2 caracteres.',
-            'nombre.max' => 'El modelo no debe ser mayor que 40 caracteres.'
-        ];
+        $this->validate($rules);
 
-        $this->validate($rules, $messages);
-        if (is_null($this->modelos_id)){
+        if ($this->tabla_id){
+            //editar
+            $model = Modelo::find($this->tabla_id);
+        }else{
             //nuevo
-            $modelos = new Modelo();
+            $model = new Modelo();
             do{
                 $rowquid = generarStringAleatorio(16);
                 $existe = Modelo::where('rowquid', $rowquid)->first();
             }while($existe);
-            $modelos->rowquid = $rowquid;
-        }else{
-            //editar
-            $modelos = Modelo::find($this->modelos_id);
+            $model->rowquid = $rowquid;
         }
 
-        if ($modelos){
-            $modelos->nombre = $this->nombre;
-            $modelos->tipos_id = $this->tipos_id;
-            $modelos->marcas_id = $this->marcas_id;
-            $modelos->save();
-            $this->dispatch('initSelects', select: 'modelo')->to(BienesOldComponent::class);
+        if ($model){
+            $model->nombre = $this->nombre;
+            $model->tipos_id = $this->tipo;
+            $model->marcas_id = $this->marca;
+            $model->save();
+            $this->limpiar();
             $this->toastBootstrap();
-        }
-
-        $this->limpiarModelos();
-    }
-
-    public function verModel($rowquid)
-    {
-        $this->limpiarModelos();
-        $modelos = $this->getModelo($rowquid);
-        if ($modelos){
-            $this->modelos_id = $modelos->id;
-            $this->nombre = $modelos->nombre;
-            $this->tipos_id = $modelos->tipos_id;
-            $this->marcas_id = $modelos->marcas_id;
-            $this->verMarca = $modelos->marca->nombre;
-            $this->verTipo = $modelos->tipo->nombre;
-            $this->rowquid = $modelos->rowquid;
-            $this->form = false;
-            $this->table = false;
-            $this->show = true;
         }
     }
 
     public function edit($rowquid)
     {
-        $this->limpiarModelos();
-        $modelos = $this->getModelo($rowquid);
-        if ($modelos){
-            $this->modelos_id = $modelos->id;
-            $this->nombre = $modelos->nombre;
-            $this->tipos_id = $modelos->tipos_id;
-            $this->tipoRowquid = $modelos->tipo->rowquid;
-            $this->marcas_id = $modelos->marcas_id;
-            $this->marcaRowquid = $modelos->marca->rowquid;
-            $this->dispatch('setModeloSelectTipos', id: $this->tipoRowquid);
-            $this->dispatch('setModeloSelectMarcas', id: $this->marcaRowquid);
-            $this->table = false;
-            $this->form = true;
+        $this->limpiar();
+        $registro = $this->getRegistro($rowquid);
+        if ($registro){
+            $this->tabla_id = $registro->id;
+            $this->ocultarTable = true;
+            $this->ocultarCard = false;
+            $this->nombre = $registro->nombre;
+            $this->tipo = $registro->tipos_id;
+            $this->marca = $registro->marcas_id;
+            $this->dispatch('setModeloTipos', rowquid: $registro->tipo->rowquid);
+            $this->dispatch('setModeloMarcas', rowquid: $registro->marca->rowquid);
         }
     }
 
-    public function destroy($rowquid)
+    #[On('deleteModelos')]
+    public function delete($rowquid)
     {
-        $this->rowquid = $rowquid;
-        $this->confirmToastBootstrap('confirmedModelos');
-    }
+        $this->limpiar();
+        $registro = $this->getRegistro($rowquid);
+        if ($registro){
 
-    #[On('confirmedModelos')]
-    public function confirmedModelos()
-    {
-        $id = null;
-        $modelos = $this->getModelo($this->rowquid);
-        if ($modelos){
-            $id = $modelos->id;
-        }
+            //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+            $vinculado = false;
 
-        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
-        $vinculado = false;
+            $bienes = Bien::where('modelos_id', $registro->id)->first();
 
-        $bienes = Bien::where('modelos_id', $id)->first();
+            if ($bienes){
+                $vinculado = true;
+            }
 
-        if ($bienes){
-            $vinculado = true;
-        }
-
-        if ($vinculado) {
-            $this->htmlToastBoostrap();
-        } else {
-            if ($modelos){
-                $nombre = "<b>".mb_strtoupper($modelos->nombre)."</b>";
-                $modelos->delete();
-                $this->dispatch('initSelects', select: 'modelo')->to(BienesOldComponent::class);
+            if ($vinculado) {
+                $this->htmlToastBoostrap();
+            } else {
+                $nombre = '<b class="text-uppercase text-warning">'.$registro->nombre.'</b>';
+                $registro->delete();
                 $this->toastBootstrap('success', "Modelo $nombre Eliminado.");
             }
-        }
 
-        $this->limpiarModelos();
-    }
-
-    public function buscar()
-    {
-        $this->limpiarModelos();
-    }
-
-    public function cerrarBusqueda()
-    {
-        $this->reset(['keyword']);
-        $this->limpiarModelos();
-    }
-
-    public function btnCancelar($show = false)
-    {
-        if (!$show){
-            $this->limpiarModelos();
-        }else{
-            $this->verModel($this->rowquid);
         }
     }
 
-    #[On('modeloSelectTipos')]
-    public function modeloSelectTipos($data)
+    #[On('initModeloTipos')]
+    public function initModeloTipos($data)
     {
         //JS
     }
 
-    #[On('getModeloSelectTipos')]
-    public function getModeloSelectTipos($id)
+    #[On('getModeloTipos')]
+    public function getModeloTipos($rowquid)
     {
-        $tipo = $this->getTipo($id);
+        $tipo = $this->getTipo($rowquid);
         if ($tipo){
-            $this->tipos_id = $tipo->id;
+            $this->tipo = $tipo->id;
         }
     }
 
-    #[On('setModeloSelectTipos')]
-    public function setModeloSelectTipos($id)
+    #[On('setModeloTipos')]
+    public function setModeloTipos($rowquid)
     {
         //JS
     }
 
-    #[On('modeloSelectMarcas')]
-    public function modeloSelectMarcas($data)
+    #[On('initModeloMarcas')]
+    public function initModeloMarcas($data)
     {
         //JS
     }
 
-    #[On('getModeloSelectMarcas')]
-    public function getModeloSelectMarcas($id)
+    #[On('getModeloMarcas')]
+    public function getModeloMarcas($rowquid)
     {
-        $marca = $this->getMarca($id);
+        $marca = $this->getMarca($rowquid);
         if ($marca){
-            $this->marcas_id = $marca->id;
+            $this->marca = $marca->id;
         }
     }
 
-    #[On('setModeloSelectMarcas')]
-    public function setModeloSelectMarcas($id)
+    #[On('setModeloMarcas')]
+    public function setModeloMarcas($rowquid)
     {
         //JS
+    }
+
+    protected function getRegistro($rowquid): ?Modelo
+    {
+        return Modelo::where('rowquid', $rowquid)->first();
     }
 
     protected function getTipo($rowquid): ?Tipo
@@ -266,11 +196,6 @@ class ModelosComponent extends Component
     protected function getMarca($rowquid): ?Marca
     {
         return Marca::where('rowquid', $rowquid)->first();
-    }
-
-    protected function getModelo($rowquid): ?Modelo
-    {
-        return Modelo::where('rowquid', $rowquid)->first();
     }
 
 }

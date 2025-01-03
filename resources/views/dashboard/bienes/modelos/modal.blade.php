@@ -1,67 +1,46 @@
-<div wire:ignore.self class="modal fade" id="modal-modelos">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="row col-md-10">
-
-                    <div class="col-md-6">
-                        <h4 class="modal-title">
-                            Modelos
-                        </h4>
-                    </div>
-
-                    <div class="col-md-6 justify-content-end">
-                        <form wire:submit="buscar">
-                            <div class="input-group close">
-                                <input type="search" class="form-control" placeholder="Buscar" wire:model="keyword" required>
-                                <div class="input-group-append">
-                                    <button type="submit" class="btn btn-default">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
-                </div>
-
-                <button type="button" wire:click="limpiarModelos" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+<div wire:ignore.self class="modal fade" id="modal-tabla-modelos">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content {{--fondo--}}">
+            <div class="modal-header bg-navy">
+                <h4 class="modal-title">
+                    {{ $modalTitle }}
+                </h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="text-white">×</span>
                 </button>
-
             </div>
-            <div class="modal-body">
+            <div class="modal-body" {{--wire:loading.class="invisible" wire:target="create, cancel, edit"--}} style="min-height: {{ $min }}px;">
 
                 <div class="row justify-content-center">
-                    <div class="col-md-6 @if(!$form) d-none @endif ">
-                        @include('dashboard.bienes.modelos.form')
-                    </div>
-                    <div class="col-12 @if(!$table) d-none @endif ">
+
+                    <form wire:submit="buscar" class="col-md-8 mb-3">
+                        <div class="input-group close">
+                            <input type="search" class="form-control" placeholder="Buscar" wire:model="keyword" required>
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-default">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="col-12 @if($ocultarTable) d-none @endif">
                         @include('dashboard.bienes.modelos.table')
                     </div>
-                    <div class="col-12 @if(!$show) d-none @endif ">
-                        @include('dashboard.bienes.modelos.show')
+
+                    <div class="col-12 @if($ocultarCard) d-none @endif">
+                        @include('dashboard.bienes.modelos.form')
                     </div>
+
                 </div>
 
             </div>
-
-            {!! verSpinner() !!}
-
-            <div class="modal-footer @if($show) justify-content-between @else justify-content-end @endif ">
-                @if($show)
-                    <button type="button" class="btn btn-danger btn-sm" wire:click="destroy('{{ $rowquid }}')">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-
-                    <button type="button" class="btn btn-primary btn-sm" wire:click="edit('{{ $rowquid }}')">
-                        <i class="fas fa-edit"></i> Editar
-                    </button>
-                @endif
-                <button type="button" wire:click="limpiarModelos" class="btn btn-default btn-sm"
-                        data-dismiss="modal">{{ __('Close') }}</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
-
+            {{--{!! verSpinner('create, cancel, edit') !!}--}}
         </div>
+        <!-- /.modal-content -->
     </div>
+    <!-- /.modal-dialog -->
 </div>

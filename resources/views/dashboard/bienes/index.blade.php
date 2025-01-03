@@ -9,6 +9,7 @@
     @livewire('dashboard.bienes-component')
     @livewire('dashboard.tipos-component')
     @livewire('dashboard.marcas-component')
+    @livewire('dashboard.modelos-component')
     @livewire('dashboard.colores-component')
     @livewire('dashboard.condiciones-component')
     @livewire('dashboard.ubicaciones-component')
