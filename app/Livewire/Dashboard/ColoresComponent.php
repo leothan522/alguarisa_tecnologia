@@ -4,164 +4,121 @@ namespace App\Livewire\Dashboard;
 
 use App\Models\Bien;
 use App\Models\Color;
+use App\Traits\LimitRows;
+use App\Traits\ModalTable;
 use App\Traits\ToastBootstrap;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class ColoresComponent extends Component
 {
     use ToastBootstrap;
+    use LimitRows;
+    use ModalTable;
 
-    public $rows = 0;
-    public $nombre, $keyword;
-    public $form = false, $table = true;
-
-    #[Locked]
-    public $colores_id, $rowquid;
+    public $nombre;
 
     public function mount()
     {
         $this->setLimit();
+        $this->setSize(483);
+        $this->modalTitle = "Colores";
+        $this->confirmed = 'deleteColores';
+        $this->modulo = 'colores';
     }
 
     public function render()
     {
-        $colores = Color::buscar($this->keyword)
+        $listar = Color::buscar($this->keyword)
             ->orderBy('created_at', 'DESC')
-            ->limit($this->rows)
-            ->get()
-        ;
-
-        $total = Color::buscar($this->keyword)->count();
-
-        $rowsColores = Color::count();
+            ->limit($this->limit)
+            ->get();
+        $limit = $listar->count();
+        $rows = Color::buscar($this->keyword)->count();
+        $this->btnVerMas($limit, $rows);
 
         return view('livewire.dashboard.colores-component')
-            ->with('listarColores', $colores)
-            ->with('rowsColores', $rowsColores)
-            ->with('totalBusqueda', $total);
+            ->with('listar', $listar)
+            ->with('rows', $rows);
     }
 
-    public function setLimit()
+    public function limpiar()
     {
-        if (numRowsPaginate() < 12) { $rows = 12; } else { $rows = numRowsPaginate(); }
-        $this->rows = $this->rows + $rows;
-    }
-
-    #[On('limpiarColores')]
-    public function limpiarColores()
-    {
+        $this->limpiarModal();
         $this->reset([
-            'colores_id', 'nombre', 'form', 'table', 'rowquid'
+            'nombre',
         ]);
-        $this->resetErrorBag();
-    }
-
-    public function create()
-    {
-        $this->form = true;
-        $this->table = false;
     }
 
     public function save()
     {
         $rules = [
-            'nombre'       =>  ['required', 'min:2', 'max:20'/*, 'alpha_dash:ascii'*/, Rule::unique('colores', 'nombre')->ignore($this->colores_id)],
+            'nombre' => ['required', 'min:2', 'max:50', Rule::unique('colores', 'nombre')->ignore($this->tabla_id)],
         ];
-        /*$messages = [
-            'nombre.required' => 'El nombre es obligatorio.',
-            'nombre.min' => 'El nombre debe contener al menos 3 caracteres.',
-            'nombre.max' => 'El nombre no debe ser mayor que 15 caracteres.',
-            'nombre.alpha_num' => ' El campo nombre sólo debe contener letras y números.'
-        ];*/
-
         $this->validate($rules);
-        if (is_null($this->colores_id)){
+
+        if ($this->tabla_id){
+            //editar
+            $model = Color::find($this->tabla_id);
+        }else{
             //nuevo
-            $color = new Color();
+            $model = new Color();
             do{
                 $rowquid = generarStringAleatorio(16);
                 $existe = Color::where('rowquid', $rowquid)->first();
             }while($existe);
-            $color->rowquid = $rowquid;
-        }else{
-            //editar
-            $color = Color::find($this->colores_id);
+            $model->rowquid = $rowquid;
         }
 
-        if ($color){
-            $color->nombre = $this->nombre;
-            $color->save();
-            $this->dispatch('initSelects', select: 'color')->to(BienesOldComponent::class);
+        if ($model){
+            $model->nombre = $this->nombre;
+            $model->save();
+            $this->limpiar();
             $this->toastBootstrap();
         }
-
-        $this->limpiarColores();
     }
 
     public function edit($rowquid)
     {
-        $color = $this->getColor($rowquid);
-        if ($color){
-            $this->colores_id = $color->id;
-            $this->nombre = $color->nombre;
-            $this->form = true;
-            $this->table = false;
+        $this->limpiar();
+        $registro = $this->getRegistro($rowquid);
+        if ($registro){
+            $this->tabla_id = $registro->id;
+            $this->ocultarTable = true;
+            $this->ocultarCard = false;
+            $this->nombre = $registro->nombre;
         }
     }
 
-    public function destroy($rowquid)
+    #[On('deleteColores')]
+    public function delete($rowquid)
     {
-        $this->rowquid = $rowquid;
-        $this->confirmToastBootstrap('confirmedColores');
-    }
+        $this->limpiar();
+        $registro = $this->getRegistro($rowquid);
+        if ($registro){
 
-    #[On('confirmedColores')]
-    public function confirmedColores()
-    {
-        $id = null;
-        $color = $this->getColor($this->rowquid);
-        if ($color){
-            $id = $color->id;
-        }
+            //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+            $vinculado = false;
 
-        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
-        $vinculado = false;
+            $bienes = Bien::where('colores_id', $registro->id)->first();
 
-        $bienes = Bien::where('colores_id', $id)->first();
+            if ($bienes){
+                $vinculado = true;
+            }
 
-        if ($bienes){
-            $vinculado = true;
-        }
-
-        if ($vinculado) {
-            $this->htmlToastBoostrap();
-        } else {
-            if ($color){
-                $nombre = "<b>".mb_strtoupper($color->nombre)."</b>";
-                $color->delete();
-                $this->dispatch('initSelects', select: 'color')->to(BienesOldComponent::class);
+            if ($vinculado) {
+                $this->htmlToastBoostrap();
+            } else {
+                $nombre = '<b class="text-uppercase text-warning">'.$registro->nombre.'</b>';
+                $registro->delete();
                 $this->toastBootstrap('success', "Color $nombre Eliminado.");
             }
+
         }
-
-        $this->limpiarColores();
     }
 
-    public function buscar()
-    {
-        $this->limpiarColores();
-    }
-
-    public function cerrarBusqueda()
-    {
-        $this->reset(['keyword']);
-        $this->limpiarColores();
-    }
-
-    protected function getColor($rowquid): ?Color
+    protected function getRegistro($rowquid): ?Color
     {
         return Color::where('rowquid', $rowquid)->first();
     }

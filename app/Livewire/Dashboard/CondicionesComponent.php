@@ -4,164 +4,121 @@ namespace App\Livewire\Dashboard;
 
 use App\Models\Bien;
 use App\Models\Condicion;
+use App\Traits\LimitRows;
+use App\Traits\ModalTable;
 use App\Traits\ToastBootstrap;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class CondicionesComponent extends Component
 {
     use ToastBootstrap;
+    use LimitRows;
+    use ModalTable;
 
-    public $rows = 0;
-    public $nombre, $keyword;
-    public $form = false, $table = true;
-
-    #[Locked]
-    public $condiciones_id, $rowquid;
+    public $nombre;
 
     public function mount()
     {
         $this->setLimit();
+        $this->setSize(483);
+        $this->modalTitle = "Condiciones";
+        $this->confirmed = 'deleteCondiciones';
+        $this->modulo = 'condiciones';
     }
 
     public function render()
     {
-        $condiciones = Condicion::buscar($this->keyword)
+        $listar = Condicion::buscar($this->keyword)
             ->orderBy('created_at', 'DESC')
-            ->limit($this->rows)
-            ->get()
-        ;
-
-        $total = Condicion::buscar($this->keyword)->count();
-
-        $rowsCondiciones = Condicion::count();
+            ->limit($this->limit)
+            ->get();
+        $limit = $listar->count();
+        $rows = Condicion::buscar($this->keyword)->count();
+        $this->btnVerMas($limit, $rows);
 
         return view('livewire.dashboard.condiciones-component')
-            ->with('listarCondiciones', $condiciones)
-            ->with('rowsCondiciones', $rowsCondiciones)
-            ->with('totalBusqueda', $total);
+            ->with('listar', $listar)
+            ->with('rows', $rows);
     }
 
-    public function setLimit()
+    public function limpiar()
     {
-        if (numRowsPaginate() < 12) { $rows = 12; } else { $rows = numRowsPaginate(); }
-        $this->rows = $this->rows + $rows;
-    }
-
-    #[On('limpiarCondiciones')]
-    public function limpiarCondiciones()
-    {
+        $this->limpiarModal();
         $this->reset([
-            'condiciones_id', 'nombre', 'form', 'table', 'rowquid'
+            'nombre',
         ]);
-        $this->resetErrorBag();
-    }
-
-    public function create()
-    {
-        $this->form = true;
-        $this->table = false;
     }
 
     public function save()
     {
         $rules = [
-            'nombre'       =>  ['required', 'min:2', 'max:20'/*, 'alpha_dash:ascii'*/, Rule::unique('condiciones', 'nombre')->ignore($this->condiciones_id)],
+            'nombre' => ['required', 'min:2', 'max:50', Rule::unique('condiciones', 'nombre')->ignore($this->tabla_id)],
         ];
-        /*$messages = [
-            'nombre.required' => 'El nombre es obligatorio.',
-            'nombre.min' => 'El nombre debe contener al menos 3 caracteres.',
-            'nombre.max' => 'El nombre no debe ser mayor que 15 caracteres.',
-            'nombre.alpha_num' => ' El campo nombre sólo debe contener letras y números.'
-        ];*/
-
         $this->validate($rules);
-        if (is_null($this->condiciones_id)){
+
+        if ($this->tabla_id){
+            //editar
+            $model = Condicion::find($this->tabla_id);
+        }else{
             //nuevo
-            $condicion = new Condicion();
+            $model = new Condicion();
             do{
                 $rowquid = generarStringAleatorio(16);
-                $existe = Condicion::where('rowquid', '=', $rowquid)->first();
+                $existe = Condicion::where('rowquid', $rowquid)->first();
             }while($existe);
-            $condicion->rowquid = $rowquid;
-        }else{
-            //editar
-            $condicion = Condicion::find($this->condiciones_id);
+            $model->rowquid = $rowquid;
         }
 
-        if ($condicion){
-            $condicion->nombre = $this->nombre;
-            $condicion->save();
-            $this->dispatch('initSelects', select: 'condicion')->to(BienesOldComponent::class);
+        if ($model){
+            $model->nombre = $this->nombre;
+            $model->save();
+            $this->limpiar();
             $this->toastBootstrap();
         }
-
-        $this->limpiarCondiciones();
     }
 
     public function edit($rowquid)
     {
-        $condicion = $this->getCondicion($rowquid);
-        if ($condicion){
-            $this->condiciones_id = $condicion->id;
-            $this->nombre = $condicion->nombre;
-            $this->form = true;
-            $this->table = false;
+        $this->limpiar();
+        $registro = $this->getRegistro($rowquid);
+        if ($registro){
+            $this->tabla_id = $registro->id;
+            $this->ocultarTable = true;
+            $this->ocultarCard = false;
+            $this->nombre = $registro->nombre;
         }
     }
 
-    public function destroy($rowquid)
+    #[On('deleteCondiciones')]
+    public function delete($rowquid)
     {
-        $this->rowquid = $rowquid;
-        $this->confirmToastBootstrap('confirmedCondicion');
-    }
+        $this->limpiar();
+        $registro = $this->getRegistro($rowquid);
+        if ($registro){
 
-    #[On('confirmedCondicion')]
-    public function confirmedCondicion()
-    {
-        $id = null;
-        $condicion = $this->getCondicion($this->rowquid);
-        if ($condicion){
-            $id = $condicion->id;
-        }
+            //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+            $vinculado = false;
 
-        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
-        $vinculado = false;
+            $bienes = Bien::where('condiciones_id', $registro->id)->first();
 
-        $bienes = Bien::where('condiciones_id', $id)->first();
-
-        if ($bienes){
-            $vinculado = true;
-        }
-
-        if ($vinculado) {
-            $this->htmlToastBoostrap();
-        } else {
-            if ($condicion){
-                $nombre = "<b>".mb_strtoupper($condicion->nombre)."</b>";
-                $condicion->delete();
-                $this->dispatch('initSelects', select: 'condicion')->to(BienesOldComponent::class);
-                $this->toastBootstrap('success', "Condición $nombre Eliminada.");
+            if ($bienes){
+                $vinculado = true;
             }
+
+            if ($vinculado) {
+                $this->htmlToastBoostrap();
+            } else {
+                $nombre = '<b class="text-uppercase text-warning">'.$registro->nombre.'</b>';
+                $registro->delete();
+                $this->toastBootstrap('success', "Condicion $nombre Eliminada.");
+            }
+
         }
-
-        $this->limpiarCondiciones();
     }
 
-    public function buscar()
-    {
-        $this->limpiarCondiciones();
-    }
-
-    public function cerrarBusqueda()
-    {
-        $this->reset(['keyword']);
-        $this->limpiarCondiciones();
-    }
-
-    protected function getCondicion($rowquid): ?Condicion
+    protected function getRegistro($rowquid): ?Condicion
     {
         return Condicion::where('rowquid', $rowquid)->first();
     }

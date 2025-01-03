@@ -5,168 +5,126 @@ namespace App\Livewire\Dashboard;
 use App\Models\Bien;
 use App\Models\Marca;
 use App\Models\Modelo;
+use App\Traits\LimitRows;
+use App\Traits\ModalTable;
 use App\Traits\ToastBootstrap;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class MarcasComponent extends Component
 {
     use ToastBootstrap;
+    use LimitRows;
+    use ModalTable;
 
-    public $rows = 0;
-    public $nombre, $keyword;
-    public $form = false, $table = true;
-
-    #[Locked]
-    public $marcas_id, $rowquid;
+    public $nombre;
 
     public function mount()
     {
         $this->setLimit();
+        $this->setSize(483);
+        $this->modalTitle = "Marcas";
+        $this->confirmed = 'deleteMarcas';
+        $this->modulo = 'marcas';
     }
 
     public function render()
     {
-        $marcas = Marca::buscar($this->keyword)
+        $listar = Marca::buscar($this->keyword)
             ->orderBy('created_at', 'DESC')
-            ->limit($this->rows)
-            ->get()
-        ;
-
-        $total = Marca::buscar($this->keyword)->count();
-
-        $rowsMarcas = Marca::count();
+            ->limit($this->limit)
+            ->get();
+        $limit = $listar->count();
+        $rows = Marca::buscar($this->keyword)->count();
+        $this->btnVerMas($limit, $rows);
 
         return view('livewire.dashboard.marcas-component')
-            ->with('listarMarcas', $marcas)
-            ->with('rowsMarcas', $rowsMarcas)
-            ->with('totalBusqueda', $total);
+            ->with('listar', $listar)
+            ->with('rows', $rows);
     }
 
-    public function setLimit()
+    public function limpiar()
     {
-        if (numRowsPaginate() < 12) { $rows = 12; } else { $rows = numRowsPaginate(); }
-        $this->rows = $this->rows + $rows;
-    }
-
-    #[On('limpiarMarcas')]
-    public function limpiarMarcas()
-    {
+        $this->limpiarModal();
         $this->reset([
-            'marcas_id', 'nombre', 'form', 'table', 'rowquid'
+            'nombre',
         ]);
-        $this->resetErrorBag();
-    }
-
-    public function create()
-    {
-        $this->form = true;
-        $this->table = false;
     }
 
     public function save()
     {
         $rules = [
-            'nombre'       =>  ['required', 'min:2', 'max:40'/*, 'alpha_dash:ascii'*/, Rule::unique('marcas', 'nombre')->ignore($this->marcas_id)],
+            'nombre' => ['required', 'min:2', 'max:50', Rule::unique('marcas', 'nombre')->ignore($this->tabla_id)],
         ];
-        /*$messages = [
-            'nombre.required' => 'El nombre es obligatorio.',
-            'nombre.min' => 'El nombre debe contener al menos 3 caracteres.',
-            'nombre.max' => 'El nombre no debe ser mayor que 15 caracteres.',
-            'nombre.alpha_num' => ' El campo nombre sólo debe contener letras y números.'
-        ];*/
-
         $this->validate($rules);
-        if (is_null($this->marcas_id)){
+
+        if ($this->tabla_id){
+            //editar
+            $model = Marca::find($this->tabla_id);
+        }else{
             //nuevo
-            $marca = new Marca();
+            $model = new Marca();
             do{
                 $rowquid = generarStringAleatorio(16);
                 $existe = Marca::where('rowquid', $rowquid)->first();
             }while($existe);
-            $marca->rowquid = $rowquid;
-        }else{
-            //editar
-            $marca = Marca::find($this->marcas_id);
+            $model->rowquid = $rowquid;
         }
 
-        if ($marca){
-            $marca->nombre = $this->nombre;
-            $marca->save();
-            $this->dispatch('initSelects', select: 'marcas')->to(BienesOldComponent::class);
+        if ($model){
+            $model->nombre = $this->nombre;
+            $model->save();
+            $this->limpiar();
             $this->toastBootstrap();
         }
-
-        $this->limpiarMarcas();
     }
 
     public function edit($rowquid)
     {
-        $this->limpiarMarcas();
-        $marca = $this->getMarca($rowquid);
-        if ($marca){
-            $this->marcas_id = $marca->id;
-            $this->nombre = $marca->nombre;
-            $this->form = true;
-            $this->table = false;
+        $this->limpiar();
+        $registro = $this->getRegistro($rowquid);
+        if ($registro){
+            $this->tabla_id = $registro->id;
+            $this->ocultarTable = true;
+            $this->ocultarCard = false;
+            $this->nombre = $registro->nombre;
         }
     }
 
-    public function destroy($rowquid)
+    #[On('deleteMarcas')]
+    public function delete($rowquid)
     {
-        $this->rowquid = $rowquid;
-        $this->confirmToastBootstrap('confirmedMarcas');
-    }
+        $this->limpiar();
+        $registro = $this->getRegistro($rowquid);
+        if ($registro){
 
-    #[On('confirmedMarcas')]
-    public function confirmedMarcas()
-    {
-        $id = null;
-        $marca = $this->getMarca($this->rowquid);
-        if ($marca){
-            $id = $marca->id;
-        }
+            //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+            $vinculado = false;
 
-        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
-        $vinculado = false;
+            $modelos = Modelo::where('marcas_id', $registro->id)->first();
+            $bienes = Bien::where('marcas_id', $registro->id)->first();
 
-        $modelos = Modelo::where('marcas_id', $id)->first();
-        $bienes = Bien::where('marcas_id', $id)->first();
+            if ($modelos || $bienes){
+                $vinculado = true;
+            }
 
-        if ($modelos || $bienes){
-            $vinculado = true;
-        }
-
-        if ($vinculado) {
-            $this->htmlToastBoostrap();
-        } else {
-            if ($marca){
-                $nombre = "<b>".mb_strtoupper($marca->nombre)."</b>";
-                $marca->delete();
-                $this->dispatch('initSelects', select: 'marcas')->to(BienesOldComponent::class);
+            if ($vinculado) {
+                $this->htmlToastBoostrap();
+            } else {
+                $nombre = '<b class="text-uppercase text-warning">'.$registro->nombre.'</b>';
+                $registro->delete();
                 $this->toastBootstrap('success', "Marca $nombre Eliminada.");
             }
+
         }
-
-        $this->limpiarMarcas();
     }
 
-    public function buscar()
-    {
-        $this->limpiarMarcas();
-    }
-
-    public function cerrarBusqueda()
-    {
-        $this->reset(['keyword']);
-        $this->limpiarMarcas();
-    }
-
-    protected function getMarca($rowquid): ?Marca
+    protected function getRegistro($rowquid): ?Marca
     {
         return Marca::where('rowquid', $rowquid)->first();
     }
+
+
 
 }
