@@ -67,10 +67,10 @@
                                 {{ $bien->marca->nombre }}
                                 {{ $bien->modelo->nombre }}
                                 @if(!is_null($bien->serial))
-                                    , Serial: {{ $bien->serial }}
+                                    , Serial: <span class="text-nowrap">{{ $bien->serial }}</span>
                                 @endif
                                 @if(!is_null($bien->identificador))
-                                    , Identificador: {{ $bien->identificador }}
+                                    , Identificador: <span class="text-nowrap">{{ $bien->identificador }}</span>
                                 @endif
                             </span>
                         </small>

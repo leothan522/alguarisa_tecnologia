@@ -29,7 +29,7 @@
     </li>
     <li class="list-group-item">
         <span>Ubicación: </span>
-        <span class="float-right text-bold text-lightblue text-uppercase">{{ $verUbicacion }}</span>
+        <span class="float-right text-bold text-lightblue text-uppercase">{{ $verUbicacion ?? "-" }}</span>
     </li>
     @if(!empty($verAdicional))
         <li class="list-group-item">

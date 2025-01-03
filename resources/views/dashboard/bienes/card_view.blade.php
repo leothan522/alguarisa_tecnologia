@@ -1,5 +1,5 @@
 <div id="div_card_view" class="card card-navy card-outline">
-    <div class="card-header" wire:loading.class="invisible" wire:target="create, cancel, show, showHide">
+    <div class="card-header" wire:loading.class="invisible" wire:target="create, edit, cancel, show, showHide">
         <h3 class="card-title">
             {{ $title }}
         </h3>
@@ -31,27 +31,31 @@
             </button>
         </div>
     </div>
-    <div id="div_card_body" class="card-body table-responsive" wire:loading.class="invisible" wire:target="create, cancel, save, show, showHide" style="max-height: calc(100vh - {{ $size + $sizeFooter }}px)">
+    <div id="div_card_body" class="card-body table-responsive" wire:loading.class="invisible" wire:target="create, edit, cancel, save, show, showHide" style="max-height: calc(100vh - {{ $size + $sizeFooter }}px)">
 
-        <form class="row" wire:submit="save">
+        <form class="row @if($imagenes) d-none @endif" wire:submit="save">
 
             <div class="col-sm-7 col-lg-6">
 
                 <div class="card card-outline card-navy" >
 
                     <div class="card-header">
-                        <h5 class="card-title">Información</h5>
+                        <h5 class="card-title">@if(!$form) Información @else Datos Básicos @endif</h5>
                         <div class="card-tools">
                             <span class="btn-tool"><i class="fas fa-book"></i></span>
                         </div>
                     </div>
 
                     <div class="card-body @if(!$form) p-0 @endif ">
-                        @if($form)
-                            @include('dashboard.empresas.form')
-                        @else
+
+                        <div class="@if(!$form) d-none @endif">
+                            @include('dashboard.bienes.form_basicos')
+                        </div>
+
+                        <div class="@if($form) d-none @endif">
                             @include('dashboard.bienes.show')
-                        @endif
+                        </div>
+
                     </div>
 
                 </div>
@@ -62,20 +66,26 @@
 
                 <div class="card card-outline card-navy">
 
-                    <div class="card-header">
+                    <div class="card-header @if($form) d-none @endif">
                         <h5 class="card-title">Imagenes</h5>
                         <div class="card-tools">
                             <span class="btn-tool"><i class="fas fa-images"></i></span>
                         </div>
                     </div>
-
-                    <div class="card-body @if(!$form) attachment-block p-0 m-0 @endif ">
-                        @if($form)
-                             @include('dashboard.empresas.form_imagen')
-                        @else
-                            @include('dashboard.bienes.show_imagen')
-                        @endif
+                    <div class="card-body attachment-block p-0 m-0 @if($form) d-none @endif">
+                        @include('dashboard.bienes.show_imagen')
                     </div>
+
+                    <div class="card-header @if(!$form) d-none @endif">
+                        <h5 class="card-title">Datos Específicos</h5>
+                        <div class="card-tools">
+                            <span class="btn-tool"><i class="fas fa-book"></i></span>
+                        </div>
+                    </div>
+                    <div class="card-body @if(!$form) d-none @endif">
+                        @include('dashboard.bienes.form_especificos')
+                    </div>
+
                 </div>
 
             </div>
@@ -100,7 +110,7 @@
     </div>
 
     @if(!$form)
-        <div id="div_card_footer" class="card-footer text-center" wire:loading.class="invisible" wire:target="create, cancel, show, showHide">
+        <div id="div_card_footer" class="card-footer text-center" wire:loading.class="invisible" wire:target="create, edit, cancel, show, showHide">
 
             <button type="button" class="btn btn-default btn-sm mr-1" wire:click="btnHorario"
                     @if(!comprobarPermisos('empresas.horario')) disabled @endif>
@@ -129,6 +139,6 @@
         </div>
     @endif
 
-    {!! verSpinner('create, cancel, save, show, showHide') !!}
+    {!! verSpinner('create, edit, cancel, save, show, showHide') !!}
 
 </div>

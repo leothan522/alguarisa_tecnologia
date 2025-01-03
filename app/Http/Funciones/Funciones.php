@@ -429,15 +429,15 @@ function dataSelect2($rows, $text = null): array
     foreach ($rows as $row){
         switch ($text){
             case 'nombre':
-                $text = $row->nombre;
+                $text = mb_strtoupper($row->nombre);
                 break;
             default:
-                $text = $row->codigo.'  '.$row->nombre;
+                $text = mb_strtoupper($row->codigo.'  '.$row->nombre);
                 break;
         }
         $option = [
             'id' => $row->id,
-            'text' => $text
+            'text' => mb_strtoupper($text)
         ];
         array_push($data, $option);
     }

@@ -2,6 +2,63 @@
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
 
+        function select_2(id, data, event) {
+            let html = '<select class="custom-select" id="'+ id +'"></select>';
+            $('#div_' + id).html(html);
+
+            $('#'  + id).select2({
+                theme: 'bootstrap4',
+                data: data,
+                placeholder: 'Seleccione',
+            })
+                .val(null)
+                .trigger('change')
+                .on('change', function() {
+                    let value = $(this).val();
+                    Livewire.dispatch(event, { id: value });
+            });
+        }
+
+        Livewire.on('selectTipos', ({ data }) => {
+            select_2('select_bienes_tipo', data, 'getselectTipos');
+        });
+
+        Livewire.on('setSelectTipos', ({ id }) => {
+            $('#select_bienes_tipo').val(id).trigger('change');
+        });
+
+        Livewire.on('selectMarcas', ({ data }) => {
+            select_2('select_bienes_marca', data, 'getselectMarcas');
+        });
+
+        Livewire.on('setSelectMarcas', ({ id }) => {
+            $('#select_bienes_marca').val(id).trigger('change');
+        });
+
+        Livewire.on('selectColores', ({ data }) => {
+            select_2('select_bienes_color', data, 'getselectColores');
+        });
+
+        Livewire.on('setSelectColores', ({ id }) => {
+            $('#select_bienes_color').val(id).trigger('change');
+        });
+
+        Livewire.on('selectCondiciones', ({ data }) => {
+            select_2('select_bienes_condicion', data, 'getselectCondiciones');
+        });
+
+        Livewire.on('setSelectCondiciones', ({ id }) => {
+            $('#select_bienes_condicion').val(id).trigger('change');
+        });
+
+        Livewire.on('selectModelos', ({ data }) => {
+            select_2('select_bienes_modelo', data, 'getselectModelos');
+        });
+
+        Livewire.on('setSelectModelos', ({ id }) => {
+            $('#select_bienes_modelo').val(id).trigger('change');
+        });
+
         Livewire.on('deleteBienes', () => {
             addClassinvisible('#div_card_tools');
             addClassinvisible('#div_card_body');
