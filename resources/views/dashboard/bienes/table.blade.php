@@ -1,4 +1,4 @@
-<div class="card card-navy card-outline" id="div_table_parametros">
+<div class="card card-navy card-outline" id="div_table_bienes">
 
     <div class="card-header">
         <h3 class="card-title">
@@ -32,17 +32,17 @@
         </div>
     </div>
 
-    <div class="card-body table-responsive p-0" id="table_empresas" wire:loading.class="invisible" wire:target="setLimit, actualizar, cerrarBusqueda, showHide, createHide" style="max-height: calc(100vh - {{ $size }}px)" >
+    <div class="card-body table-responsive p-0" id="table_bienes" wire:loading.class="invisible" wire:target="setLimit, actualizar, cerrarBusqueda, showHide, createHide" style="max-height: calc(100vh - {{ $size }}px)" >
 
         <table class="table table-head-fixed table-hover text-nowrap sticky-top">
             <thead>
             <tr class="text-lightblue">
-                <th class="text-uppercase" style="width: 10%">
+                {{--<th class="text-uppercase" style="width: 10%">
                     <!--Código-->
                     &nbsp;
-                </th>
+                </th>--}}
                 <th>
-                    <span class="text-uppercase">Nombre</span>
+                    <span class="text-uppercase">Descripción</span>
                     <small class="float-right">Rows {{ $listar->count() }}</small>
                 </th>
             </tr>
@@ -52,23 +52,31 @@
         <!-- TO DO List -->
         <ul class="todo-list" data-widget="todo-list">
             @if($listar->isNotEmpty())
-                @foreach($listar as $parametro)
-                    <li class=" @if(/*$parametro->id == $parametros_id*/true) text-warning @endif ">
+                @foreach($listar as $bien)
+                    <li class=" @if($bien->id == $bienes_id) text-warning @endif ">
 
                         <!-- todo text -->
-                        <span class="text">
+                        {{--<span class="text">
                               codigo
-                        </span>
+                        </span>--}}
 
                         <!-- Emphasis label -->
-                        <small class="badge" style="cursor: pointer;">
-                            <span class="text-uppercase text-truncate" style="max-width: 250px;">
-                                {{ $parametro->nombre }}
+                        <small class="text text-uppercase" style="cursor: pointer;">
+                            <span class="" wire:click="show('{{ $bien->rowquid }}')">
+                                {{ $bien->tipo->nombre }}
+                                {{ $bien->marca->nombre }}
+                                {{ $bien->modelo->nombre }}
+                                @if(!is_null($bien->serial))
+                                    , Serial: {{ $bien->serial }}
+                                @endif
+                                @if(!is_null($bien->identificador))
+                                    , Identificador: {{ $bien->identificador }}
+                                @endif
                             </span>
                         </small>
 
                         <!-- General tools such as edit or delete-->
-                        <div class="tools text-lightblue">
+                        <div class="tools text-lightblue" wire:click="show('{{ $bien->rowquid }}')">
                             <i class="fas fa-eye"></i>
                         </div>
 

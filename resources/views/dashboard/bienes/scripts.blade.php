@@ -2,6 +2,35 @@
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
 
+        Livewire.on('deleteBienes', () => {
+            addClassinvisible('#div_card_tools');
+            addClassinvisible('#div_card_body');
+            addClassinvisible('#div_card_footer');
+            verCargando('div_card_view');
+        });
+
+        function buscar(){
+            addClassinvisible("#table_bienes");
+            verCargando('div_table_bienes');
+            let input = $("#navbarSearch");
+            let keyword  = input.val();
+            if (keyword.length > 0){
+                input.blur();
+                Livewire.dispatch('buscar', { keyword: keyword });
+            }
+            return false;
+        }
+
+        /* Ekko Lightbox */
+        $(function () {
+            $(document).on('click', '[data-toggle="lightbox"]', function(event) {
+                event.preventDefault();
+                $(this).ekkoLightbox({
+                    alwaysShowClose: true
+                });
+            });
+        });
+
         document.addEventListener('DOMContentLoaded', function() {
             document.querySelector('.sidebar_tablas_bienes').classList.remove('d-none');
         });
