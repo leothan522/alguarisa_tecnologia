@@ -94,7 +94,7 @@ class CondicionesComponent extends Component
         if ($condicion){
             $condicion->nombre = $this->nombre;
             $condicion->save();
-            $this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
+            $this->dispatch('initSelects', select: 'condicion')->to(BienesOldComponent::class);
             $this->toastBootstrap();
         }
 
@@ -142,7 +142,7 @@ class CondicionesComponent extends Component
             if ($condicion){
                 $nombre = "<b>".mb_strtoupper($condicion->nombre)."</b>";
                 $condicion->delete();
-                $this->dispatch('initSelects', select: 'condicion')->to(BienesComponent::class);
+                $this->dispatch('initSelects', select: 'condicion')->to(BienesOldComponent::class);
                 $this->toastBootstrap('success', "Condición $nombre Eliminada.");
             }
         }

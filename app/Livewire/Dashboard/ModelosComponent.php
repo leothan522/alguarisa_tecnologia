@@ -115,7 +115,7 @@ class ModelosComponent extends Component
             $modelos->tipos_id = $this->tipos_id;
             $modelos->marcas_id = $this->marcas_id;
             $modelos->save();
-            $this->dispatch('initSelects', select: 'modelo')->to(BienesComponent::class);
+            $this->dispatch('initSelects', select: 'modelo')->to(BienesOldComponent::class);
             $this->toastBootstrap();
         }
 
@@ -188,7 +188,7 @@ class ModelosComponent extends Component
             if ($modelos){
                 $nombre = "<b>".mb_strtoupper($modelos->nombre)."</b>";
                 $modelos->delete();
-                $this->dispatch('initSelects', select: 'modelo')->to(BienesComponent::class);
+                $this->dispatch('initSelects', select: 'modelo')->to(BienesOldComponent::class);
                 $this->toastBootstrap('success', "Modelo $nombre Eliminado.");
             }
         }

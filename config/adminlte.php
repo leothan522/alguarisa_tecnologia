@@ -342,13 +342,54 @@ return [
                             'url'  => '#',
                             'data'  => [
                                 'toggle' => 'modal',
-                                'target' => '#modal-tipos',
+                                'target' => '#modal-tabla-tipos',
                             ],
                             'id' => 'sidebar_tabla_tipos'
                         ],
                         [
                             'text' => 'Marcas',
                             'url'  => '#',
+                            'data'  => [
+                                'toggle' => 'modal',
+                                'target' => '#modal-tabla-marcas',
+                            ],
+                            'id' => 'sidebar_tabla_marcas'
+                        ],
+                        [
+                            'text' => 'Modelos',
+                            'url'  => '#',
+                            'data'  => [
+                                'toggle' => 'modal',
+                                'target' => '#modal-tabla-modelos',
+                            ],
+                            'id' => 'sidebar_tabla_modelos'
+                        ],
+                        [
+                            'text' => 'Colores',
+                            'url'  => '#',
+                            'data'  => [
+                                'toggle' => 'modal',
+                                'target' => '#modal-tabla-colores',
+                            ],
+                            'id' => 'sidebar_tabla_colores'
+                        ],
+                        [
+                            'text' => 'Condiciones',
+                            'url'  => '#',
+                            'data'  => [
+                                'toggle' => 'modal',
+                                'target' => '#modal-tabla-condiciones',
+                            ],
+                            'id' => 'sidebar_tabla_condiciones'
+                        ],
+                        [
+                            'text' => 'Ubicaciones',
+                            'url'  => '#',
+                            'data'  => [
+                                'toggle' => 'modal',
+                                'target' => '#modal-tabla-ubicaciones',
+                            ],
+                            'id' => 'sidebar_tabla_ubicaciones'
                         ],
                     ],
                 ],

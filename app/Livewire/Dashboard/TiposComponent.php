@@ -5,168 +5,122 @@ namespace App\Livewire\Dashboard;
 use App\Models\Bien;
 use App\Models\Modelo;
 use App\Models\Tipo;
+use App\Traits\LimitRows;
+use App\Traits\ModalTable;
 use App\Traits\ToastBootstrap;
 use Illuminate\Validation\Rule;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
-use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class TiposComponent extends Component
 {
-    use LivewireAlert;
     use ToastBootstrap;
+    use LimitRows;
+    use ModalTable;
 
-    public $rows = 0;
-    public $nombre, $keyword;
-    public $form = false, $table = true;
-
-    #[Locked]
-    public $tipos_id, $rowquid;
+    public $nombre;
 
     public function mount()
     {
         $this->setLimit();
+        $this->setSize(483);
+        $this->modalTitle = "Tipos";
+        $this->confirmed = 'deleteTipos';
+        $this->modulo = 'tipos';
     }
 
     public function render()
     {
-        $tipos = Tipo::buscar($this->keyword)
+        $listar = Tipo::buscar($this->keyword)
             ->orderBy('created_at', 'DESC')
-            ->limit($this->rows)
-            ->get()
-        ;
-
-        $total = Tipo::buscar($this->keyword)->count();
-
-        $rowsTipos = Tipo::count();
+            ->limit($this->limit)
+            ->get();
+        $limit = $listar->count();
+        $rows = Tipo::buscar($this->keyword)->count();
+        $this->btnVerMas($limit, $rows);
 
         return view('livewire.dashboard.tipos-component')
-            ->with('listarTipos', $tipos)
-            ->with('rowsTipos', $rowsTipos)
-            ->with('totalBusqueda', $total);
+            ->with('listar', $listar)
+            ->with('rows', $rows);
     }
 
-    public function setLimit()
+    public function limpiar()
     {
-        if (numRowsPaginate() < 12) { $rows = 12; } else { $rows = numRowsPaginate(); }
-        $this->rows = $this->rows + $rows;
-    }
-
-    #[On('limpiarTipos')]
-    public function limpiarTipos()
-    {
+        $this->limpiarModal();
         $this->reset([
-            'tipos_id', 'nombre', 'form', 'table', 'rowquid'
+            'nombre',
         ]);
-        $this->resetErrorBag();
-    }
-
-    public function create()
-    {
-        $this->form = true;
-        $this->table = false;
     }
 
     public function save()
     {
         $rules = [
-            'nombre'       =>  ['required', 'min:2', 'max:50'/*, 'alpha_dash:ascii'*/, Rule::unique('tipos', 'nombre')->ignore($this->tipos_id)],
+            'nombre' => ['required', 'min:2', 'max:50', Rule::unique('tipos', 'nombre')->ignore($this->tabla_id)],
         ];
-        /*$messages = [
-            'nombre.required' => 'El nombre es obligatorio.',
-            'nombre.min' => 'El nombre debe contener al menos 3 caracteres.',
-            'nombre.max' => 'El nombre no debe ser mayor que 15 caracteres.',
-            'nombre.alpha_num' => ' El campo nombre sólo debe contener letras y números.'
-        ];*/
-
         $this->validate($rules);
-        if (is_null($this->tipos_id)){
+
+        if ($this->tabla_id){
+            //editar
+            $model = Tipo::find($this->tabla_id);
+        }else{
             //nuevo
-            $tipo = new Tipo();
+            $model = new Tipo();
             do{
                 $rowquid = generarStringAleatorio(16);
                 $existe = Tipo::where('rowquid', $rowquid)->first();
             }while($existe);
-            $tipo->rowquid = $rowquid;
-        }else{
-            //editar
-            $tipo = Tipo::find($this->tipos_id);
+            $model->rowquid = $rowquid;
         }
 
-        if ($tipo){
-            $tipo->nombre = $this->nombre;
-            $tipo->save();
-            $this->dispatch('initSelects', select: 'tipos')->to(BienesComponent::class);
+        if ($model){
+            $model->nombre = $this->nombre;
+            $model->save();
+            $this->limpiar();
             $this->toastBootstrap();
         }
-
-        $this->limpiarTipos();
     }
 
     public function edit($rowquid)
     {
-        $this->limpiarTipos();
-        $tipo = $this->getTipo($rowquid);
-        if ($tipo){
-            $this->tipos_id = $tipo->id;
-            $this->nombre = $tipo->nombre;
-            $this->form = true;
-            $this->table = false;
+        $this->limpiar();
+        $registro = $this->getRegistro($rowquid);
+        if ($registro){
+            $this->tabla_id = $registro->id;
+            $this->ocultarTable = true;
+            $this->ocultarCard = false;
+            $this->nombre = $registro->nombre;
         }
     }
 
-    public function destroy($rowquid)
+    #[On('deleteTipos')]
+    public function delete($rowquid)
     {
-        $this->rowquid = $rowquid;
-        $this->confirmToastBootstrap('confirmedTipos');
-    }
+        $this->limpiar();
+        $registro = $this->getRegistro($rowquid);
+        if ($registro){
 
-    #[On('confirmedTipos')]
-    public function confirmedTipos()
-    {
-        $id = null;
-        $tipo = $this->getTipo($this->rowquid);
-        if ($tipo){
-            $id = $tipo->id;
-        }
+            //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+            $vinculado = false;
 
-        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
-        $vinculado = false;
+            $modelos = Modelo::where('tipos_id', $registro->id)->first();
+            $bienes = Bien::where('tipos_id', $registro->id)->first();
 
-        $modelos = Modelo::where('tipos_id', $id)->first();
-        $bienes = Bien::where('tipos_id', $id)->first();
+            if ($modelos || $bienes){
+                $vinculado = true;
+            }
 
-        if ($modelos || $bienes){
-            $vinculado = true;
-        }
-
-        if ($vinculado) {
-            $this->htmlToastBoostrap();
-        } else {
-            if ($tipo){
-                $nombre = '<b>'.mb_strtoupper($tipo->nombre).'</b>';
-                $tipo->delete();
-                $this->dispatch('initSelects', select: 'tipos')->to(BienesComponent::class);
+            if ($vinculado) {
+                $this->htmlToastBoostrap();
+            } else {
+                $nombre = '<b class="text-uppercase text-warning">'.$registro->nombre.'</b>';
+                $registro->delete();
                 $this->toastBootstrap('success', "Tipo $nombre Eliminado.");
             }
+
         }
-
-        $this->limpiarTipos();
     }
 
-    public function buscar()
-    {
-        $this->limpiarTipos();
-    }
-
-    public function cerrarBusqueda()
-    {
-        $this->reset(['keyword']);
-        $this->limpiarTipos();
-    }
-
-    protected function getTipo($rowquid): ?Tipo
+    protected function getRegistro($rowquid): ?Tipo
     {
         return Tipo::where('rowquid', $rowquid)->first();
     }

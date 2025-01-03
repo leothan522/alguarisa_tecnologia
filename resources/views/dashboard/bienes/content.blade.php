@@ -1,11 +1,8 @@
-<div class="row">
-    <div class="col-md-4 {{--col-lg-5--}}">
-        @include('dashboard.bienes._layout.table')
+<div class="row justify-content-center">
+    <div class="col-md-5 col-lg-4 {{--@if($ocultarTable) d-none @endif--}} ">
+        hola
     </div>
-    <div class="col-md-8 {{--col-lg-7--}}">
-        @include('dashboard.bienes._layout.card')
+    <div class="col-md-7 col-lg-8 {{--@if($ocultarCard) d-none @endif d-md-block--}}">
+        mundo
     </div>
-</div>
-<div>
-    @include('dashboard.bienes._layout.modal')
 </div>

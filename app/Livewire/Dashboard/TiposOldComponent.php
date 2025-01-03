@@ -3,16 +3,18 @@
 namespace App\Livewire\Dashboard;
 
 use App\Models\Bien;
-use App\Models\Marca;
 use App\Models\Modelo;
+use App\Models\Tipo;
 use App\Traits\ToastBootstrap;
 use Illuminate\Validation\Rule;
+use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class MarcasComponent extends Component
+class TiposOldComponent extends Component
 {
+    use LivewireAlert;
     use ToastBootstrap;
 
     public $rows = 0;
@@ -20,7 +22,7 @@ class MarcasComponent extends Component
     public $form = false, $table = true;
 
     #[Locked]
-    public $marcas_id, $rowquid;
+    public $tipos_id, $rowquid;
 
     public function mount()
     {
@@ -29,19 +31,19 @@ class MarcasComponent extends Component
 
     public function render()
     {
-        $marcas = Marca::buscar($this->keyword)
+        $tipos = Tipo::buscar($this->keyword)
             ->orderBy('created_at', 'DESC')
             ->limit($this->rows)
             ->get()
         ;
 
-        $total = Marca::buscar($this->keyword)->count();
+        $total = Tipo::buscar($this->keyword)->count();
 
-        $rowsMarcas = Marca::count();
+        $rowsTipos = Tipo::count();
 
-        return view('livewire.dashboard.marcas-component')
-            ->with('listarMarcas', $marcas)
-            ->with('rowsMarcas', $rowsMarcas)
+        return view('livewire.dashboard.tipos-component')
+            ->with('listarTipos', $tipos)
+            ->with('rowsTipos', $rowsTipos)
             ->with('totalBusqueda', $total);
     }
 
@@ -51,11 +53,11 @@ class MarcasComponent extends Component
         $this->rows = $this->rows + $rows;
     }
 
-    #[On('limpiarMarcas')]
-    public function limpiarMarcas()
+    #[On('limpiarTipos')]
+    public function limpiarTipos()
     {
         $this->reset([
-            'marcas_id', 'nombre', 'form', 'table', 'rowquid'
+            'tipos_id', 'nombre', 'form', 'table', 'rowquid'
         ]);
         $this->resetErrorBag();
     }
@@ -69,7 +71,7 @@ class MarcasComponent extends Component
     public function save()
     {
         $rules = [
-            'nombre'       =>  ['required', 'min:2', 'max:40'/*, 'alpha_dash:ascii'*/, Rule::unique('marcas', 'nombre')->ignore($this->marcas_id)],
+            'nombre'       =>  ['required', 'min:2', 'max:50'/*, 'alpha_dash:ascii'*/, Rule::unique('tipos', 'nombre')->ignore($this->tipos_id)],
         ];
         /*$messages = [
             'nombre.required' => 'El nombre es obligatorio.',
@@ -79,36 +81,36 @@ class MarcasComponent extends Component
         ];*/
 
         $this->validate($rules);
-        if (is_null($this->marcas_id)){
+        if (is_null($this->tipos_id)){
             //nuevo
-            $marca = new Marca();
+            $tipo = new Tipo();
             do{
                 $rowquid = generarStringAleatorio(16);
-                $existe = Marca::where('rowquid', $rowquid)->first();
+                $existe = Tipo::where('rowquid', $rowquid)->first();
             }while($existe);
-            $marca->rowquid = $rowquid;
+            $tipo->rowquid = $rowquid;
         }else{
             //editar
-            $marca = Marca::find($this->marcas_id);
+            $tipo = Tipo::find($this->tipos_id);
         }
 
-        if ($marca){
-            $marca->nombre = $this->nombre;
-            $marca->save();
-            $this->dispatch('initSelects', select: 'marcas')->to(BienesOldComponent::class);
+        if ($tipo){
+            $tipo->nombre = $this->nombre;
+            $tipo->save();
+            $this->dispatch('initSelects', select: 'tipos')->to(BienesOldComponent::class);
             $this->toastBootstrap();
         }
 
-        $this->limpiarMarcas();
+        $this->limpiarTipos();
     }
 
     public function edit($rowquid)
     {
-        $this->limpiarMarcas();
-        $marca = $this->getMarca($rowquid);
-        if ($marca){
-            $this->marcas_id = $marca->id;
-            $this->nombre = $marca->nombre;
+        $this->limpiarTipos();
+        $tipo = $this->getTipo($rowquid);
+        if ($tipo){
+            $this->tipos_id = $tipo->id;
+            $this->nombre = $tipo->nombre;
             $this->form = true;
             $this->table = false;
         }
@@ -117,23 +119,23 @@ class MarcasComponent extends Component
     public function destroy($rowquid)
     {
         $this->rowquid = $rowquid;
-        $this->confirmToastBootstrap('confirmedMarcas');
+        $this->confirmToastBootstrap('confirmedTipos');
     }
 
-    #[On('confirmedMarcas')]
-    public function confirmedMarcas()
+    #[On('confirmedTipos')]
+    public function confirmedTipos()
     {
         $id = null;
-        $marca = $this->getMarca($this->rowquid);
-        if ($marca){
-            $id = $marca->id;
+        $tipo = $this->getTipo($this->rowquid);
+        if ($tipo){
+            $id = $tipo->id;
         }
 
         //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
         $vinculado = false;
 
-        $modelos = Modelo::where('marcas_id', $id)->first();
-        $bienes = Bien::where('marcas_id', $id)->first();
+        $modelos = Modelo::where('tipos_id', $id)->first();
+        $bienes = Bien::where('tipos_id', $id)->first();
 
         if ($modelos || $bienes){
             $vinculado = true;
@@ -142,31 +144,31 @@ class MarcasComponent extends Component
         if ($vinculado) {
             $this->htmlToastBoostrap();
         } else {
-            if ($marca){
-                $nombre = "<b>".mb_strtoupper($marca->nombre)."</b>";
-                $marca->delete();
-                $this->dispatch('initSelects', select: 'marcas')->to(BienesOldComponent::class);
-                $this->toastBootstrap('success', "Marca $nombre Eliminada.");
+            if ($tipo){
+                $nombre = '<b>'.mb_strtoupper($tipo->nombre).'</b>';
+                $tipo->delete();
+                $this->dispatch('initSelects', select: 'tipos')->to(BienesOldComponent::class);
+                $this->toastBootstrap('success', "Tipo $nombre Eliminado.");
             }
         }
 
-        $this->limpiarMarcas();
+        $this->limpiarTipos();
     }
 
     public function buscar()
     {
-        $this->limpiarMarcas();
+        $this->limpiarTipos();
     }
 
     public function cerrarBusqueda()
     {
         $this->reset(['keyword']);
-        $this->limpiarMarcas();
+        $this->limpiarTipos();
     }
 
-    protected function getMarca($rowquid): ?Marca
+    protected function getTipo($rowquid): ?Tipo
     {
-        return Marca::where('rowquid', $rowquid)->first();
+        return Tipo::where('rowquid', $rowquid)->first();
     }
 
 }

@@ -15,7 +15,15 @@ class BienesController extends Controller
 {
     public function index()
     {
-        return view('dashboard.bienes.index');
+        return view('dashboard.bienes.index')
+            ->with('keyword', false)
+            ->with('rows', 999)
+            ->with('btnDisabled', false)
+            ->with('size', 0)
+            ->with('title', 'Nuevo')
+            ->with('btnNuevo', true)
+            ->with('users_id', true)
+            ;
     }
 
     public function export()

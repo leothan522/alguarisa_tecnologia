@@ -94,7 +94,7 @@ class ColoresComponent extends Component
         if ($color){
             $color->nombre = $this->nombre;
             $color->save();
-            $this->dispatch('initSelects', select: 'color')->to(BienesComponent::class);
+            $this->dispatch('initSelects', select: 'color')->to(BienesOldComponent::class);
             $this->toastBootstrap();
         }
 
@@ -142,7 +142,7 @@ class ColoresComponent extends Component
             if ($color){
                 $nombre = "<b>".mb_strtoupper($color->nombre)."</b>";
                 $color->delete();
-                $this->dispatch('initSelects', select: 'color')->to(BienesComponent::class);
+                $this->dispatch('initSelects', select: 'color')->to(BienesOldComponent::class);
                 $this->toastBootstrap('success', "Color $nombre Eliminado.");
             }
         }
