@@ -37,7 +37,7 @@ class BienesComponent extends Component
     public function mount()
     {
         $this->setLimit();
-        $this->setSize(245);
+        $this->setSize(250);
         $this->lastBien();
     }
 
@@ -272,6 +272,23 @@ class BienesComponent extends Component
         }else{
             $this->create();
         }
+    }
+
+    public function btnImagenes()
+    {
+        $this->title = "Cambiar Imagenes";
+        $this->btnNuevo = false;
+        $this->btnEditar = false;
+        $this->btnCancelar = true;
+        $this->imagenes = true;
+        $this->sizeFooter = 0;
+        $this->dispatch('initImagenes', id: $this->bienes_id)->to(BienesImagenesComponent::class);
+    }
+
+    #[On('cerrarImagenes')]
+    public function cerrarImagenes()
+    {
+        $this->cancel();
     }
 
     protected function setSizeFooter()

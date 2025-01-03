@@ -2,6 +2,14 @@
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
 
+        function imgFrontal(){
+            $('#customFileFrontal').click();
+        }
+
+        function imgPosterior(){
+            $('#customFilePosterior').click();
+        }
+
         function select_2(id, data, event) {
             let html = '<select class="custom-select" id="'+ id +'"></select>';
             $('#div_' + id).html(html);

@@ -1,11 +1,14 @@
 <div id="div_card_view" class="card card-navy card-outline">
-    <div class="card-header" wire:loading.class="invisible" wire:target="create, edit, cancel, show, showHide">
+
+    {!! verSpinner('create, edit, cancel, save, show, btnImagenes, showHide') !!}
+
+    <div class="card-header" wire:loading.class="invisible" wire:target="create, edit, cancel, show, btnImagenes, showHide">
         <h3 class="card-title">
             {{ $title }}
         </h3>
 
         <div id="div_card_tools" class="card-tools">
-            @if(!$form)
+            @if(!$form && !$imagenes)
                 <button type="button" class="btn btn-tool" wire:click="show('{{ $rowquid }}')">
                     <i class="fas fa-sync-alt"></i>
                 </button>
@@ -31,7 +34,7 @@
             </button>
         </div>
     </div>
-    <div id="div_card_body" class="card-body table-responsive" wire:loading.class="invisible" wire:target="create, edit, cancel, save, show, showHide" style="max-height: calc(100vh - {{ $size + $sizeFooter }}px)">
+    <div id="div_card_body" class="card-body table-responsive" wire:loading.class="invisible" wire:target="create, edit, cancel, save, show, btnImagenes, showHide" style="max-height: calc(100vh - {{ $size + $sizeFooter }}px)">
 
         <form class="row @if($imagenes) d-none @endif" wire:submit="save">
 
@@ -107,10 +110,14 @@
 
         </form>
 
+        <div class="@if(!$imagenes) d-none @endif">
+            @livewire('dashboard.bienes-imagenes-component')
+        </div>
+
     </div>
 
-    @if(!$form)
-        <div id="div_card_footer" class="card-footer text-center" wire:loading.class="invisible" wire:target="create, edit, cancel, show, showHide">
+    @if(!$form && !$imagenes)
+        <div id="div_card_footer" class="card-footer text-center" wire:loading.class="invisible" wire:target="create, edit, cancel, show, btnImagenes, showHide">
 
             <button type="button" class="btn btn-default btn-sm mr-1" wire:click="btnHorario"
                     @if(!comprobarPermisos('empresas.horario')) disabled @endif>
@@ -122,7 +129,7 @@
                 <i class="fas fa-thumbtack"></i> Ubicación
             </button>
 
-            <button type="button" class="btn btn-default btn-sm mr-1 mb-1 mb-sm-auto mt-1 mt-sm-auto" wire:click="btnHorario"
+            <button type="button" class="btn btn-default btn-sm mr-1 mb-1 mb-sm-auto mt-1 mt-sm-auto" wire:click="btnImagenes"
                     @if(!comprobarPermisos('empresas.horario')) disabled @endif>
                 <i class="fas fa-images"></i> Cambiar Imagenes
             </button>
@@ -138,7 +145,5 @@
 
         </div>
     @endif
-
-    {!! verSpinner('create, edit, cancel, save, show, showHide') !!}
 
 </div>
