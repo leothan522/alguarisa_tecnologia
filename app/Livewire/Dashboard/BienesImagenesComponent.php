@@ -99,6 +99,7 @@ class BienesImagenesComponent extends Component
             }
         }
         $this->initImagenes($this->bienes_id);
+        $this->dispatch('actualizarMovil');
         $this->toastBootstrap();
 
     }
@@ -174,6 +175,12 @@ class BienesImagenesComponent extends Component
         }else{
             $this->setSaveImagen(false);
         }
+    }
+
+    #[On('actualizarMovil')]
+    public function actualizarMovil()
+    {
+        //JS
     }
 
 }

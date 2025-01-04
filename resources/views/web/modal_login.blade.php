@@ -4,64 +4,52 @@
 </button>--}}
 
 <!-- Modal -->
+<form wire:submit="login">
+    <div wire:ignore.self class="modal fade" id="modal_login" data-backdrop="static" data-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true" xmlns:wire="http://www.w3.org/1999/xhtml">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
 
-<div wire:ignore.self class="modal fade" id="modal_login" data-backdrop="static" data-keyboard="false" tabindex="-1"
-     aria-labelledby="staticBackdropLabel" aria-hidden="true" xmlns:wire="http://www.w3.org/1999/xhtml">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <form wire:submit="login">
-                <div class="modal-header">
+                <div class="modal-header bg-navy">
                     <h5 class="modal-title" id="staticBackdropLabel"></h5>
                     <h5 class="modal-title" id="staticBackdropLabel">Iniciar Sesión</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span class="text-white" aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" wire:loading.class="invisible">
                     <div class="row justify-content-center">
 
                         @error('login_validacion')
                         <div class="col-12">
                             <div class="alert alert-warning alert-dismissible">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                <h5><i class="icon fas fa-exclamation-triangle"></i> Alert!</h5>
-                                {{ $message }}
+                                <h5><i class="icon fas fa-exclamation-triangle"></i>¡Alerta!</h5>
+                                <p class="text-justify">
+                                    {{ $message }}
+                                </p>
                             </div>
                         </div>
                         @enderror
 
-                        <div class="col-md-8">
+                        <div class="col-12">
 
                             <div class="form-group">
-                                <label for="name">{{ __('Email') }}</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                    </div>
-                                    <input type="email" class="form-control" wire:model="login_email"
-                                           placeholder="Ingrese su email">
+                                <small class="text-lightblue text-bold text-uppercase">{{ __('Email') }}:</small>
+                                <div class="input-group">
+                                    <input type="email" wire:model="login_email" class="form-control @error('login_email') is-invalid @enderror" placeholder="{{ __('Email') }}">
                                     @error('login_email')
-                                    <span class="col-sm-12 text-sm text-bold text-danger">
-                                        <i class="icon fas fa-exclamation-triangle"></i>
-                                        {{ $message }}
-                                    </span>
+                                    <span class="error invalid-feedback text-bold">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="name">{{ __('Password') }}</label>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-unlock"></i></span>
-                                    </div>
-                                    <input type="password" class="form-control" wire:model="login_password"
-                                           placeholder="Ingrese su clave">
+                                <small class="text-lightblue text-bold text-uppercase">{{ __('Password') }}:</small>
+                                <div class="input-group">
+                                    <input type="password" wire:model="login_password" class="form-control @error('login_password') is-invalid @enderror" placeholder="{{ __('Password') }}">
                                     @error('login_password')
-                                    <span class="col-sm-12 text-sm text-bold text-danger">
-                                        <i class="icon fas fa-exclamation-triangle"></i>
-                                        {{ $message }}
-                                    </span>
+                                    <span class="error invalid-feedback text-bold">{{ $message }}</span>
                                     @enderror
                                 </div>
                             </div>
@@ -71,27 +59,22 @@
                     </div>
 
                 </div>
-                <div class="modal-footer">
-                    <div class="col-12 p-0">
+                <div class="modal-footer" wire:loading.class="">
 
-                        <button class="btn btn-primary float-right" type="button" wire:loading disabled>
-                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            CARGANDO...
-                        </button>
-
-                        <button type="submit" class="btn btn-primary float-right" wire:loading.remove>
-                            INICIAR SESIÓN
-                        </button>
-
-                        <button type="button" class="btn btn-default float-right mr-2" data-dismiss="modal" wire:loading.remove id="btn_modal_login_cerrar">
-                            Cerrar
-                        </button>
-
-                    </div>
+                    <button type="button" class="btn btn-default mr-2" data-dismiss="modal" id="btn_modal_login_cerrar"  wire:loading.remove>
+                        Cerrar
+                    </button>
+                    <button type="submit" class="btn btn-primary float-right"  wire:loading.remove>
+                        INICIAR SESIÓN
+                    </button>
+                    <button type="button" class="btn btn-primary float-right" wire:loading disabled>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        CARGANDO...
+                    </button>
                 </div>
                 {!! verSpinner()  !!}
-            </form>
+
+            </div>
         </div>
     </div>
-</div>
-
+</form>
