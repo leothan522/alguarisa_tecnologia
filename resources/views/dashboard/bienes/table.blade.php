@@ -62,7 +62,19 @@
 
                         <!-- Emphasis label -->
                         <small class="text text-uppercase" style="cursor: pointer;">
-                            <span class="" wire:click="show('{{ $bien->rowquid }}')">
+                            <span class="d-none d-md-inline" wire:click="show('{{ $bien->rowquid }}')">
+                                {{ $bien->tipo->nombre }}
+                                {{ $bien->marca->nombre }}
+                                {{ $bien->modelo->nombre }}
+                                @if(!is_null($bien->serial))
+                                    , Serial: <span class="text-nowrap">{{ $bien->serial }}</span>
+                                @endif
+                                @if(!is_null($bien->identificador))
+                                    , Identificador: <span class="text-nowrap">{{ $bien->identificador }}</span>
+                                @endif
+                            </span>
+
+                            <span class="d-md-none" wire:click="showHide('{{ $bien->rowquid }}')">
                                 {{ $bien->tipo->nombre }}
                                 {{ $bien->marca->nombre }}
                                 {{ $bien->modelo->nombre }}
@@ -77,6 +89,10 @@
 
                         <!-- General tools such as edit or delete-->
                         <div class="tools text-lightblue" wire:click="show('{{ $bien->rowquid }}')">
+                            <i class="d-none d-md-inline fas fa-eye"></i>
+                        </div>
+
+                        <div class="tools text-lightblue d-md-none" wire:click="showHide('{{ $bien->rowquid }}')">
                             <i class="fas fa-eye"></i>
                         </div>
 

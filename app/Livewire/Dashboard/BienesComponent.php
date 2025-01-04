@@ -25,7 +25,7 @@ class BienesComponent extends Component
     use LimitRows;
 
     public $sizeFooter = 55; //60;
-    public $ocultarTable = false, $ocultarCard = false;
+    public $ocultarTable = false, $ocultarCard = true;
     public $keyword, $btnNuevo = true, $btnCancelar = false, $btnEditar = true, $title = "Ver Bienes", $form = false;
     public $verTipo, $verMarca, $verModelo, $verColor, $verSerial, $verIdentificador, $verCondicion, $verUbicacion, $verAdicional;
     public $imagenes = false, $imagenFrontal, $imagenPosterior, $miniFrontal, $miniPosterior;
@@ -310,6 +310,25 @@ class BienesComponent extends Component
             $this->lastBien();
             $this->dispatch('cerrarModalPropiedades', selector: 'btn_modal_vinculados_cerrar');
         }
+    }
+
+    public function showHide($rowquid = null)
+    {
+        if ($rowquid){
+            $this->ocultarTable = true;
+            $this->ocultarCard = false;
+            $this->show($rowquid);
+        }else{
+            $this->ocultarTable = false;
+            $this->ocultarCard = true;
+        }
+    }
+
+    public function createHide()
+    {
+        $this->ocultarTable = true;
+        $this->ocultarCard = false;
+        $this->create();
     }
 
     protected function setSizeFooter()

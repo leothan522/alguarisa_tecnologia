@@ -120,17 +120,17 @@
         <div id="div_card_footer" class="card-footer text-center" wire:loading.class="invisible" wire:target="create, edit, cancel, show, btnImagenes, showHide">
 
             <button type="button" class="btn btn-default btn-sm mr-1" wire:click="btnOficios" data-toggle="modal" data-target="#modal-sm-bien-oficios"
-                    onclick="verOficiosVinculados()" @if(!comprobarPermisos('empresas.horario')) disabled @endif>
+                    onclick="verOficiosVinculados()" {{--@if(!comprobarPermisos('empresas.horario')) disabled @endif--}}>
                 <i class="fas fa-file-invoice"></i> Vinculados
             </button>
 
             <button type="button" class="btn btn-default btn-sm mr-1" wire:click="btnUbicacion" data-toggle="modal" data-target="#modal-sm-bien-ubicacion"
-                    onclick="verUbicacion()" @if(!comprobarPermisos('empresas.horario')) disabled @endif>
+                    onclick="verUbicacion()" {{--@if(!comprobarPermisos('empresas.horario')) disabled @endif--}}>
                 <i class="fas fa-thumbtack"></i> Ubicación
             </button>
 
             <button type="button" class="btn btn-default btn-sm mr-1 mb-1 mb-sm-auto mt-1 mt-sm-auto" wire:click="btnImagenes"
-                    @if(!comprobarPermisos('empresas.horario')) disabled @endif>
+                    @if(!comprobarPermisos('bienes.edit')) disabled @endif>
                 <i class="fas fa-images"></i> Cambiar Imagenes
             </button>
 
@@ -139,7 +139,7 @@
             </a>
 
             <button type="button" class="btn btn-default btn-sm" onclick="confirmToastBootstrap('deleteBienes', { rowquid: '{{ $rowquid }}'})"
-                    @if(!comprobarPermisos('empresas.destroy')) disabled @endif>
+                    @if(!comprobarPermisos('bienes.destroy')) disabled @endif>
                 <i class="fas fa-trash-alt"></i> Borrar
             </button>
 
