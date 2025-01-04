@@ -276,19 +276,29 @@ class BienesComponent extends Component
 
     public function btnImagenes()
     {
-        $this->title = "Cambiar Imagenes";
-        $this->btnNuevo = false;
-        $this->btnEditar = false;
-        $this->btnCancelar = true;
-        $this->imagenes = true;
-        $this->sizeFooter = 0;
-        $this->dispatch('initImagenes', id: $this->bienes_id)->to(BienesImagenesComponent::class);
+        $bien = Bien::find($this->bienes_id);
+        if ($bien){
+            $this->title = "Cambiar Imagenes";
+            $this->btnNuevo = false;
+            $this->btnEditar = false;
+            $this->btnCancelar = true;
+            $this->imagenes = true;
+            $this->sizeFooter = 0;
+            $this->dispatch('initImagenes', id: $this->bienes_id)->to(BienesImagenesComponent::class);
+        }else{
+            $this->lastBien();
+        }
     }
 
-    #[On('cerrarImagenes')]
-    public function cerrarImagenes()
+    public function btnUbicacion()
     {
-        $this->cancel();
+        $bien = Bien::find($this->bienes_id);
+        if ($bien){
+            $this->dispatch('getBienesUbicaciones', bienID: $this->bienes_id)->to(ModalUbicacionesComponent::class);
+        }else{
+            $this->lastBien();
+            $this->dispatch('cerrarModalPropiedades', selector: 'btn_modal_bienes_propiedad_ubicacion');
+        }
     }
 
     protected function setSizeFooter()
@@ -310,6 +320,8 @@ class BienesComponent extends Component
         $bien = Bien::orderBy('created_at', 'DESC')->first();
         if ($bien){
             $this->show($bien->rowquid);
+        }else{
+            $this->create();
         }
     }
 
@@ -344,6 +356,12 @@ class BienesComponent extends Component
             $parametro->rowquid = $rowquid;
         }
         $parametro->save();
+    }
+
+    #[On('cerrarImagenes')]
+    public function cerrarImagenes()
+    {
+        $this->cancel();
     }
 
     #[On('initSelects')]
@@ -561,6 +579,12 @@ class BienesComponent extends Component
 
     #[On('setSelectModelos')]
     public function setSelectModelos($id)
+    {
+        //JS
+    }
+
+    #[On('cerrarModalPropiedades')]
+    public function cerrarModalPropiedades($selector)
     {
         //JS
     }

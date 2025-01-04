@@ -124,8 +124,8 @@
                 <i class="fas fa-file-invoice"></i> Vinculados
             </button>
 
-            <button type="button" class="btn btn-default btn-sm mr-1" wire:click="btnHorario"
-                    @if(!comprobarPermisos('empresas.horario')) disabled @endif>
+            <button type="button" class="btn btn-default btn-sm mr-1" wire:click="btnUbicacion" data-toggle="modal" data-target="#modal-sm-bien-ubicacion"
+                    onclick="verUbicacion()" @if(!comprobarPermisos('empresas.horario')) disabled @endif>
                 <i class="fas fa-thumbtack"></i> Ubicación
             </button>
 

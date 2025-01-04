@@ -13,6 +13,7 @@
     @livewire('dashboard.colores-component')
     @livewire('dashboard.condiciones-component')
     @livewire('dashboard.ubicaciones-component')
+    @livewire('dashboard.modal-ubicaciones-component')
 @endsection
 
 @section('right-sidebar')

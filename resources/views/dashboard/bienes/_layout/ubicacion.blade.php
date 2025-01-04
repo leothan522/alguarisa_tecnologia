@@ -10,7 +10,7 @@
                 </button>
             </div>
 
-            <div class="card-body p-0">
+            <div class="card-body p-0"  id="div_modal_ubicacion_body" wire:loading.class="invisible">
 
                 <div class="table-responsive p-0" style="height: 40vh;">
 
@@ -71,7 +71,7 @@
                                 <td>
                                     <div class="form-group">
                                         <div class="input-group">
-                                            <select wire:model.live="ubicacionesRowquid" class="custom-select custom-select-sm @error("ubicaciones_id") is-invalid @enderror" id="ubicacion_select_ubicaciones">
+                                            <select wire:model="ubicacionesRowquid" class="custom-select custom-select-sm @error("ubicaciones_id") is-invalid @enderror" id="ubicacion_select_ubicaciones">
                                                 <option value="">Seleccione</option>
                                                 @foreach($listarUbicaciones as $ubicacion)
                                                     <option value="{{ $ubicacion->rowquid }}">{{ mb_strtoupper($ubicacion->nombre) }}</option>
@@ -101,14 +101,6 @@
             </div>
 
             {!! verSpinner() !!}
-
-            <div class="overlay-wrapper d-none cargar_bienes">
-                <div class="overlay">
-                    <div class="spinner-border text-navy" role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                </div>
-            </div>
 
         </div>
     </div>

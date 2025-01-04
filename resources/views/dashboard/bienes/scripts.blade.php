@@ -2,6 +2,15 @@
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
 
+        Livewire.on('cerrarModalPropiedades', ({ selector }) => {
+            $('#' + selector).click();
+        });
+
+        function verUbicacion() {
+            addClassinvisible('#div_modal_ubicacion_body');
+            verCargando('modal-sm-bien-ubicacion');
+        }
+
         function imgFrontal(){
             $('#customFileFrontal').click();
         }
