@@ -81,7 +81,7 @@ class ModalBusquedaComponent extends Component
                 'serial' => $this->serial,
                 'identificador' => $this->identificador
             ];
-            $this->dispatch('busquedaAvanzada', data: $data)->to(BienesOldComponent::class);
+            $this->dispatch('busquedaAvanzada', data: $data)->to(BienesComponent::class);
             $this->dispatch('cerrarBusqueda');
         }else{
             $this->toastBootstrap('warning', 'Debes Establecer al menos un filtro para la busqueda.');

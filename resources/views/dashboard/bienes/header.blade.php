@@ -6,8 +6,17 @@
             </div>
             <div class="col-sm-6 d-none d-md-inline">
                 <ol class="breadcrumb float-sm-right">
-                    {{--<li class="breadcrumb-item"><a href="#">Home</a></li>--}}
-                    <li class="breadcrumb-item active">Pagina en Blanco</li>
+                    <li class="breadcrumb-item">
+                        <a href="#" data-toggle="modal" data-target="#modal-busqueda-avanzada" id="btn_header_busqueda">
+                            <i class="fas fa-search"></i> Busqueda Avanzada
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="#" data-toggle="modal" data-target="#modal-oficios" id="btn_header_oficios">
+                            <i class="fas fa-file-invoice"></i> Oficios Entregados
+                        </a>
+                    </li>
+                    {{--<li class="breadcrumb-item active">Pagina en Blanco</li>--}}
                 </ol>
             </div>
         </div>

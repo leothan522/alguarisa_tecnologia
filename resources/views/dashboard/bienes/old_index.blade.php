@@ -121,8 +121,7 @@
             Livewire.dispatch('limpiarUbicaciones');
         }
 
-        function select_2_tablas(id, data, event, modal, btn = false)
-        {
+        function select_2_tablas(id, data, event, modal, btn = false) {
             let html = '<div class="input-group-prepend">' +
                 '<span class="input-group-text">' +
                 '<i class="fas fa-tag"></i>' +

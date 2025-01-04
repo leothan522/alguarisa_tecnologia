@@ -2,6 +2,81 @@
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
 
+        const btn_header_busqueda = document.querySelector('#btn_header_busqueda');
+        const btn_header_oficios = document.querySelector('#btn_header_oficios');
+
+        btn_header_busqueda.addEventListener('click', event => {
+            event.preventDefault();
+            addClassinvisible('#div_modal_busqueda_body');
+            verCargando('modal-busqueda-avanzada');
+            Livewire.dispatch('modalBusqueda');
+        });
+
+        function selectsBusquedaAvanzada(id, data, event) {
+            let html = '<select class="custom-select" id="'+ id +'"></select>';
+            $('#div_' + id).html(html);
+
+            $('#'  + id).select2({
+                dropdownParent: $('#modal-busqueda-avanzada'),
+                theme: 'bootstrap4',
+                data: data,
+                placeholder: 'Seleccione',
+                allowClear: false
+            })
+                .val(null)
+                .trigger('change')
+                .on('change', function() {
+                    let value = $(this).val();
+                    Livewire.dispatch(event, { id: value });
+                });
+        }
+
+        Livewire.on('busquedaSelectTipos', ({ data }) => {
+            selectsBusquedaAvanzada('select_busqueda_tipo', data, 'getBusquedaSelectTipos');
+        });
+
+        Livewire.on('setBusquedaSelectTipos', ({ id }) => {
+            $('#select_busqueda_tipo').val(id).trigger('change');
+        });
+
+        Livewire.on('busquedaSelectMarcas', ({ data }) => {
+            selectsBusquedaAvanzada('select_busqueda_marca', data, 'getBusquedaSelectMarcas');
+        });
+
+        Livewire.on('setBusquedaSelectMarcas', ({ id }) => {
+            $('#select_busqueda_marca').val(id).trigger('change');
+        });
+
+        Livewire.on('busquedaSelectColor', ({ data }) => {
+            selectsBusquedaAvanzada('select_busqueda_color', data, 'getBusquedaSelectColor');
+        });
+
+        Livewire.on('setBusquedaSelectColor', ({ id }) => {
+            $('#select_busqueda_color').val(id).trigger('change');
+        });
+
+        Livewire.on('busquedaSelectCondicion', ({ data }) => {
+            selectsBusquedaAvanzada('select_busqueda_condicion', data, 'getBusquedaSelectCondicion');
+        });
+
+        Livewire.on('setBusquedaSelectCondicion', ({ id }) => {
+            $('#select_busqueda_condicion').val(id).trigger('change');
+        });
+
+        Livewire.on('busquedaSelectModelo', ({ data }) => {
+            selectsBusquedaAvanzada('select_busqueda_modelo', data, 'getBusquedaSelectModelo');
+        });
+
+        Livewire.on('setBusquedaSelectModelo', ({ id }) => {
+            $('#select_busqueda_modelo').val(id).trigger('change');
+        });
+
+        Livewire.on('cerrarBusqueda', () => {
+            addClassinvisible("#table_bienes");
+            verCargando('div_table_bienes');
+            $('#cerrar_busqueda_avanzada').click();
+        });
+
         function verOficiosVinculados() {
             addClassinvisible('#div_modal_oficios_vinculados_body');
             verCargando('modal-sm-bien-oficios');

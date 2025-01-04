@@ -15,6 +15,7 @@
     @livewire('dashboard.ubicaciones-component')
     @livewire('dashboard.modal-ubicaciones-component')
     @livewire('dashboard.modal-oficios-vinculados-component')
+    @livewire('dashboard.modal-busqueda-component')
 @endsection
 
 @section('right-sidebar')

@@ -2,10 +2,16 @@
 
     <div class="card-header">
         <h3 class="card-title">
-            @if($keyword)
-                Búsqueda
-                <span class="text-nowrap">{ <b class="text-warning">{{ $keyword }}</b> }</span>
-                <span class="text-nowrap">[ <b class="text-warning">{{ $rows }}</b> ]</span>
+            @if($keyword || !empty($busqueda))
+                @if($keyword)
+                    Búsqueda
+                    <span class="text-nowrap">{ <b class="text-warning">{{ $keyword }}</b> }</span>
+                    <span class="text-nowrap">[ <b class="text-warning">{{ $rows }}</b> ]</span>
+                @else
+                    Búsqueda Avanzada
+                    <span class="text-nowrap">[ <b class="text-warning">{{ $rows }}</b> ]</span>
+                @endif
+
                 <button class="d-sm-none btn btn-tool text-warning" wire:click="cerrarBusqueda">
                     <i class="fas fa-times"></i>
                 </button>
@@ -15,7 +21,7 @@
         </h3>
 
         <div class="card-tools">
-            @if($keyword)
+            @if($keyword || !empty($busqueda))
                 <button class="d-none d-sm-inline-block btn btn-tool text-warning" wire:click="cerrarBusqueda">
                     <i class="fas fa-times"></i>
                 </button>
@@ -63,9 +69,9 @@
                         <!-- Emphasis label -->
                         <small class="text text-uppercase" style="cursor: pointer;">
                             <span class="d-none d-md-inline" wire:click="show('{{ $bien->rowquid }}')">
-                                {{ $bien->tipo->nombre }}
-                                {{ $bien->marca->nombre }}
-                                {{ $bien->modelo->nombre }}
+                                {{ $bien->verTipo }}
+                                {{ $bien->verMarca }}
+                                {{ $bien->verModelo }}
                                 @if(!is_null($bien->serial))
                                     , Serial: <span class="text-nowrap">{{ $bien->serial }}</span>
                                 @endif
@@ -75,9 +81,9 @@
                             </span>
 
                             <span class="d-md-none" wire:click="showHide('{{ $bien->rowquid }}')">
-                                {{ $bien->tipo->nombre }}
-                                {{ $bien->marca->nombre }}
-                                {{ $bien->modelo->nombre }}
+                                {{ $bien->verTipo }}
+                                {{ $bien->verMarca }}
+                                {{ $bien->verModelo }}
                                 @if(!is_null($bien->serial))
                                     , Serial: <span class="text-nowrap">{{ $bien->serial }}</span>
                                 @endif

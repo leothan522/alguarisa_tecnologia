@@ -14,6 +14,8 @@ use App\Models\Parametro;
 use App\Models\Tipo;
 use App\Traits\LimitRows;
 use App\Traits\ToastBootstrap;
+use DB;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Validation\Rule;
 use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
@@ -30,6 +32,7 @@ class BienesComponent extends Component
     public $verTipo, $verMarca, $verModelo, $verColor, $verSerial, $verIdentificador, $verCondicion, $verUbicacion, $verAdicional;
     public $imagenes = false, $imagenFrontal, $imagenPosterior, $miniFrontal, $miniPosterior;
     public $tipo, $marca, $modelo, $color, $serial, $identificador, $condicion, $adicional;
+    public $busqueda;
 
     #[Locked]
     public $bienes_id, $rowquid;
@@ -43,17 +46,13 @@ class BienesComponent extends Component
 
     public function render()
     {
-        $bienes = Bien::buscar($this->keyword)
-            ->orderBy('created_at', 'DESC')
-            ->limit($this->limit)
-            ->get();
-        $limit = $bienes->count();
-        $rows = Bien::buscar($this->keyword)->count();
-        $this->btnVerMas($limit, $rows);
+        $listarBienes = $this->listarBienes();
+        $limit = $listarBienes['bienes']->count();
+        $this->btnVerMas($limit, $listarBienes['rows']);
 
         return view('livewire.dashboard.bienes-component')
-            ->with('listar', $bienes)
-            ->with('rows', $rows);
+            ->with('listar', $listarBienes['bienes'])
+            ->with('rows', $listarBienes['rows']);
     }
 
     public function limpiar()
@@ -66,6 +65,96 @@ class BienesComponent extends Component
             'bienes_id',
         ]);
         $this->resetErrorBag();
+    }
+
+    public function listarBienes(): array
+    {
+        $listarBienes = [];
+        if (empty($this->busqueda)){
+
+            $bienes = Bien::buscar($this->keyword)
+                ->orderBy('created_at', 'DESC')
+                ->limit($this->limit)
+                ->get();
+            $bienes->each(function ($bien) {
+                $bien->verTipo = $bien->tipo->nombre;
+                $bien->verMarca = $bien->marca->nombre;
+                $bien->verModelo = $bien->modelo->nombre;
+            });
+
+            $listarBienes['bienes'] = $bienes;
+
+
+            $listarBienes['rows'] = Bien::buscar($this->keyword)->count();
+
+        }else{
+
+            $tipo = $this->busqueda['tipo'];
+            $marca = $this->busqueda['marca'];
+            $modelo = $this->busqueda['modelo'];
+            $color = $this->busqueda['color'];
+            $condicion = $this->busqueda['condicion'];
+            $serial = $this->busqueda['serial'];
+            $identidicador = $this->busqueda['identificador'];
+
+            $bienes = DB::table('bienes')
+                ->when($tipo, function (Builder $query, string $tipo) {
+                    $query->where('tipos_id', $tipo);
+                })
+                ->when($marca, function (Builder $query, string $marca) {
+                    $query->where('marcas_id', $marca);
+                })
+                ->when($modelo, function (Builder $query, string $modelo) {
+                    $query->where('modelos_id', $modelo);
+                })
+                ->when($color, function (Builder $query, string $color) {
+                    $query->where('colores_id', $color);
+                })
+                ->when($condicion, function (Builder $query, string $condicion) {
+                    $query->where('condiciones_id', $condicion);
+                })
+                ->when($condicion, function (Builder $query, string $condicion) {
+                    $query->where('condiciones_id', $condicion);
+                })
+                ->whereNull('deleted_at')
+                ->orderBy('created_at', 'DESC')
+                ->limit($this->limit)
+                ->get();
+            $bienes->each(function ($bien) {
+                $tipo = Tipo::find($bien->tipos_id);
+                $bien->verTipo = $tipo->nombre;
+                $marca = Marca::find($bien->marcas_id);
+                $bien->verMarca = $marca->nombre;
+                $modelo = Modelo::find($bien->modelos_id);
+                $bien->verModelo = $modelo->nombre;
+            });
+
+            $listarBienes['bienes'] = $bienes;
+
+            $listarBienes['rows'] = DB::table('bienes')
+                ->when($tipo, function (Builder $query, string $tipo) {
+                    $query->where('tipos_id', $tipo);
+                })
+                ->when($marca, function (Builder $query, string $marca) {
+                    $query->where('marcas_id', $marca);
+                })
+                ->when($modelo, function (Builder $query, string $modelo) {
+                    $query->where('modelos_id', $modelo);
+                })
+                ->when($color, function (Builder $query, string $color) {
+                    $query->where('colores_id', $color);
+                })
+                ->when($condicion, function (Builder $query, string $condicion) {
+                    $query->where('condiciones_id', $condicion);
+                })
+                ->when($condicion, function (Builder $query, string $condicion) {
+                    $query->where('condiciones_id', $condicion);
+                })
+                ->whereNull('deleted_at')
+                ->count();
+        }
+
+        return $listarBienes;
     }
 
     public function show($rowquid)
@@ -252,12 +341,13 @@ class BienesComponent extends Component
     #[On('buscar')]
     public function buscar($keyword)
     {
+        $this->reset(['busqueda']);
         $this->keyword = $keyword;
     }
 
     public function cerrarBusqueda()
     {
-        $this->reset(['keyword']);
+        $this->reset(['keyword', 'busqueda']);
     }
 
     public function actualizar()
@@ -392,6 +482,13 @@ class BienesComponent extends Component
     public function cerrarImagenes()
     {
         $this->cancel();
+    }
+
+    #[On('busquedaAvanzada')]
+    public function busquedaAvanzada($data)
+    {
+        $this->reset('keyword');
+        $this->busqueda = $data;
     }
 
     #[On('initSelects')]
