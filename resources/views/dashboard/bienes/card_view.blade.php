@@ -119,8 +119,8 @@
     @if(!$form && !$imagenes)
         <div id="div_card_footer" class="card-footer text-center" wire:loading.class="invisible" wire:target="create, edit, cancel, show, btnImagenes, showHide">
 
-            <button type="button" class="btn btn-default btn-sm mr-1" wire:click="btnHorario"
-                    @if(!comprobarPermisos('empresas.horario')) disabled @endif>
+            <button type="button" class="btn btn-default btn-sm mr-1" wire:click="btnOficios" data-toggle="modal" data-target="#modal-sm-bien-oficios"
+                    onclick="verOficiosVinculados()" @if(!comprobarPermisos('empresas.horario')) disabled @endif>
                 <i class="fas fa-file-invoice"></i> Vinculados
             </button>
 

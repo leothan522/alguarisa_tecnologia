@@ -2,14 +2,24 @@
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
 
-        Livewire.on('cerrarModalPropiedades', ({ selector }) => {
-            $('#' + selector).click();
-        });
+        function verOficiosVinculados() {
+            addClassinvisible('#div_modal_oficios_vinculados_body');
+            verCargando('modal-sm-bien-oficios');
+        }
+
+        function verOficio() {
+            $('#btn_modal_vinculados_cerrar').click();
+            $('#btn_header_oficios').click();
+        }
 
         function verUbicacion() {
             addClassinvisible('#div_modal_ubicacion_body');
             verCargando('modal-sm-bien-ubicacion');
         }
+
+        Livewire.on('cerrarModalPropiedades', ({ selector }) => {
+            $('#' + selector).click();
+        });
 
         function imgFrontal(){
             $('#customFileFrontal').click();

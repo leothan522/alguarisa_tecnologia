@@ -301,6 +301,17 @@ class BienesComponent extends Component
         }
     }
 
+    public function btnOficios()
+    {
+        $bien = Bien::find($this->bienes_id);
+        if ($bien){
+            $this->dispatch('getBienesOficios', bienID: $this->bienes_id)->to(ModalOficiosVinculadosComponent::class);
+        }else{
+            $this->lastBien();
+            $this->dispatch('cerrarModalPropiedades', selector: 'btn_modal_vinculados_cerrar');
+        }
+    }
+
     protected function setSizeFooter()
     {
         if ($this->ocultarTable){

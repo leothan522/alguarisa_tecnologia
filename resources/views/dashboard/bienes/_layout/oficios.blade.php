@@ -1,4 +1,4 @@
-<div wire:ignore.self class="modal fade" id="modal-sm-bien-oficios" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div wire:ignore.self class="modal fade" id="modal-sm-bien-oficios">
     <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
 
@@ -10,7 +10,7 @@
                 </button>
             </div>
 
-            <div class="card-body p-0">
+            <div class="card-body p-0" id="div_modal_oficios_vinculados_body" wire:loading.class="invisible">
 
                 <div class="table-responsive p-0" style="height: 40vh;">
 
