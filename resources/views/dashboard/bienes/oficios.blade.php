@@ -16,9 +16,9 @@
 
                     <table class="table table-sm table-head-fixed table-hover text-nowrap">
                         <thead>
-                        <tr class="text-navy">
-                            <th class="">Nro. Oficio</th>
-                            <th style="width: 10%">Fecha</th>
+                        <tr class="text-lightblue">
+                            <th class="text-uppercase">Nro. Oficio</th>
+                            <th class="text-uppercase" style="width: 10%">Fecha</th>
                             <th style="width: 5%">&nbsp;</th>
                         </tr>
                         </thead>
@@ -41,11 +41,17 @@
                                         </td>
                                         <td class="text-right">
                                             @if(!$web)
-                                                <button class="btn btn-sm text-primary m-0"
-                                                        wire:click="verOficio('{{ $equipo->idOficio }}')"
-                                                        onclick="verOficio()">
-                                                    <i class="fas fa-eye"></i>
-                                                </button>
+                                                @if($equipo->pdf)
+                                                    <a href="{{ asset($equipo->pdf) }}" target="_blank" class="btn btn-sm text-primary m-0">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                @else
+                                                    <button class="btn btn-sm text-primary m-0"
+                                                            wire:click="verOficio('{{ $equipo->idOficio }}')"
+                                                            onclick="verOficio()">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                @endif
                                             @endif
                                         </td>
                                     </tr>

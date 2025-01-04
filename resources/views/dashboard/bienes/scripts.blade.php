@@ -3,14 +3,24 @@
     <script>
 
         const btn_header_busqueda = document.querySelector('#btn_header_busqueda');
+        const btn_movil_busqueda = document.querySelector('#btn_movil_busqueda');
         const btn_header_oficios = document.querySelector('#btn_header_oficios');
 
         btn_header_busqueda.addEventListener('click', event => {
             event.preventDefault();
+            verModalBusqueda();
+        });
+
+        btn_movil_busqueda.addEventListener('click', event => {
+            event.preventDefault();
+            verModalBusqueda();
+        });
+
+        function verModalBusqueda() {
             addClassinvisible('#div_modal_busqueda_body');
             verCargando('modal-busqueda-avanzada');
             Livewire.dispatch('modalBusqueda');
-        });
+        }
 
         function selectsBusquedaAvanzada(id, data, event) {
             let html = '<select class="custom-select" id="'+ id +'"></select>';

@@ -12,6 +12,11 @@
                         </a>
                     </li>
                     <li class="breadcrumb-item">
+                        <a href="{{ route('bienes.export') }}" {{--target="_blank"--}} onclick="toastBootstrap({ toast: 'toast', type: 'info', message: 'Descargando Archivo.'})" >
+                            <i class="far fa-file-excel"></i> Exportar Excel
+                        </a>
+                    </li>
+                    <li class="breadcrumb-item d-none">
                         <a href="#" data-toggle="modal" data-target="#modal-oficios" id="btn_header_oficios">
                             <i class="fas fa-file-invoice"></i> Oficios Entregados
                         </a>

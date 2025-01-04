@@ -16,10 +16,11 @@
     @livewire('dashboard.modal-ubicaciones-component')
     @livewire('dashboard.modal-oficios-vinculados-component')
     @livewire('dashboard.modal-busqueda-component')
+    @livewire('dashboard.modal-oficios-component')
 @endsection
 
 @section('right-sidebar')
-    @include('dashboard.bienes.right-sidebar')
+    @include('dashboard.right-sidebar')
 @endsection
 
 @section('footer')

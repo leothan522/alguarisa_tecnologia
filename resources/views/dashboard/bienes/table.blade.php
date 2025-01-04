@@ -29,7 +29,7 @@
             <button type="button" class="btn btn-tool" wire:click="actualizar">
                 <i class="fas fa-sync-alt"></i>
             </button>
-            <button type="button" class="btn btn-tool d-sm-none" wire:click="createHide" @if(!comprobarPermisos('empresas.create')) disabled @endif>
+            <button type="button" class="btn btn-tool d-sm-none" wire:click="createHide" @if(!comprobarPermisos('bienes.create')) disabled @endif>
                 <i class="fas fa-file"></i> Nuevo
             </button>
             <button type="button" class="btn btn-tool" wire:click="setLimit" @if($btnDisabled) disabled @endif>

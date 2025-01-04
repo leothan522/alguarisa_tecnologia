@@ -16,8 +16,8 @@
 
                     <table class="table table-sm table-head-fixed table-hover text-nowrap">
                         <thead>
-                        <tr class="text-navy">
-                            <th class="">Historico</th>
+                        <tr class="text-lightblue">
+                            <th class="text-uppercase">Historico</th>
                             {{--<th style="width: 10%">Oficios</th>--}}
                             <th style="width: 5%">&nbsp;</th>
                         </tr>
