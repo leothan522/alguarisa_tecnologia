@@ -22,7 +22,7 @@ class CondicionesComponent extends Component
     public function mount()
     {
         $this->setLimit();
-        $this->setSize(483);
+        $this->setSize(330);
         $this->modalTitle = "Condiciones";
         $this->confirmed = 'deleteCondiciones';
         $this->modulo = 'condiciones';

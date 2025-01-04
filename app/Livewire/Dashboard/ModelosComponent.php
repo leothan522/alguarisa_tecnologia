@@ -25,7 +25,7 @@ class ModelosComponent extends Component
     public function mount()
     {
         $this->setLimit();
-        $this->setSize(483);
+        $this->setSize(330);
         $this->modalTitle = "Modelos";
         $this->confirmed = 'deleteModelos';
         $this->modulo = 'modelos';

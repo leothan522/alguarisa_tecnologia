@@ -22,7 +22,7 @@ class ColoresComponent extends Component
     public function mount()
     {
         $this->setLimit();
-        $this->setSize(483);
+        $this->setSize(330);
         $this->modalTitle = "Colores";
         $this->confirmed = 'deleteColores';
         $this->modulo = 'colores';

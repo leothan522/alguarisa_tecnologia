@@ -35,7 +35,7 @@
                 </div>
 
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer d-none">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
             </div>
             {{--{!! verSpinner('create, cancel, edit') !!}--}}

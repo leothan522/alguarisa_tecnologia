@@ -23,7 +23,7 @@ class MarcasComponent extends Component
     public function mount()
     {
         $this->setLimit();
-        $this->setSize(483);
+        $this->setSize(330);
         $this->modalTitle = "Marcas";
         $this->confirmed = 'deleteMarcas';
         $this->modulo = 'marcas';
