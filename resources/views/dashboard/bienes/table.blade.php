@@ -59,28 +59,12 @@
         <ul class="todo-list" data-widget="todo-list">
             @if($listar->isNotEmpty())
                 @foreach($listar as $bien)
-                    <li class=" @if($bien->id == $bienes_id) text-warning @endif ">
 
-                        <!-- todo text -->
-                        {{--<span class="text">
-                              codigo
-                        </span>--}}
+                    <li class="d-none d-md-block @if($bien->id == $bienes_id) text-warning @endif " wire:click="show('{{ $bien->rowquid }}')" style="cursor: pointer;">
 
                         <!-- Emphasis label -->
-                        <small class="text text-uppercase" style="cursor: pointer;">
-                            <span class="d-none d-md-inline" wire:click="show('{{ $bien->rowquid }}')">
-                                {{ $bien->verTipo }}
-                                {{ $bien->verMarca }}
-                                {{ $bien->verModelo }}
-                                @if(!is_null($bien->serial))
-                                    , Serial: <span class="text-nowrap">{{ $bien->serial }}</span>
-                                @endif
-                                @if(!is_null($bien->identificador))
-                                    , Identificador: <span class="text-nowrap">{{ $bien->identificador }}</span>
-                                @endif
-                            </span>
-
-                            <span class="d-md-none" wire:click="showHide('{{ $bien->rowquid }}')">
+                        <small class="text text-uppercase">
+                            <span class="<!--d-none d-md-inline-->">
                                 {{ $bien->verTipo }}
                                 {{ $bien->verMarca }}
                                 {{ $bien->verModelo }}
@@ -94,15 +78,36 @@
                         </small>
 
                         <!-- General tools such as edit or delete-->
-                        <div class="tools text-lightblue" wire:click="show('{{ $bien->rowquid }}')">
+                        <div class="tools text-lightblue">
                             <i class="d-none d-md-inline fas fa-eye"></i>
                         </div>
 
-                        <div class="tools text-lightblue d-md-none" wire:click="showHide('{{ $bien->rowquid }}')">
-                            <i class="fas fa-eye"></i>
+                    </li>
+
+                    <li class="d-md-none @if($bien->id == $bienes_id) text-warning @endif " wire:click="showHide('{{ $bien->rowquid }}')" style="cursor: pointer;">
+
+                        <!-- Emphasis label -->
+                        <small class="text text-uppercase">
+                            <span>
+                                {{ $bien->verTipo }}
+                                {{ $bien->verMarca }}
+                                {{ $bien->verModelo }}
+                                @if(!is_null($bien->serial))
+                                    , Serial: <span class="text-nowrap">{{ $bien->serial }}</span>
+                                @endif
+                                @if(!is_null($bien->identificador))
+                                    , Identificador: <span class="text-nowrap">{{ $bien->identificador }}</span>
+                                @endif
+                            </span>
+                        </small>
+
+                        <!-- General tools such as edit or delete-->
+                        <div class="tools text-lightblue">
+                            <i class="d-none d-md-inline fas fa-eye"></i>
                         </div>
 
                     </li>
+
                 @endforeach
             @else
                 <li class="text-center">
