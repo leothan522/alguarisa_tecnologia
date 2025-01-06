@@ -30,6 +30,7 @@ class TerritorioComponent extends Component
     public function mount()
     {
         $this->setLimit(['limitMunicipios', 'limitParroquias']);
+        $this->setSize(334);
     }
 
     public function render()
