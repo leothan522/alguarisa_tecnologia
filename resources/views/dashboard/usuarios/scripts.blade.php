@@ -44,6 +44,10 @@
             Livewire.dispatch('showPermisos', { rowquid: rowquid });
         }
 
+        Livewire.on('resetPassword', () => {
+            verCargando('div_show_user');
+        });
+
         console.log('Hi!');
     </script>
 @endsection
