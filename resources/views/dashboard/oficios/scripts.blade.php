@@ -124,10 +124,6 @@
             $('#navbar_search_id').addClass('d-none');
         });
 
-        document.querySelector("#btn_header_nuevo_oficio").addEventListener('click', event => {
-            event.preventDefault();
-            $('#btn_cards_nuevo').click();
-        });
 
         console.log('Hi!');
     </script>

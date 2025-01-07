@@ -1,6 +1,6 @@
 @section('content_header')
     <div class="container-fluid">
-        <div class="row mb-2">
+        <div class="row">
             <div class="col-sm-6">
                 <h1 class="m-0 text-dark"><i class="fas fa-file-invoice"></i> Oficios</h1>
             </div>

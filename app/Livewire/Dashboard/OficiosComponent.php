@@ -23,6 +23,10 @@ class OficiosComponent extends Component
     use ToastBootstrap;
     use WithPagination, WithoutUrlPagination, WithFileUploads;
 
+    public $size = 365, $ocultarTable = false, $ocultarShow = true, $ocultarForm = true;
+
+
+
     public $view = 'table',$order = 'DESC', $keyword;
     public $serial;
     public $dirigido, $copia;
@@ -51,6 +55,7 @@ class OficiosComponent extends Component
     public function limpiar()
     {
         $this->reset([
+            'size', 'ocultarTable', 'ocultarShow', 'ocultarForm',
             'view', 'oficios_id', 'rowquid',
             'dirigido', 'copia',
             'numero', 'repetido', 'fecha', 'adicional', 'equipos', 'pdf',
@@ -66,6 +71,11 @@ class OficiosComponent extends Component
         $this->dispatch('initSelectDirigido', data: $this->getDataSelects());
         $this->dispatch('initSelectCopia', data: $this->getDataSelects());
         $this->reset('verPDF');
+
+        $this->ocultarTable = true;
+        $this->ocultarShow = true;
+        $this->ocultarForm = false;
+
         $this->view = 'form';
     }
 
@@ -112,7 +122,12 @@ class OficiosComponent extends Component
 
             $this->verBtnRepetido = $oficio->repetido;
 
+            $this->ocultarTable = true;
+            $this->ocultarForm = true;
+            $this->ocultarShow = false;
+            $this->size = 334;
             $this->view = 'show';
+
         }
     }
 
