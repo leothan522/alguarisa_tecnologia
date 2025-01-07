@@ -1,9 +1,9 @@
 @if($view == 'show' || $view == 'form')
-    <button type="button" class="btn btn-primary btn-block mb-3" wire:click="limpiar">
+    <button type="button" class="btn btn-primary btn-block mb-3 d-none d-md-block" wire:click="limpiar">
         <i class="fas fa-arrow-left"></i> Volver a Oficios
     </button>
 @else
-    <button type="button" class="btn btn-primary btn-block mb-3" wire:click="create" @if(!comprobarPermisos('oficios.create')) disabled @endif >
+    <button id="btn_cards_nuevo" type="button" class="btn btn-primary btn-block mb-3 d-none d-md-block" wire:click="create" @if(!comprobarPermisos('oficios.create')) disabled @endif >
         <i class="fas fa-file"></i> Nuevo Oficio
     </button>
 @endif

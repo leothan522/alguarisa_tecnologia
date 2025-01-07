@@ -7,20 +7,7 @@
 
 @section('title', 'Oficios')
 
-@section('content_header')
-    <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1 class="m-0 text-dark"><i class="fas fa-file-invoice"></i> Oficios</h1>
-            </div>
-            <div class="col-sm-6">
-                <ol class="breadcrumb float-sm-right">
-                    {{--<li class="breadcrumb-item"><a href="#">Home</a></li>--}}
-                </ol>
-            </div>
-        </div>
-    </div>
-@endsection
+@include('dashboard.oficios.header')
 
 @section('content')
     @livewire('dashboard.oficios-component')
