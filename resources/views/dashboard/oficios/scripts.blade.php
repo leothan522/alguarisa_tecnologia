@@ -44,6 +44,16 @@
             headerButton(option);
         });
 
+        Livewire.on('deletePersonas', () => {
+            addClassinvisible('#tbody_personas');
+            verCargando('div_table_personas');
+        });
+
+        Livewire.on('deleteInstituciones', () => {
+            addClassinvisible('#tbody_instituciones');
+            verCargando('div_table_instituciones');
+        });
+
         function select_2(id, data, event) {
             let html = '<select class="select2" multiple="multiple" data-placeholder="Seleccione" style="width: 100%;" id="'+ id +'"></select>';
             $("#div_" + id).html(html);
@@ -95,12 +105,7 @@
 
         Livewire.on('personasSelectInstituciones', ({ data }) => {
 
-            let html = '<div class="input-group-prepend">' +
-                '<span class="input-group-text">' +
-                '<i class="fas fa-tag"></i>' +
-                '</span>' +
-                '</div> ' +
-                '<select id="personasSelectInstituciones"></select>';
+            let html = '<select id="personasSelectInstituciones"></select>';
 
             $("#div_select_personas_institucion").html(html);
 

@@ -5,78 +5,53 @@ namespace App\Livewire\Dashboard;
 use App\Models\Institucion;
 use App\Models\Oficio;
 use App\Models\Persona;
+use App\Traits\LimitRows;
+use App\Traits\ModalTable;
 use App\Traits\ToastBootstrap;
-use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class PersonasComponent extends Component
 {
     use ToastBootstrap;
+    use LimitRows;
+    use ModalTable;
 
-    public $rows = 0, $keyword;
-    public $form = false, $table = true, $disable;
     public $nombre, $prefijo, $cargo, $instituciones_id, $sexo;
-    public $filtro = '';
-
-    #[Locked]
-    public $personas_id, $rowquid;
 
     public function mount()
     {
         $this->setLimit();
+        $this->setSize(330);
+        $this->modalTitle = "Personas";
+        $this->confirmed = 'deletePersonas';
+        $this->modulo = 'personas';
     }
 
     public function render()
     {
 
-        $listarRows = Persona::buscar($this->keyword)
+        $listar = Persona::buscar($this->keyword)
             ->orderBy('created_at', 'DESC')
-            ->limit($this->rows)
+            ->limit($this->limit)
             ->get();
-
-        $rowsCount = Persona::buscar($this->keyword)->count();
-
-        $totalRows = Persona::count();
-
-        if (($rowsCount > $this->rows)) {
-            $this->disable = false;
-        }else{
-            $this->disable = true;
-        }
+        $limit = $listar->count();
+        $rows = Persona::buscar($this->keyword)->count();
+        $this->btnVerMas($limit, $rows);
 
         return view('livewire.dashboard.personas-component')
-            ->with('listarRows', $listarRows)
-            ->with('rowsCount', $rowsCount)
-            ->with('totalRows', $totalRows);
+            ->with('listar', $listar)
+            ->with('rows', $rows);
     }
 
-    public function setLimit()
+    public function limpiar()
     {
-        if (numRowsPaginate() < 12) {
-            $rows = 12;
-        } else {
-            $rows = numRowsPaginate();
-        }
-        $this->rows = $this->rows + $rows;
-    }
-
-    #[On('limpiarPersonas')]
-    public function limpiarPersonas()
-    {
+        $this->limpiarModal();
         $this->reset([
-            'form', 'table', 'rowquid', 'personas_id',
             'nombre', 'prefijo', 'cargo', 'instituciones_id', 'sexo',
         ]);
         $this->resetErrorBag();
         $this->dispatch('personasSelectInstituciones', data: $this->getInstituciones());
-    }
-
-    public function create()
-    {
-        $this->limpiarPersonas();
-        $this->form = true;
-        $this->table = false;
     }
 
     public function save()
@@ -89,96 +64,79 @@ class PersonasComponent extends Component
         ];
 
         $this->validate($rules);
-        if (is_null($this->personas_id)) {
+
+        if ($this->tabla_id){
+            //editar
+            $model = Persona::find($this->tabla_id);
+        }else{
             //nuevo
-            $table = new Persona();
-            do {
+            $model = new Persona();
+            do{
                 $rowquid = generarStringAleatorio(16);
                 $existe = Persona::where('rowquid', $rowquid)->first();
-            } while ($existe);
-            $table->rowquid = $rowquid;
-        } else {
-            //editar
-            $table = Persona::find($this->personas_id);
+            }while($existe);
+            $model->rowquid = $rowquid;
         }
 
-        if ($table) {
-            $table->nombre = $this->nombre;
-            $table->prefijo = $this->prefijo;
-            $table->cargo = $this->cargo;
-            $table->instituciones_id = $this->instituciones_id;
-            $table->sexo = $this->sexo;
-            $table->save();
+        if ($model){
+            $model->nombre = $this->nombre;
+            $model->prefijo = $this->prefijo;
+            $model->cargo = $this->cargo;
+            $model->instituciones_id = $this->instituciones_id;
+            $model->sexo = $this->sexo;
+            $model->save();
             $this->dispatch('initSelectsForm')->to(OficiosComponent::class);
+            $this->limpiar();
             $this->toastBootstrap();
         }
-
-        $this->limpiarPersonas();
     }
 
     public function edit($rowquid)
     {
-        $this->limpiarPersonas();
-        $table = $this->getPersona($rowquid);
-        if ($table) {
-            $this->personas_id = $table->id;
-            $this->nombre = $table->nombre;
-            $this->prefijo = $table->prefijo;
-            $this->cargo = $table->cargo;
-            $this->sexo = $table->sexo;
-            $this->rowquid = $table->rowquid;
-            $this->dispatch('setPersonasSelectInstituciones', rowquid: $table->institucion->rowquid ?? '');
-            $this->form = true;
-            $this->table = false;
+        $this->limpiar();
+        $registro = $this->getRegistro($rowquid);
+        if ($registro) {
+            $this->tabla_id = $registro->id;
+            $this->ocultarTable = true;
+            $this->ocultarCard = false;
+            $this->nombre = $registro->nombre;
+            $this->prefijo = $registro->prefijo;
+            $this->cargo = $registro->cargo;
+            $this->sexo = $registro->sexo;
+            $this->rowquid = $registro->rowquid;
+            $this->dispatch('setPersonasSelectInstituciones', rowquid: $registro->institucion->rowquid ?? '');
         }
     }
 
-    public function destroy($rowquid)
+    #[On('deletePersonas')]
+    public function delete($rowquid)
     {
-        $this->rowquid = $rowquid;
-        $this->confirmToastBootstrap('confirmedPersonas');
-    }
+        $this->limpiar();
+        $registro = $this->getRegistro($rowquid);
+        if ($registro){
 
-    #[On('confirmedPersonas')]
-    public function confirmedPersonas()
-    {
-        $table = $this->getPersona($this->rowquid);
+            //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+            $vinculado = false;
 
-        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
-        $vinculado = false;
-
-        $oficio = Oficio::where('dirigido', 'like', "%$this->rowquid%")
-            ->orWhere('copia', 'like', "%$this->rowquid%")->first();
-        if ($oficio){
-            $vinculado = true;
-        }
-
-        if ($vinculado) {
-            $this->htmlToastBoostrap();
-        } else {
-            if ($table) {
-                $nombre = "<b>".mb_strtoupper($table->nombre)."</b>";
-                $table->delete();
-                $this->dispatch('initSelectsForm')->to(OficiosComponent::class);
-                $this->toastBootstrap('success', "Registro $nombre Eliminado.");
+            $oficio = Oficio::where('dirigido', 'like', "%$registro->rowquid%")
+                ->orWhere('copia', 'like', "%$registro->rowquid%")->first();
+            if ($oficio){
+                $vinculado = true;
             }
+
+            if ($vinculado) {
+                $this->htmlToastBoostrap();
+            } else {
+                $nombre = '<b class="text-uppercase text-warning">'.$registro->numero.'</b>';
+                $registro->delete();
+                $this->dispatch('initSelectsForm')->to(OficiosComponent::class);
+                $this->toastBootstrap('success', "Oficio $nombre Eliminado.");
+            }
+
         }
-
-        $this->limpiarPersonas();
     }
 
-    public function buscar()
-    {
-        $this->limpiarPersonas();
-    }
-
-    public function cerrarBusqueda()
-    {
-        $this->reset(['keyword']);
-        $this->limpiarPersonas();
-    }
-
-    protected function getPersona($rowquid): ?Persona
+    protected function getRegistro($rowquid): ?Persona
     {
         return Persona::where('rowquid', $rowquid)->first();
     }
@@ -226,7 +184,7 @@ class PersonasComponent extends Component
         }
     }
 
-    #[On('filtrarPersonasInstitucion')]
+    /*#[On('filtrarPersonasInstitucion')]
     public function filtrarPersonasInstitucion($id)
     {
         $this->cerrarBusqueda();
@@ -235,6 +193,6 @@ class PersonasComponent extends Component
             $this->keyword = $institucion->id;
             $this->filtro = $institucion->nombre;
         }
-    }
+    }*/
 
 }

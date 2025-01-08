@@ -5,191 +5,133 @@ namespace App\Livewire\Dashboard;
 use App\Models\Institucion;
 use App\Models\Oficio;
 use App\Models\Persona;
+use App\Traits\LimitRows;
+use App\Traits\ModalTable;
 use App\Traits\ToastBootstrap;
 use Illuminate\Validation\Rule;
-use Livewire\Attributes\Locked;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
 class InstitucionesComponent extends Component
 {
     use ToastBootstrap;
+    use LimitRows;
+    use ModalTable;
 
-    public $rows = 0, $keyword;
-    public $form = false, $table = true, $disable;
     public $nombre, $sufijo;
-
-    #[Locked]
-    public $instituciones_id, $rowquid;
 
     public function mount()
     {
         $this->setLimit();
+        $this->setSize(330);
+        $this->modalTitle = "Instituciones";
+        $this->confirmed = 'deleteInstituciones';
+        $this->modulo = 'instituciones';
     }
 
     public function render()
     {
-        $listarRows = Institucion::buscar($this->keyword)
+        $listar = Institucion::buscar($this->keyword)
             ->orderBy('created_at', 'DESC')
-            ->limit($this->rows)
+            ->limit($this->limit)
             ->get();
-
-        $rowsCount = Institucion::buscar($this->keyword)->count();
-
-        $totalRows = Institucion::count();
-
-        if (($rowsCount > $this->rows)) {
-            $this->disable = false;
-        }else{
-            $this->disable = true;
-        }
+        $limit = $listar->count();
+        $rows = Institucion::buscar($this->keyword)->count();
+        $this->btnVerMas($limit, $rows);
 
         return view('livewire.dashboard.instituciones-component')
-            ->with('listarRows', $listarRows)
-            ->with('rowsCount', $rowsCount)
-            ->with('totalRows', $totalRows);
+            ->with('listar', $listar)
+            ->with('rows', $rows);
     }
 
-    public function setLimit()
+    public function limpiar()
     {
-        if (numRowsPaginate() < 12) {
-            $rows = 12;
-        } else {
-            $rows = numRowsPaginate();
-        }
-        $this->rows = $this->rows + $rows;
-    }
-
-    #[On('limpiarInstituciones')]
-    public function limpiarInstituciones()
-    {
+        $this->limpiarModal();
         $this->reset([
-            'form', 'table', 'rowquid', 'instituciones_id',
             'nombre', 'sufijo'
         ]);
-        $this->resetErrorBag();
-    }
-
-    public function create()
-    {
-        $this->limpiarInstituciones();
-        $this->form = true;
-        $this->table = false;
     }
 
     public function save()
     {
         $rules = [
-            'nombre' => ['required', 'min:2', 'max:50', Rule::unique('oficios_instituciones', 'nombre')->ignore($this->instituciones_id)],
+            'nombre' => ['required', 'min:2', 'max:50', Rule::unique('oficios_instituciones', 'nombre')->ignore($this->tabla_id)],
             'sufijo' => 'nullable|min:2|max:50',
         ];
 
         $this->validate($rules);
-        if (is_null($this->instituciones_id)) {
+
+
+        if ($this->tabla_id){
+            //editar
+            $model = Institucion::find($this->tabla_id);
+        }else{
             //nuevo
-            $table = new Institucion();
-            do {
+            $model = new Institucion();
+            do{
                 $rowquid = generarStringAleatorio(16);
                 $existe = Institucion::where('rowquid', $rowquid)->first();
-            } while ($existe);
-            $table->rowquid = $rowquid;
-        } else {
-            //editar
-            $table = Institucion::find($this->instituciones_id);
+            }while($existe);
+            $model->rowquid = $rowquid;
         }
 
-        if ($table) {
-            $table->nombre = $this->nombre;
-            $table->sufijo = $this->sufijo;
-            $table->save();
-
+        if ($model){
+            $model->nombre = $this->nombre;
+            $model->sufijo = $this->sufijo;;
+            $model->save();
             $this->dispatch('initSelectPersonas')->to(PersonasComponent::class);
             $this->dispatch('initSelectsForm')->to(OficiosComponent::class);
-
+            $this->limpiar();
             $this->toastBootstrap();
         }
-
-        $this->limpiarInstituciones();
     }
 
     public function edit($rowquid)
     {
-        $this->limpiarInstituciones();
-        $table = $this->getInstitucion($rowquid);
-        if ($table) {
-            $this->instituciones_id = $table->id;
-            $this->nombre = $table->nombre;
-            $this->sufijo = $table->sufijo;
-            $this->form = true;
-            $this->table = false;
+        $this->limpiar();
+        $registro = $this->getRegistro($rowquid);
+        if ($registro){
+            $this->tabla_id = $registro->id;
+            $this->ocultarTable = true;
+            $this->ocultarCard = false;
+            $this->nombre = $registro->nombre;
+            $this->sufijo = $registro->sufijo;
         }
     }
 
-    public function destroy($rowquid)
+    #[On('deleteInstituciones')]
+    public function delete($rowquid)
     {
-        $this->rowquid = $rowquid;
-        $this->confirmToastBootstrap('confirmedInstitucion');
-    }
+        $this->limpiar();
+        $registro = $this->getRegistro($rowquid);
+        if ($registro){
 
-    #[On('confirmedInstitucion')]
-    public function confirmedInstitucion()
-    {
-        $id = 0;
-        $table = $this->getInstitucion($this->rowquid);
-        if ($table) {
-            $id = $table->id;
-        }
+            //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
+            $vinculado = false;
 
-        //codigo para verificar si realmente se puede borrar, dejar false si no se requiere validacion
-        $vinculado = false;
+            $personas = Persona::where('instituciones_id', $registro->id)->first();
+            $oficio = Oficio::where('dirigido', 'like', "%$registro->rowquid%")
+                ->orWhere('copia', 'like', "%$registro->rowquid%")->first();
 
-        $personas = Persona::where('instituciones_id', $id)->first();
-        if ($personas){
-            $vinculado = true;
-        }
+            if ($personas || $oficio){
+                $vinculado = true;
+            }
 
-        $oficio = Oficio::where('dirigido', 'like', "%$this->rowquid%")
-            ->orWhere('copia', 'like', "%$this->rowquid%")->first();
-        if ($oficio){
-            $vinculado = true;
-        }
-
-        if ($vinculado) {
-            $this->htmlToastBoostrap();
-        } else {
-            if ($table) {
-                $nombre = "<b>".mb_strtoupper($table->nombre)."</b>";
-                $table->delete();
+            if ($vinculado) {
+                $this->htmlToastBoostrap();
+            } else {
+                $nombre = '<b class="text-uppercase text-warning">'.$registro->nombre.'</b>';
+                $registro->delete();
                 $this->dispatch('initSelectPersonas')->to(PersonasComponent::class);
                 $this->toastBootstrap('success', "Institución $nombre Eliminada.");
             }
+
         }
-
-        $this->limpiarInstituciones();
     }
 
-    public function buscar()
-    {
-        $this->limpiarInstituciones();
-    }
-
-    public function cerrarBusqueda()
-    {
-        $this->reset(['keyword']);
-        $this->limpiarInstituciones();
-    }
-
-    protected function getInstitucion($rowquid): ?Institucion
+    protected function getRegistro($rowquid): ?Institucion
     {
         return Institucion::where('rowquid', $rowquid)->first();
-    }
-
-    public function filtrar($rowquid)
-    {
-        $institucion = $this->getInstitucion($rowquid);
-        if ($institucion){
-            $this->dispatch('filtrarPersonasInstitucion', id: $institucion->id)->to(PersonasComponent::class);
-        }
     }
 
 }
