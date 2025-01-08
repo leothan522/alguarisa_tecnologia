@@ -1,5 +1,5 @@
 <div class="card card-navy card-outline">
-    <div class="card-header">
+    <div class="card-header" wire:loading.class="invisible" wire:target="show, create">
 
         <div class="row p-0">
             <div class="col-7 col-sm-8 col-md-9 p-0">
@@ -36,7 +36,7 @@
     </div>
 
 
-    <div class="card-body p-0">
+    <div class="card-body p-0" wire:loading.class="invisible" wire:target="show, create">
 
         @include('dashboard.oficios.mailbox-controls')
         @include('dashboard.oficios.mailbox-messages')
@@ -44,7 +44,7 @@
     </div>
 
 
-    <div class="card-footer p-0">
+    <div class="card-footer p-0" wire:loading.class="invisible" wire:target="show, create">
         @include('dashboard.oficios.mailbox-controls')
     </div>
 

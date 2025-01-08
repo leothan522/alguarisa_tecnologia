@@ -1,6 +1,6 @@
 <div class="card card-navy card-outline">
 
-    <div class="card-header">
+    <div class="card-header" wire:loading.class="invisible">
 
         <h3 class="card-title">
             Ver Oficio [ <b class="text-warning text-uppercase">{{ $numero }}</b> ]
@@ -19,7 +19,7 @@
 
     </div>
 
-    <div class="card-body p-0" style="min-height: calc(100vh - {{ $size }}px); max-height: calc(100vh - {{ $size }}px)">
+    <div class="card-body table-responsive p-0" wire:loading.class="invisible" style="min-height: calc(100vh - {{ $size }}px); max-height: calc(100vh - {{ $size }}px)">
 
         <div class="mailbox-read-info mr-3 ml-3">
             <h5>
@@ -58,47 +58,48 @@
         <!-- /.mailbox-controls -->
 
         @if(!empty($adicional))
-            <div class="card-footer bg-white">
-                <div class="card card-navy card-outline">
-                    <div class="card-body table-responsive p-0">
-                        <table class="table">
-                            <thead>
-                            <tr>
-                                <th>Información Adicional</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    {!! $adicional !!}
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+            <div class="mailbox-read-message">
+                <div class="card card-lightblue card-outline">
+                    <div class="card-body pt-0 pb-0">
+                        <small class="text-lightblue text-bold text-uppercase">Información Adicional:</small>
+                        <p class="text-justify">{!! $adicional !!}</p>
                     </div>
                 </div>
             </div>
         @endif
 
-        @include('dashboard.oficios.table_equipos')
-
-        <div class="mailbox-read-message">
-            @if($verPDF)
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe class="embed-responsive-item" src="{{asset('ViewerJS/#../'.$verPDF)}}" allowfullscreen></iframe>
+        @if(!empty($listarEquipos))
+            <div class="mailbox-read-message">
+                <div class="card card-lightblue card-outline">
+                    <div class="card-body table-responsive p-0" style="max-height: 30vh;">
+                        <div class="col-12 bg-light sticky-top">
+                            <small class="text-lightblue text-bold text-uppercase pl-4">Equipos:</small>
+                            <small class="float-right text-bold text-uppercase pr-4">{{ $equipos }}</small>
+                        </div>
+                        @include('dashboard.oficios.table_equipos')
+                    </div>
                 </div>
-            @endif
-        </div>
+            </div>
+        @endif
+
+        @if($verPDF)
+            <div class="mailbox-read-message">
+                <div class="embed-responsive embed-responsive-21by9">
+                    <iframe class="embed-responsive-item" src="{{ asset('ViewerJS/#../'.$verPDF) }}" allowfullscreen></iframe>
+                </div>
+            </div>
+        @endif
+
 
     </div>
 
-    <div class="card-footer">
+    <div class="card-footer" wire:loading.class="invisible">
         <div class="float-right">
             <button type="button" class="btn btn-default btn-sm" wire:click="edit" @if(!comprobarPermisos('oficios.edit')) disabled @endif >
                 <i class="fas fa-edit"></i> Editar
             </button>
         </div>
-        <button type="button" class="btn btn-default btn-sm" wire:click="destroy" @if(!comprobarPermisos('oficios.destroy')) disabled @endif >
+        <button type="button" class="btn btn-default btn-sm" onclick="confirmToastBootstrap('confirmed')" @if(!comprobarPermisos('oficios.destroy')) disabled @endif >
             <i class="fas fa-trash-alt"></i> Eliminar
         </button>
         {{--<button type="button" class="btn btn-default"><i class="fas fa-print"></i> Imprimir</button>--}}

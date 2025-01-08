@@ -498,11 +498,6 @@ class OficiosComponent extends Component
         return Oficio::where('rowquid', $rowquid)->first();
     }
 
-    public function destroy()
-    {
-        $this->confirmToastBootstrap('confirmed');
-    }
-
     #[On('confirmed')]
     public function confirmed()
     {
