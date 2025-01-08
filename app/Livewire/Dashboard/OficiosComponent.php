@@ -75,7 +75,7 @@ class OficiosComponent extends Component
         $this->ocultarTable = true;
         $this->ocultarShow = true;
         $this->ocultarForm = false;
-
+        $this->size = 345;
         $this->view = 'form';
     }
 
@@ -127,7 +127,7 @@ class OficiosComponent extends Component
             $this->ocultarShow = false;
             $this->size = 334;
             $this->view = 'show';
-
+            $this->dispatch('btnHeaderMovil', option: 'show');
         }
     }
 
@@ -144,6 +144,11 @@ class OficiosComponent extends Component
         }
         $this->dispatch('setTextArea', texto: $this->adicional);
         $this->reset('verPDF');
+
+        $this->ocultarTable = true;
+        $this->ocultarShow = true;
+        $this->ocultarForm = false;
+        $this->size = 345;
         $this->view = 'form';
     }
 
@@ -167,12 +172,12 @@ class OficiosComponent extends Component
     public function messages()
     {
         return [
-            'dirigido.required' => 'El campo dirigido a es obligatorio.',
+            'dirigido.required' => 'El campo Dirigido a es obligatorio.',
             'copia.different' => 'Con copia y Dirigido a deben ser diferentes.',
-            'numero.required' => 'El numero es obligatorio.',
-            'fecha.required' => 'La fecha es obligatoria.',
-            'numero.unique' => 'El numero ya ha sido registrado.',
-            'adicional.required_if' => 'El campo adicional es obligatorio cuando equipos vinculados es 0.',
+            'numero.required' => 'El Nro. Oficio es obligatorio.',
+            'fecha.required' => 'La Fecha es obligatoria.',
+            'numero.unique' => 'El Nro. Oficio ya ha sido registrado.',
+            'adicional.required_if' => 'El campo Información Adicional es obligatorio cuando equipos vinculados es 0.',
             'pdf.mimes' => 'El archivo a adjuntar debe ser un archivo con formato: pdf.',
         ];
     }
@@ -317,7 +322,7 @@ class OficiosComponent extends Component
                 $this->reset('serial');
                 $this->toastBootstrap('info', 'Bien Agregado.');
             }else{
-                $this->confirmToastBootstrap('nuevoBien', [
+                $this->confirmToastBootstrap('nuevoBien', null, [
                     'title' => 'Registrar Bienes',
                     'message' => "El Serial ó Identificador suministrado NO coindide con algún Bien registrado.",
                     'button' => "¡Sí, Registrar Equipo!"
@@ -542,7 +547,9 @@ class OficiosComponent extends Component
             $this->show($this->rowquid);
         }else{
             $this->limpiar();
+            $this->dispatch('btnHeaderMovil', option: 'limpiar');
         }
+
     }
 
     #[On('initSelectsForm')]
@@ -564,5 +571,23 @@ class OficiosComponent extends Component
         $this->keyword = $this->numero;
         $this->reset('view');
         $this->buscar();
+    }
+
+    #[On('btnHeaderMovil')]
+    public function btnHeaderMovil($option)
+    {
+        //JS
+    }
+
+    #[On('createHide')]
+    public function createHide()
+    {
+        $this->create();;
+    }
+
+    #[On('limpiarHide')]
+    public function limpiarHide()
+    {
+        $this->limpiar();
     }
 }

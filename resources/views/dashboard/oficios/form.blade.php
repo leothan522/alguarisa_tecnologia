@@ -1,6 +1,6 @@
-<div class="card card-navy card-outline">
+<div id="div_form_oficios" class="card card-navy card-outline">
 
-    <div class="card-header">
+    <div id="div_from_header" class="card-header" wire:loading.class="invisible" wire:target="btnDescartar, limpiar">
 
         <div class="row p-0">
             <div class="col-7 col-sm-8 col-md-9 p-0">
@@ -35,7 +35,7 @@
 
     <form wire:submit="save">
 
-        <div class="card-body table-responsive" style="min-height: calc(100vh - {{ $size }}px); max-height: calc(100vh - {{ $size }}px)">
+        <div id="div_from_body" class="card-body table-responsive" wire:loading.class="invisible" wire:target="save, limpiar, btnDescartar" style="min-height: calc(100vh - {{ $size }}px); max-height: calc(100vh - {{ $size }}px)">
 
             <div class="form-group">
                 <small class="text-lightblue text-bold text-uppercase">Dirigido a:</small>
@@ -182,7 +182,7 @@
 
         </div>
 
-        <div class="card-footer">
+        <div id="div_form_footer" class="card-footer" wire:loading.class="invisible" wire:target="btnDescartar, limpiar">
             <div class="float-right">
                 <button type="submit" class="btn btn-primary">
                     <i class="fas fa-save"></i> Guardar
@@ -195,13 +195,7 @@
 
     </form>
 
-    <div class="overlay-wrapper" wire:loading wire:target="save, searchSerial, btnQuitarEquipo, btnResetPDF, limpiar, btnDescartar">
-        <div class="overlay">
-            <div class="spinner-border text-navy" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-    </div>
+    {!! verSpinner('save, searchSerial, btnQuitarEquipo, btnResetPDF, limpiar, btnDescartar') !!}
 
 </div>
 

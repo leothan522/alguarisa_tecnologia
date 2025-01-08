@@ -2,27 +2,47 @@
     <script src="{{ asset("js/app.js") }}"></script>
     <script>
 
-        // $('.select2').select2();
+        const breadcrumb_nuevo_oficio = document.querySelector('#breadcrumb_nuevo_oficio');
+        const breadcrumb_volver = document.querySelector('#breadcrumb_volver');
 
-        //Initialize Select2 Elements
-        /*$('.select2bs4').select2({
-            theme: 'bootstrap4'
-        });*/
+        function headerButton(option) {
 
-        //Enable check and uncheck all functionality
-        // $('.checkbox-toggle').click(function () {
-        //     var clicks = $(this).data('clicks')
-        //     if (clicks) {
-        //         //Uncheck all checkboxes
-        //         $('.mailbox-messages input[type=\'checkbox\']').prop('checked', false)
-        //         $('.checkbox-toggle .far.fa-check-square').removeClass('fa-check-square').addClass('fa-square')
-        //     } else {
-        //         //Check all checkboxes
-        //         $('.mailbox-messages input[type=\'checkbox\']').prop('checked', true)
-        //         $('.checkbox-toggle .far.fa-square').removeClass('fa-square').addClass('fa-check-square')
-        //     }
-        //     $(this).data('clicks', !clicks)
-        // });
+            if (option === 'nuevo'){
+                breadcrumb_nuevo_oficio.classList.add('d-none');
+                breadcrumb_volver.classList.remove('d-none');
+                Livewire.dispatch('createHide');
+            }
+
+            if (option === 'show'){
+                breadcrumb_nuevo_oficio.classList.add('d-none');
+                breadcrumb_volver.classList.remove('d-none');
+            }
+
+            if (option === 'limpiar'){
+                breadcrumb_nuevo_oficio.classList.remove('d-none');
+                breadcrumb_volver.classList.add('d-none');
+                Livewire.dispatch('limpiarHide');
+            }
+
+        }
+
+        breadcrumb_nuevo_oficio.addEventListener('click', event => {
+            event.preventDefault();
+            headerButton('nuevo');
+        });
+
+        breadcrumb_volver.addEventListener('click', event => {
+           event.preventDefault();
+           addClassinvisible('#div_from_header');
+           addClassinvisible('#div_from_body');
+           addClassinvisible('#div_form_footer');
+           verCargando('div_form_oficios');
+           headerButton('limpiar');
+        });
+
+        Livewire.on('btnHeaderMovil', ({ option }) => {
+            headerButton(option);
+        });
 
         function select_2(id, data, event) {
             let html = '<select class="select2" multiple="multiple" data-placeholder="Seleccione" style="width: 100%;" id="'+ id +'"></select>';
@@ -39,7 +59,6 @@
                     Livewire.dispatch(event, { rowquid: value });
                 });
         }
-
 
         Livewire.on('initSelectDirigido', ({ data }) => {
             select_2('select_dirigido_a', data, 'getSelectDirigido');
@@ -125,7 +144,6 @@
         $(document).ready(function () {
             $('#navbar_search_id').addClass('d-none');
         });
-
 
         console.log('Hi!');
     </script>

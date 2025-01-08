@@ -1,4 +1,4 @@
-@if($view == 'show' || $view == 'form')
+@if(!$ocultarShow || !$ocultarForm)
     <button type="button" class="btn btn-primary btn-block mb-3 d-none d-md-block" wire:click="limpiar">
         <i class="fas fa-arrow-left"></i> Volver a Oficios
     </button>
