@@ -40,6 +40,7 @@
                 });
         }
 
+
         Livewire.on('initSelectDirigido', ({ data }) => {
             select_2('select_dirigido_a', data, 'getSelectDirigido');
             $('#adicional').summernote('code', '');
@@ -104,6 +105,7 @@
 
         $('#adicional').val('{{ $adicional }}').summernote({
             lang: 'es-ES',
+            placeholder: 'Información Adicional',
             toolbar: [
                 // [groupName, [list of button]]
                 ['font', ['bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear']],

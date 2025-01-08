@@ -2,9 +2,6 @@
 
     <div class="card-header">
 
-
-
-
         <div class="row p-0">
             <div class="col-7 col-sm-8 col-md-9 p-0">
                 <h3 class="card-title">
@@ -38,10 +35,10 @@
 
     <form wire:submit="save">
 
-        <div class="card-body">
+        <div class="card-body table-responsive" style="min-height: calc(100vh - {{ $size }}px); max-height: calc(100vh - {{ $size }}px)">
 
             <div class="form-group">
-                <label>Dirigido a:</label>
+                <small class="text-lightblue text-bold text-uppercase">Dirigido a:</small>
                 {{--{!! json_encode($dirigido) !!}--}}
                 <div wire:ignore>
                     <div id="div_select_dirigido_a" class="select2-purple">
@@ -51,16 +48,13 @@
                     </div>
                 </div>
                 @error('dirigido')
-                <span class="col-sm-12 text-sm text-bold text-danger">
-                    <i class="icon fas fa-exclamation-triangle"></i>
-                    {{ $message }}
-                </span>
+                    <small class="text-danger text-bold">{{ $message }}</small>
                 @enderror
             </div>
 
 
             <div class="form-group">
-                <label>Con copia a:</label>
+                <small class="text-lightblue text-bold text-uppercase">Con copia a:</small>
                 {{--{!! json_encode($copia) !!}--}}
                 <div wire:ignore>
                     <div id="div_select_con_copia_a" class="select2-purple">
@@ -70,28 +64,19 @@
                     </div>
                 </div>
                 @error('copia')
-                <span class="col-sm-12 text-sm text-bold text-danger">
-                    <i class="icon fas fa-exclamation-triangle"></i>
-                    {{ $message }}
-                </span>
+                    <small class="text-danger text-bold">{{ $message }}</small>
                 @enderror
             </div>
 
 
-            <div class="row">
-                <div class="col-md-6">
+            <div class="row justify-content-center">
+                <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="email">Nro. Oficio:</label>
+                        <small class="text-lightblue text-bold text-uppercase">Nro. Oficio:</small>
                         <div class="input-group">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="far fa-bookmark"></i></span>
-                            </div>
-                            <input type="text" class="form-control" wire:model="numero" placeholder="Nro. Oficio">
+                            <input type="text" wire:model="numero" class="form-control @error('numero') is-invalid @enderror"  placeholder="Nro. Oficio">
                             @error('numero')
-                            <span class="col-sm-12 text-sm text-bold text-danger">
-                                <i class="icon fas fa-exclamation-triangle"></i>
-                                {{ $message }}
-                            </span>
+                                <span class="error invalid-feedback text-bold">{{ $message }}</span>
                             @enderror
                         </div>
                         @error('numero')
@@ -102,19 +87,13 @@
                         @enderror
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col-sm-6">
                     <div class="form-group">
-                        <label for="name">Fecha:</label>
+                        <small class="text-lightblue text-bold text-uppercase">Fecha:</small>
                         <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><i class="far fa-bookmark"></i></span>
-                            </div>
-                            <input type="date" class="form-control" wire:model="fecha" placeholder="alfanumérico">
+                            <input type="date" wire:model="fecha" class="form-control @error('fecha') is-invalid @enderror" placeholder="Fecha">
                             @error('fecha')
-                            <span class="col-sm-12 text-sm text-bold text-danger">
-                                <i class="icon fas fa-exclamation-triangle"></i>
-                                {{ $message }}
-                            </span>
+                                <span class="error invalid-feedback text-bold">{{ $message }}</span>
                             @enderror
                         </div>
                     </div>
@@ -123,70 +102,23 @@
 
             <div class="form-group">
                 <div wire:ignore>
-                    <textarea id="adicional" class="form-control" style="height: 300px;">
+                    <textarea id="adicional" class="form-control" placeholder="hola" {{--style="height: 300px;"--}}>
                         {{--{{ $adicional }}--}}
                     </textarea>
                 </div>
                 @error('adicional')
-                <span class="col-sm-12 text-sm text-bold text-danger">
-                    <i class="icon fas fa-exclamation-triangle"></i>
-                    {{ $message }}
-                </span>
+                    <small class="text-danger text-bold">{{ $message }}</small>
                 @enderror
             </div>
 
-            <div class="card card-navy card-outline">
-
-                <div class="card-body table-responsive p-0" style="max-height: 30vh;" >
-
-                    <table class="table table-head-fixed table-hover text-nowrap sticky-top">
-                        <thead>
-                        <tr class="text-navy">
-                            {{--<th style="width: 10%">Código</th>--}}
-                            <th>
-                                Equipos
-                                <small class="float-right">Cantidad {{ $equipos }}</small>
-                            </th>
-                        </tr>
-                        </thead>
-                    </table>
-
-                    <!-- TO DO List -->
-                    <ul class="todo-list" data-widget="todo-list">
-                        @if(!empty($listarEquipos))
-                            @php($i = 0)
-                            @foreach($listarEquipos as $key => $equipo)
-                                @php($i++)
-                                <li>
-                                    <small class="text text-uppercase">
-                                        <small class="text-navy">{{ $i }}.&nbsp;-&nbsp;</small>
-                                        {{ $equipo['tipo'] }}
-                                        {{ $equipo['marca'] }}
-                                        {{ $equipo['modelo'] }}
-                                        @if(!is_null($equipo['serial']))
-                                            , Serial: {{ $equipo['serial'] }}
-                                        @endif
-                                        @if(!is_null($equipo['identificador']))
-                                            , Identificador: {{ $equipo['identificador'] }}
-                                        @endif
-                                    </small>
-                                    <!-- General tools such as edit or delete-->
-                                    <div class="tools text-danger" wire:click="btnQuitarEquipo({{ $key }})">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </div>
-                                </li>
-                            @endforeach
-                        @else
-                            <li class="text-center">
-                                <span class="text">Sin Equipos vinculados</span>
-                            </li>
-                        @endif
-
-                    </ul>
-
+            <div class="card card-lightblue card-outline">
+                <div class="card-body table-responsive p-0" style="max-height: 30vh;">
+                    <div class="col-12 bg-light sticky-top">
+                        <small class="text-lightblue text-bold text-uppercase pl-4">Equipos:</small>
+                        <small class="float-right text-bold text-uppercase pr-4">{{ $equipos }}</small>
+                    </div>
+                    @include('dashboard.oficios.table_equipos')
                 </div>
-
-
             </div>
 
             <div class="form-group"
