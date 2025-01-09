@@ -38,7 +38,7 @@
         </div>
     </div>
 
-    <div class="card-body table-responsive p-0" id="table_bienes" wire:loading.class="invisible" wire:target="setLimit, actualizar, cerrarBusqueda, showHide, createHide" style="max-height: calc(100vh - {{ $size ?? 250 }}px)" >
+    <div class="card-body table-responsive p-0" id="table_bienes" wire:loading.class="invisible" wire:target="setLimit, actualizar, cerrarBusqueda, showHide, createHide" style="max-height: calc(100vh - {{ $size }}px)" >
 
         <table class="table table-head-fixed table-hover text-nowrap sticky-top">
             <thead>

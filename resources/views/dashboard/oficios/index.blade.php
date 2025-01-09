@@ -25,6 +25,3 @@
     @include('dashboard.footer')
 @endsection
 
-
-
-
