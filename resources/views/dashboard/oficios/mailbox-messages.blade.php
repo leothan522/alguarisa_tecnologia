@@ -1,4 +1,4 @@
-<div class="table-responsive mailbox-messages" style="max-height: calc(100vh - {{ $size ?? 365 }}px)">
+<div class="table-responsive mailbox-messages prueba_table" {{--style="max-height: calc(100vh - {{ $size ?? 365 }}px)"--}}>
 
     <table class="table table-hover table-striped">
         <tbody wire:loading.class="invisible">

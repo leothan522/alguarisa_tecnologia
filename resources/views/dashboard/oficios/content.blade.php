@@ -26,6 +26,17 @@
 
 </div>
 
+@section('css')
+    {{--<link rel="stylesheet" href="/css/admin_custom.css">--}}
+    <style>
+
+        .prueba_table {
+            max-height: calc(100vh - {{ $size ?? 365 }}px);
+        }
+
+    </style>
+@stop
+
 
 
 
