@@ -38,6 +38,7 @@ function allPermisos()
             'submenu' => [
                 'Exportar Excel'      => 'bienes.export',
                 'Imprimir Etiquetas'  => 'etiquetas.print',
+                'Verificar Bienes'  => 'bienes.check',
                 'Crear Bienes' => 'bienes.create',
                 'Editar Bienes' => 'bienes.edit',
                 'Borrar Bienes' => 'bienes.destroy',
