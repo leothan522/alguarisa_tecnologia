@@ -37,4 +37,10 @@
             <span class="text-bold text-lightblue text-uppercase">{{ $verAdicional }}</span>
         </li>
     @endif
+    @if($verificado)
+        <li class="list-group-item">
+            <span>Verificado por: </span>
+            <span class="float-right text-bold text-danger text-uppercase">{{ $userVerify ?? "-" }}</span>
+        </li>
+    @endif
 </ul>

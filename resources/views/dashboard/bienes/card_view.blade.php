@@ -45,6 +45,9 @@
                     <div class="card-header">
                         <h5 class="card-title">@if(!$form) Información @else Datos Básicos @endif</h5>
                         <div class="card-tools">
+                            @if($verificado)
+                                <span class="btn-tool text-danger"><i class="fas fa-check-double"></i></span>
+                            @endif
                             <span class="btn-tool"><i class="fas fa-book"></i></span>
                         </div>
                     </div>
@@ -137,6 +140,13 @@
             <a href="{{ route('etiquetas.print', $rowquid ?? 0) }}" target="_blank" class="btn btn-default btn-sm mr-1">
                 <i class="fas fa-print"></i> Imprimir Etiqueta
             </a>
+
+            @if(!$verificado)
+                <button type="button" class="btn btn-default btn-sm mr-1 mb-1 mb-sm-auto mt-1 mt-sm-auto" onclick="confirmToastBootstrap('btnVerificar', { rowquid: '{{ $rowquid }}'}, { toast: false, type: 'warning', button: '¡Sí, Verificado!' })"
+                        @if(!comprobarPermisos('bienes.check')) disabled @endif>
+                    <i class="fas fa-check-double"></i> Verificado
+                </button>
+            @endif
 
             <button type="button" class="btn btn-default btn-sm" onclick="confirmToastBootstrap('deleteBienes', { rowquid: '{{ $rowquid }}'})"
                     @if(!comprobarPermisos('bienes.destroy')) disabled @endif>

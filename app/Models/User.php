@@ -117,4 +117,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Fcm::class, 'users_id', 'id');
     }
 
+    public function bienes(): HasMany
+    {
+        return $this->hasMany(Bien::class, 'users_id', 'id');
+    }
+
 }

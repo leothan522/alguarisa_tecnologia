@@ -33,6 +33,7 @@ class BienesComponent extends Component
     public $imagenes = false, $imagenFrontal, $imagenPosterior, $miniFrontal, $miniPosterior;
     public $tipo, $marca, $modelo, $color, $serial, $identificador, $condicion, $adicional;
     public $busqueda;
+    public $verificado, $userVerify;
 
     #[Locked]
     public $bienes_id, $rowquid;
@@ -63,6 +64,7 @@ class BienesComponent extends Component
             'imagenes', 'imagenFrontal', 'imagenPosterior', 'miniFrontal', 'miniPosterior',
             'tipo', 'marca', 'modelo', 'color', 'serial', 'identificador', 'condicion', 'adicional',
             'bienes_id',
+            'verificado', 'userVerify'
         ]);
         $this->resetErrorBag();
     }
@@ -199,7 +201,10 @@ class BienesComponent extends Component
             $this->identificador = $bien->identificador;
             $this->condicion = $bien->condiciones_id;
             $this->adicional = $bien->adicional;
-
+            $this->verificado = $bien->verificado;
+            if ($this->verificado){
+                $this->userVerify = $bien->user->name;
+            }
         }
     }
 
@@ -275,6 +280,8 @@ class BienesComponent extends Component
             $bien->condiciones_id = $this->condicion;
             $bien->adicional = $this->adicional;
             $bien->auditoria = $auditoria;
+            $bien->verificado = 0;
+            $bien->users_id = null;
             $bien->save();
 
             if ($this->serial == '_'){
@@ -714,6 +721,19 @@ class BienesComponent extends Component
     public function cerrarModalPropiedades($selector)
     {
         //JS
+    }
+
+    #[On('btnVerificar')]
+    public function btnVerificar($rowquid)
+    {
+        $bien = $this->getBien($rowquid);
+        if ($bien){
+            $bien->verificado = 1;
+            $bien->users_id = auth()->id();
+            $bien->save();
+        }
+        $this->show($rowquid);
+        $this->toastBootstrap();
     }
 
 }

@@ -24,8 +24,16 @@ class Bien extends Model
         'condiciones_id',
         'adicional',
         'auditoria',
+        'verificado',
+        'users_id',
         'rowquid'
     ];
+
+    public function scopeBuscar($query, $keyword)
+    {
+        return $query->where('serial', 'LIKE', "%$keyword%")
+            ->orWhere('identificador', 'LIKE', "%$keyword%");
+    }
 
     public function tipo(): BelongsTo
     {
@@ -62,10 +70,9 @@ class Bien extends Model
         return $this->hasMany(BienUbicacion::class, 'bienes_id', 'id');
     }
 
-    public function scopeBuscar($query, $keyword)
+    public function user(): BelongsTo
     {
-        return $query->where('serial', 'LIKE', "%$keyword%")
-            ->orWhere('identificador', 'LIKE', "%$keyword%");
+        return $this->belongsTo(User::class, 'users_id', 'id');
     }
 
 }
