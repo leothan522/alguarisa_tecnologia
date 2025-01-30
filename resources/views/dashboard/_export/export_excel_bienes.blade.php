@@ -13,6 +13,7 @@
         <th>Imagen Posterior</th>
         <th>Ubicación</th>
         <th>Oficios Vinculados</th>
+        <th>Verificado</th>
         <th>Observación</th>
         @if(auth()->user()->role == 100)
             <th>Auditoria</th>
@@ -42,6 +43,13 @@
                     @foreach($bien->oficios as $oficio)
                         [{{ $oficio }}]
                     @endforeach
+                @endif
+            </td>
+            <td>
+                @if($bien->verificado)
+                    SI
+                @else
+                    NO
                 @endif
             </td>
             <td>{{ mb_strtoupper($bien->adicional) }}</td>
