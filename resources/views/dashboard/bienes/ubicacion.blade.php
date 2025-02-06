@@ -69,19 +69,23 @@
                             <tbody>
                             <tr>
                                 <td>
+
                                     <div class="form-group">
-                                        <div class="input-group">
-                                            <select wire:model="ubicacionesRowquid" class="custom-select custom-select-sm @error("ubicaciones_id") is-invalid @enderror" id="ubicacion_select_ubicaciones">
-                                                <option value="">Seleccione</option>
-                                                @foreach($listarUbicaciones as $ubicacion)
-                                                    <option value="{{ $ubicacion->rowquid }}">{{ mb_strtoupper($ubicacion->nombre) }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div wire:ignore>
+                                            <div id="div_select_ubicaciones_bien" class="input-group">
+                                                <select class="custom-select">
+                                                    <option value="">Seleccione</option>
+                                                </select>
+                                            </div>
                                         </div>
+                                        @error('ubicaciones_id')
+                                        <small class="text-danger text-bold">{{ $message }}</small>
+                                        @enderror
                                     </div>
+
                                 </td>
                                 <td style="width: 5%;">
-                                    <button type="submit" class="btn btn-success btn-sm" @if(!comprobarPermisos('bienes.edit')) disabled @endif >
+                                    <button type="submit" class="btn btn-success" @if(!comprobarPermisos('bienes.edit')) disabled @endif >
                                         <i class="fas fa-save"></i>
                                     </button>
                                 </td>

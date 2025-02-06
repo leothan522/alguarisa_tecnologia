@@ -280,6 +280,29 @@
             verCargando('div_card_view');
         });
 
+        function selectsUbicaciones(id, data, event) {
+            let html = '<select class="custom-select" id="'+ id +'"></select>';
+            $('#div_' + id).html(html);
+            $('#'  + id).select2({
+                dropdownParent: $('#modal-sm-bien-ubicacion'),
+                theme: 'bootstrap4',
+                data: data,
+                placeholder: 'Seleccione',
+                allowClear: false
+            });
+            $('#'  + id)
+                .val(null)
+                .trigger('change')
+                .on('change', function() {
+                    let value = $(this).val();
+                    Livewire.dispatch(event, { rowquid: value });
+                });
+        }
+
+        Livewire.on('initSelectUbicaciones', ({ data }) => {
+            selectsUbicaciones('select_ubicaciones_bien', data, 'getSelectUbicaciones');
+        });
+
         console.log('Hi!');
     </script>
 @endsection

@@ -35,7 +35,7 @@ class ModalUbicacionesComponent extends Component
         $this->resetErrorBag();
         $this->reset(['listarUbicaciones', 'bienes_id', 'ubicaciones_id', 'actual', 'ubicacionesRowquid']);
         $this->bienes_id = $bienID;
-        $this->listarUbicaciones = Ubicacion::orderBy('nombre', 'ASC')->get();
+        $this->dataSelectUbicaciones();
     }
 
     public function save()
@@ -43,7 +43,10 @@ class ModalUbicacionesComponent extends Component
         $rules = [
             'ubicaciones_id' => 'required'
         ];
-        $this->validate($rules);
+        $messages = [
+            'ubicaciones_id.required' => 'Seleccione una ubicacion',
+        ];
+        $this->validate($rules, $messages);
 
         $existe = BienUbicacion::where('bienes_id', $this->bienes_id)->where('actual', 1)->first();
         if ($existe){
@@ -81,12 +84,32 @@ class ModalUbicacionesComponent extends Component
         }
     }
 
-    public function updatedUbicacionesRowquid()
+    public function dataSelectUbicaciones()
     {
-        $ubicacion = Ubicacion::where('rowquid', $this->ubicacionesRowquid)->first();
+        $this->reset('ubicaciones_id');
+        $ubicaciones = Ubicacion::orderBy('nombre', 'ASC')->get();
+        $data = getDataSelect2($ubicaciones, 'nombre');
+        $this->dispatch('initSelectUbicaciones', data: $data);
+    }
+
+    #[On('initSelectUbicaciones')]
+    public function initSelectUbicaciones($data)
+    {
+        //JS
+    }
+
+    #[On('getSelectUbicaciones')]
+    public function getSelectUbicaciones($rowquid)
+    {
+        $this->reset('ubicaciones_id');
+        $ubicacion = Ubicacion::where('rowquid', $rowquid)->first();
         if ($ubicacion){
             $this->ubicaciones_id = $ubicacion->id;
         }
     }
+
+
+
+
 
 }
