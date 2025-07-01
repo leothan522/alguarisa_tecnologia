@@ -81,8 +81,8 @@
         .gobernacion{
             display: block;
             position: absolute;
-            height: 80px;
-            width: 80px;
+            height: 100px;
+            width: 100px;
             right: 3%;
             top: 3%;
         }

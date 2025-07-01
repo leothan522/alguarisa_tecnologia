@@ -15,7 +15,7 @@
                             <div class="col-lg-6">
                                 <div class="card-body p-md-5 mx-md-4">
 
-                                    <img class="gobernacion_start d-lg-none" src="{{ asset('img/logo_gobernacion.svg') }}" alt="Logo Gobernacion">
+                                    <img class="gobernacion_start d-lg-none" src="{{ asset('img/logo_gobernacion.png') }}" alt="Logo Gobernacion">
 
                                     <div class="text-center mt-5 mt-sm-auto ">
                                         <a href="{{ route('web.index') }}">
