@@ -30,6 +30,7 @@
 
     <!--Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap" rel="stylesheet">
@@ -152,7 +153,44 @@
 
 <div id="preloader"></div>
 
-@yield('content')
+<div class="position-relative gradient-form" style="min-height: 100vh;">
+    <div class="position-absolute top-50 start-50 translate-middle container">
+
+
+        <div class="row d-flex justify-content-center align-items-center">
+            <div class="col-xl-10">
+                <div class="card rounded-3 text-black">
+                    <div class="row g-0">
+                        <div class="col-lg-6">
+                            <div class="card-body p-md-5 mx-md-4">
+
+                                <img class="gobernacion_start d-lg-none" src="{{ asset('img/logo_gobernacion.png') }}" alt="Logo Gobernación Guárico">
+
+                                <div class="text-center @if(\Illuminate\Support\Facades\Route::currentRouteName() == 'web.index') mt-5 pt-5 @endif">
+                                    <a href="{{ route('web.index') }}">
+                                        <img class="img-fluid @if(\Illuminate\Support\Facades\Route::currentRouteName() != 'web.index') mt-5 @endif @if(\Illuminate\Support\Facades\Route::currentRouteName() != 'register') mt-sm-5 @else mt-sm-1 @endif" src="{{ asset('img/logo_alguarisa.png') }}" alt="Logo Alguarisa">
+                                    </a>
+                                    <h6 class="mt-1 mb-4 pb-1 text_title"><strong>Dirección de Tecnología y Sistemas.</strong></h6>
+                                </div>
+
+                                @yield('content')
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6 d-none d-lg-flex align-items-center gradient-custom-2" style="min-height: 70vh">
+                            <img class="gobernacion" src="{{ asset('img/logo_gobernacion_white.png') }}" alt="Logo Gobernación Guárico">
+                            <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                                <img class="img-fluid rounded-2 border border-light" src="{{ asset('img/logo_tecnologia.png') }}" alt="Logo Tecnología Alguarisa">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 @livewireScripts
