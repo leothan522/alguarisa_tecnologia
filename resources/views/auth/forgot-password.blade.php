@@ -1,6 +1,6 @@
 @extends('layouts.bootstrap')
 
-@section('title', 'Olvidé mi contraseña')
+@section('title', __('Forgot your password?'))
 
 @section('content')
 
