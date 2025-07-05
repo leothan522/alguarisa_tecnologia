@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <form class="needs-validation position-relative" method="POST" action="{{ route('verification.send') }}" novalidate>
+    <form class="needs-validation" method="POST" action="{{ route('verification.send') }}" novalidate>
         @csrf
 
         <div class="mb-4">

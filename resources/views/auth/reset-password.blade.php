@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <form class="needs-validation position-relative" method="POST" action="{{ route('password.update') }}" novalidate>
+    <form class="needs-validation" method="POST" action="{{ route('password.update') }}" novalidate>
         @csrf
 
         <input type="hidden" name="token" value="{{ $request->route('token') }}">
