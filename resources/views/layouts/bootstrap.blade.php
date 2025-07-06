@@ -26,7 +26,7 @@
     <link rel="manifest" href="{{ asset('favicons/manifest.json') }}">
     <meta name="msapplication-TileColor" content="#091a30">
     <meta name="msapplication-TileImage" content="{{ asset('favicons/ms-icon-310x310.png') }}">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#091a30">
 
     <!--Bootstrap -->
     {{--<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">--}}
