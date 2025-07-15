@@ -7,10 +7,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>
-        {{--AdminLTE 3 | Top Navigation--}}
-        @yield('title')
-    </title>
+    <meta name="description" content="">
+    <meta name="author" content="Ing. Yonathan Castillo">
+    <title>@yield('title', 'Alguarisa') - {{ config('app.name', 'Laravel') }}</title>
 
     <!-- Favicons -->
     <link rel="apple-touch-icon" sizes="57x57" href="{{ asset('favicons/apple-icon-57x57.png') }}">
@@ -22,7 +21,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="apple-touch-icon" sizes="144x144" href="{{ asset('favicons/apple-icon-144x144.png') }}">
     <link rel="apple-touch-icon" sizes="152x152" href="{{ asset('favicons/apple-icon-152x152.png') }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicons/apple-icon-180x180.png') }}">
-    <link rel="icon" type="image/png" sizes="192x192"  href="{{ asset('favicons/android-icon-192x192.png') }}">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('favicons/android-icon-192x192.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicons/favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicons/favicon-96x96.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicons/favicon-16x16.png') }}">
@@ -32,7 +31,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <meta name="theme-color" content="#ffffff">
 
     <!-- Google Font: Source Sans Pro -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
     {{--<link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">--}}
     <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
@@ -43,7 +43,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     @yield('css')
     {{-- PRELOADER--}}
     <style>
-        .loader-section{
+        .loader-section {
             width: 100vw;
             height: 100vh;
             max-width: 100%;
@@ -53,13 +53,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
             justify-content: center;
             align-items: center;
             background-color: #ffffff;
-            z-index:999;
+            z-index: 999;
             transition: all 1s 1s ease-out;
-            opacity:1;
+            opacity: 1;
         }
-        .loaded{
-            opacity:0;
-            z-index:-1;
+
+        .loaded {
+            opacity: 0;
+            z-index: -1;
         }
 
         .loader {
@@ -126,7 +127,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <script src="{{ asset('vendor/adminlte/dist/js/adminlte.min.js') }}"></script>
 <script src="{{ asset('vendor/sweetalert2/sweetalert2.all.min.js') }}"></script>
 @livewireScripts
-<x-livewire-alert::scripts />
+<x-livewire-alert::scripts/>
 <script src="{{ asset('js/toastBootstrap.js') }}"></script>
 @include('layouts.toastBootstrap')
 @yield('js')

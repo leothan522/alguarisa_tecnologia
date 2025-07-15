@@ -15,8 +15,8 @@ return [
     */
 
     'title' => 'Alguarisa',
-    'title_prefix' => ''.mb_strtoupper(env('APP_NAME', 'Laravel')).' | ',
-    'title_postfix' => '',
+    'title_prefix' => '',
+    'title_postfix' => ' - '.env('APP_NAME', 'Alguarisa'),
 
     /*
     |--------------------------------------------------------------------------
