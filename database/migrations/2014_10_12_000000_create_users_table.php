@@ -33,28 +33,6 @@ return new class extends Migration
             $table->timestamp('times_recuperacion')->nullable();
             $table->timestamps();
         });
-
-        DB::table("users")
-            ->insert([
-                "name" => "Yonathan Castillo",
-                "email" => "leothan522@gmail.com",
-                "email_verified_at" => \Carbon\Carbon::now(),
-                "password" => \Illuminate\Support\Facades\Hash::make("20025623"),
-                "role" => 100,
-                "created_at" => \Carbon\Carbon::now(),
-                "updated_at" => \Carbon\Carbon::now(),
-            ]);
-
-        DB::table("users")
-            ->insert([
-                "name" => "Administrador",
-                "email" => "admin@alguarisa.com",
-                "email_verified_at" => \Carbon\Carbon::now(),
-                "password" => \Illuminate\Support\Facades\Hash::make("Alguarisa2023.*"),
-                "role" => 1,
-                "created_at" => \Carbon\Carbon::now(),
-                "updated_at" => \Carbon\Carbon::now(),
-            ]);
     }
 
     /**

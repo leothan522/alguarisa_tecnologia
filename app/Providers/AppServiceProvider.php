@@ -25,12 +25,14 @@ class AppServiceProvider extends ServiceProvider
         //Paginator::useBootstrapFive();
         Paginator::useBootstrapFour();
         //Asset URL para Livewire 3
-        Livewire::setUpdateRoute(function ($handle) {
-            return Route::post('/'.env('APP_URL_LIVEWIRE', 'laravel/public').'/livewire/update', $handle);
-        });
+        if (config('app.assetlivewire')){
+            Livewire::setUpdateRoute(function ($handle) {
+                return Route::post('/'.config('app.assetlivewire', 'laravel/public').'/livewire/update', $handle);
+            });
 
-        Livewire::setScriptRoute(function ($handle) {
-            return Route::get(''.env('APP_URL_LIVEWIRE', 'laravel/public').'/livewire/livewire.js', $handle);
-        });
+            Livewire::setScriptRoute(function ($handle) {
+                return Route::get(''.config('app.assetlivewire', 'laravel/public').'/livewire/livewire.js', $handle);
+            });
+        }
     }
 }

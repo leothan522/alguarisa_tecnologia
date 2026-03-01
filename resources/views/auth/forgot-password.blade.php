@@ -3,8 +3,7 @@
 @section('title', __('Forgot your password?'))
 
 @section('content')
-
-    <form class="needs-validation" method="POST" action="{{ route('password.email') }}" novalidate>
+    <form class="needs-validation mb-3 mb-sm-auto" method="POST" action="{{ route('password.email') }}" novalidate>
         @csrf
 
         <div class="mb-4">
@@ -23,9 +22,7 @@
 
         @if ($errors->any())
             <div>
-                <div class="fs-6 text-danger fw-normal">{{ __('Whoops! Something went wrong.') }}</div>
-
-                <ul class="mt-3 fs-6 text-danger fw-normal">
+                <ul class="fs-6 text-danger fw-normal">
                     @foreach ($errors->all() as $error)
                         <li><small>{{ $error }}</small></li>
                     @endforeach
@@ -34,7 +31,8 @@
         @endif
 
         <div class="form-floating mb-3 has-validation">
-            <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="name@example.com" required autofocus />
+            <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}"
+                   placeholder="name@example.com" required autofocus/>
             <label for="email">{{ __('Email') }}</label>
             <div class="invalid-feedback">
                 Por favor ingrese su {{ __('Email') }}.
@@ -45,13 +43,13 @@
             <button type="submit" class="btn shadow text-white btn-block  gradient-custom-2">{{ __('Email Password Reset Link') }}</button>
         </div>
 
-        <div class="position-absolute top-50 start-50 translate-middle d-none verCargando">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
+        <div x-data class="d-flex align-items-center justify-content-center mt-4">
+            @if (Route::has('register'))
+                <p class="mb-0 me-2">{{ __('O, regrese a') }}</p>
+                <a href="{{ route('register') }}" class="text-muted" @click="mostrarPreloader()">{{ __('Log in') }}</a>
+            @endif
         </div>
 
     </form>
 
 @endsection
-

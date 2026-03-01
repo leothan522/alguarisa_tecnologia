@@ -218,4 +218,12 @@ return [
         'Image' => \Intervention\Image\Facades\Image::class
     ])->toArray(),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Variables de Entornos Personalizadas para el proyecto
+    |--------------------------------------------------------------------------
+    */
+
+    'assetlivewire' => env('APP_URL_LIVEWIRE', false),
+
 ];
