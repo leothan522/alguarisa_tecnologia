@@ -69,12 +69,12 @@
             @endif
         </div>
 
-        <div x-data class="d-flex align-items-center justify-content-center">
-            @if (Route::has('register'))
+        @if (Route::has('register'))
+            <div x-data class="d-flex align-items-center justify-content-center">
                 <p class="mb-0 me-2">¿No tienes una cuenta?</p>
                 <a href="{{ route('register') }}" class="btn btn-outline-primary btn-sm" @click="mostrarPreloader()">{{ __('Register') }}</a>
-            @endif
-        </div>
+            </div>
+        @endif
 
     </form>
 @endsection

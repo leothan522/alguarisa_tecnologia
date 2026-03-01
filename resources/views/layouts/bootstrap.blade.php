@@ -137,7 +137,7 @@
 </head>
 <body style="background-color: #eee;">
 
-<div class="gradient-form" style="min-height: 100vh;">
+<div class="position-relative gradient-form" style="min-height: 100vh; z-index: 2;">
     <div class="position-absolute top-50 start-50 translate-middle container">
 
 
@@ -156,7 +156,7 @@
                                     <a x-data href="{{ route('web.index') }}">
                                         <img class="img-fluid" src="{{ asset('img/logo_alguarisa.png') }}" alt="Logo AlGUARISA" @click="mostrarPreloader()">
                                     </a>
-                                    <h6 class="mt-1 mb-4 pb-1 text_title"><strong>Dirección de Tecnología y Sistemas.</strong></h6>
+                                    <h6 class="mt-1 mb-4 pb-1 text_title"><strong>Dirección de Tecnología y Sistemas</strong></h6>
                                 </div>
 
                                 @yield('content')

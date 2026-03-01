@@ -1,6 +1,6 @@
 @extends('layouts.bootstrap')
 
-@section('title', "Bienvenido - ". config('app.name', 'Laravel'))
+@section('title', "Bienvenido")
 
 @section('content')
 
