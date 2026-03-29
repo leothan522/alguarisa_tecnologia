@@ -10,7 +10,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <title>@yield('title', 'Alguarisa') - {{ config('app.name', 'Laravel') }}</title>
 
     <meta name="description" content="App de la Dirección de Tecnología y Sistemas de Alimentos del Guárico S.A.">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#0056b3">
 
     <meta property="og:title" content="Tecnología ALGUARISA">
     <meta property="og:description" content="App de la Dirección de Tecnología y Sistemas de Alimentos del Guárico S.A.">
