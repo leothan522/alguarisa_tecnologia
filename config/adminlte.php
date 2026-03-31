@@ -424,15 +424,15 @@ return [
                     'route' => 'parametros.index',
                     'can' => 'parametros',
                 ],
-                [
+                /*[
                     'text' => 'Pruebas',
                     'icon' => 'fas fa-fw fa-tools',
                     'route' => 'pruebas.index',
                     'can' => 'pruebas',
-                ]
+                ]*/
             ],
         ],
-        [
+        /*[
             'text'      => 'View Android',
             'icon'      => 'fas fa-fw fa-mobile-alt',
             'can'       => ['fcm'],
@@ -458,7 +458,7 @@ return [
                     'target' => '_blank',
                 ],
             ],
-        ],
+        ],*/
     ],
 
     /*'menu' => [

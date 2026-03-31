@@ -4,18 +4,24 @@
     "description": "The Laravel Framework.",
     "keywords": ["framework", "laravel"],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Yonathan Castillo",
+            "email": "leothan522@gmail.com"
+        }
+    ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "bacon/bacon-qr-code": "^3.0",
-        "barryvdh/laravel-dompdf": "^2.0",
+        "barryvdh/laravel-dompdf": "^3.1.1",
         "guzzlehttp/guzzle": "^7.2",
         "hisorange/browser-detect": "^5.0",
         "intervention/image": "^2.7",
         "jantinnerezo/livewire-alert": "^v3.0.1",
         "jeroennoten/laravel-adminlte": "^3.8",
-        "kreait/laravel-firebase": "^5.2",
-        "laravel/framework": "^11.0",
-        "laravel/jetstream": "^5.0",
+        "kreait/laravel-firebase": "^6.0",
+        "laravel/framework": "^12.0",
+        "laravel/jetstream": "^5.3",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^v3.4.4",
@@ -23,12 +29,12 @@
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
-        "laravel-lang/common": "^3.1",
+        "laravel-lang/common": "^6.6.0",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.1",
-        "phpunit/phpunit": "^10.0",
+        "phpunit/phpunit": "^11.0",
         "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
