@@ -65,7 +65,7 @@ return [
 
     'logo' => '<b>ALGUARISA</b>',
     /*'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',*/
-    'logo_img' => 'img/logo_small_50x50.png',
+    'logo_img' => 'img/logo_redes_alguarisa.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     /*'logo_img_xl' => 'img/logo_xl_210x33.png',*/
     'logo_img_xl' => null,
@@ -112,7 +112,7 @@ return [
         'enabled' => true,
         'img' => [
             /*'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',*/
-            'path' => 'img/preloader_171x171.png',
+            'path' => 'img/logo_redes_alguarisa.png',
             'alt' => '...',
             'effect' => 'animation__shake',
             'width' => 60,
